@@ -1,26 +1,46 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/site/Navbar";
+import { Hero } from "@/components/site/Hero";
+import { Industries } from "@/components/site/Industries";
+import { ProblemSolution } from "@/components/site/ProblemSolution";
+import { Features } from "@/components/site/Features";
+import { Steps } from "@/components/site/Steps";
+import { Compare } from "@/components/site/Compare";
+import { Pricing } from "@/components/site/Pricing";
+import { CTAFooter } from "@/components/site/CTAFooter";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "WBConnect+ — Salesforce-native WhatsApp powered by Cloud API" },
+      {
+        name: "description",
+        content:
+          "Bring WhatsApp directly into your Salesforce workflow. Salesforce-native managed package on Meta Cloud API — flows, broadcasts, analytics, and full data sync.",
+      },
+      { property: "og:title", content: "WBConnect+ — WhatsApp, native to Salesforce" },
+      {
+        property: "og:description",
+        content:
+          "The Salesforce-native WhatsApp Cloud API package. Unify conversations, automate flows, and sync every message to your CRM.",
+      },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return (
+    <main className="min-h-screen bg-white text-slate-900">
+      <Navbar />
+      <Hero />
+      <Industries />
+      <ProblemSolution />
+      <Features />
+      <Steps />
+      <Compare />
+      <Pricing />
+      <CTAFooter />
+    </main>
+  );
 }
