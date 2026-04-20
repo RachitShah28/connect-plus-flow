@@ -1,14 +1,58 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Building2, HeartPulse, ShoppingBag, GraduationCap, ArrowRight } from "lucide-react";
+import {
+  Building2,
+  HeartPulse,
+  ShoppingBag,
+  GraduationCap,
+  Plane,
+  Banknote,
+  Car,
+  Utensils,
+  Dumbbell,
+  Briefcase,
+  ArrowRight,
+  X,
+  CheckCircle2,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
-const industries = [
+type Industry = {
+  icon: typeof Building2;
+  name: string;
+  headline: string;
+  body: string;
+  flow: string[];
+  details: {
+    intro: string;
+    examples: { title: string; desc: string }[];
+    outcomes: string[];
+  };
+};
+
+const industries: Industry[] = [
   {
     icon: Building2,
     name: "Real Estate",
     headline: "Close site visits faster.",
     body: "Send rich property cards, schedule site visits and auto-log responses against the Lead record.",
     flow: ["Property card sent", "Lead replies 'Visit Sat 4PM'", "Salesforce creates Event"],
+    details: {
+      intro:
+        "Brokers and developers run on speed. WBConnect+ turns every WhatsApp inbound into a CRM-tracked opportunity and lets agents send brochures, floor plans and visit invites without leaving Salesforce.",
+      examples: [
+        { title: "Property drop", desc: "Broadcast 3-BHK listings to a saved-search audience with image carousels." },
+        { title: "Site-visit booking Flow", desc: "WhatsApp Flow collects name, preferred date and property type — Salesforce creates an Event automatically." },
+        { title: "Post-visit follow-up", desc: "Automation sends a feedback template 2 hours after the visit; replies update Opportunity stage." },
+      ],
+      outcomes: ["3.2× more booked site visits", "65% faster lead first-response", "Zero leakage between marketing & sales"],
+    },
   },
   {
     icon: HeartPulse,
@@ -16,13 +60,33 @@ const industries = [
     headline: "Reduce no-shows by 40%.",
     body: "Appointment reminders, prescription refills and pre-visit forms — synced to the Patient object.",
     flow: ["Reminder sent", "Patient replies 'Confirm'", "Status → Confirmed"],
+    details: {
+      intro:
+        "Hospitals and clinics use WBConnect+ to remind, confirm and triage patients on a channel they actually open — while keeping every interaction inside their EHR-linked Salesforce org.",
+      examples: [
+        { title: "Pre-visit intake Flow", desc: "Patient fills symptoms, allergies and insurance details inside WhatsApp; pushed to the Patient record." },
+        { title: "Appointment reminders", desc: "Template fires 24h before with quick replies — Confirm / Reschedule / Cancel — and updates the Appointment object." },
+        { title: "Refill requests", desc: "Quick-reply button triggers an automated refill template routed to the assigned pharmacist." },
+      ],
+      outcomes: ["40% fewer no-shows", "Faster triage with structured intake", "HIPAA-friendly with bring-your-own-S3"],
+    },
   },
   {
     icon: ShoppingBag,
-    name: "E-commerce",
+    name: "E-commerce & Retail",
     headline: "Recover abandoned carts.",
     body: "Trigger cart recovery, order updates and post-purchase NPS — all from your Salesforce Orders.",
     flow: ["Cart abandoned", "Offer sent on WhatsApp", "Checkout completed"],
+    details: {
+      intro:
+        "Turn WhatsApp into a revenue channel. Recover carts, confirm orders, share tracking and run post-purchase NPS — all tied to the Order and Customer records.",
+      examples: [
+        { title: "Cart recovery", desc: "Automation sends a 10%-off template 1h after abandonment with a deep link back to checkout." },
+        { title: "Order tracking", desc: "Status changes in Salesforce push templated updates to the customer in real time." },
+        { title: "Post-purchase NPS Flow", desc: "WhatsApp Flow collects star rating + comment 7 days after delivery, written back to the Order record." },
+      ],
+      outcomes: ["12–18% cart recovery uplift", "5× higher CSAT response rate vs email", "Direct attribution to revenue"],
+    },
   },
   {
     icon: GraduationCap,
@@ -30,11 +94,124 @@ const industries = [
     headline: "Engage students at scale.",
     body: "Admission updates, fee reminders and broadcast announcements native to your Education Cloud.",
     flow: ["Application received", "Docs requested", "Admission confirmed"],
+    details: {
+      intro:
+        "From inquiry to alumni, run the entire student lifecycle on WhatsApp without losing a single touchpoint inside Education Cloud.",
+      examples: [
+        { title: "Application Flow", desc: "Prospect fills program, intake and contact details inside a WhatsApp Flow — creates a Lead in Education Cloud." },
+        { title: "Document collection", desc: "Quick-reply triggers a follow-up template that lists pending documents per applicant." },
+        { title: "Fee reminders", desc: "Scheduled broadcast 5 days before due date, with a Pay Now CTA button." },
+      ],
+      outcomes: ["2× faster application-to-admit cycle", "90%+ open rate on fee reminders", "Lower call-centre load"],
+    },
+  },
+  {
+    icon: Plane,
+    name: "Travel & Hospitality",
+    headline: "Be the concierge in their pocket.",
+    body: "Booking confirmations, check-in reminders, upgrades and on-trip support — all on WhatsApp.",
+    flow: ["Booking confirmed", "Check-in reminder", "Upgrade accepted"],
+    details: {
+      intro:
+        "Airlines, hotels and OTAs use WBConnect+ to handle the entire journey — from search to post-stay review — without making the guest install another app.",
+      examples: [
+        { title: "Check-in Flow", desc: "Guest picks seat / room preferences inside WhatsApp 24h before arrival." },
+        { title: "Upsell automation", desc: "Quick-reply on the confirmation template offers a paid upgrade with one-tap acceptance." },
+        { title: "On-trip support", desc: "Live agent handover from the Global Chat Window with full booking context." },
+      ],
+      outcomes: ["+22% ancillary revenue", "Lower call-centre minutes per booking", "Higher review scores"],
+    },
+  },
+  {
+    icon: Banknote,
+    name: "Banking & Financial Services",
+    headline: "Onboard, service & cross-sell.",
+    body: "KYC collection, statement delivery, loan offers and dispute handling — secured inside your CRM.",
+    flow: ["KYC link sent", "Documents submitted", "Account activated"],
+    details: {
+      intro:
+        "Banks, NBFCs and insurers run secure customer journeys on WhatsApp with full audit trails inside Salesforce Financial Services Cloud.",
+      examples: [
+        { title: "KYC Flow", desc: "Customer uploads PAN/Aadhaar inside a WhatsApp Flow; files land in your S3 bucket, references on the record." },
+        { title: "Loan pre-approval", desc: "Personalised template with eligible amount + Apply quick-reply triggers the loan-application automation." },
+        { title: "Statement delivery", desc: "Monthly statement template with secure deep link, opens authenticated portal." },
+      ],
+      outcomes: ["50% faster KYC turnaround", "Higher cross-sell conversion", "Full regulatory audit trail"],
+    },
+  },
+  {
+    icon: Car,
+    name: "Automotive",
+    headline: "From test drive to service.",
+    body: "Test drive booking, finance offers, delivery updates and service reminders — all on one number.",
+    flow: ["Test drive booked", "Finance offer sent", "Delivery scheduled"],
+    details: {
+      intro:
+        "Dealerships and OEMs use WBConnect+ to nurture leads from the showroom inquiry through ownership and service.",
+      examples: [
+        { title: "Test-drive Flow", desc: "Choose model, dealership and slot — appointment created in Salesforce." },
+        { title: "Service reminder", desc: "Automation 11 months after delivery suggests next service with a Book Now button." },
+        { title: "Finance offers", desc: "Personalised EMI template per lead, with Apply quick-reply." },
+      ],
+      outcomes: ["+30% test-drive show-up", "Higher service retention", "Centralised conversation history per VIN"],
+    },
+  },
+  {
+    icon: Utensils,
+    name: "Food & Delivery",
+    headline: "Orders, OTPs & feedback.",
+    body: "Take orders, send delivery OTPs and capture feedback — all inside WhatsApp.",
+    flow: ["Menu sent", "Order placed", "Delivery OTP shared"],
+    details: {
+      intro:
+        "Cloud kitchens and restaurant chains use WBConnect+ for direct ordering, freeing them from aggregator commissions.",
+      examples: [
+        { title: "Menu Flow", desc: "Customer browses categories, adds items and confirms inside a WhatsApp Flow." },
+        { title: "Delivery OTP", desc: "Utility template fires when rider is 5 minutes away." },
+        { title: "Feedback Flow", desc: "Star rating + comment captured 30 minutes after delivery." },
+      ],
+      outcomes: ["Higher repeat-order rate", "Lower aggregator dependence", "Real-time CSAT"],
+    },
+  },
+  {
+    icon: Dumbbell,
+    name: "Fitness & Wellness",
+    headline: "Class bookings & retention.",
+    body: "Class schedules, trainer chat, renewal reminders and progress check-ins on WhatsApp.",
+    flow: ["Class slots sent", "Member books", "Reminder fires"],
+    details: {
+      intro:
+        "Gyms, studios and wellness apps cut churn by staying in touch on the channel members actually open.",
+      examples: [
+        { title: "Class booking Flow", desc: "Member picks studio, class and slot — booking pushed to Salesforce." },
+        { title: "Renewal nudge", desc: "Personalised template with renew-now CTA 7 days before expiry." },
+        { title: "Trainer chat", desc: "Direct line to assigned trainer, logged on member record." },
+      ],
+      outcomes: ["Lower churn", "Higher class fill-rate", "Personalised at scale"],
+    },
+  },
+  {
+    icon: Briefcase,
+    name: "Professional Services",
+    headline: "Client comms, organised.",
+    body: "Consultations, document requests, status updates and invoices — every message tied to the matter.",
+    flow: ["Consultation booked", "Docs requested", "Invoice shared"],
+    details: {
+      intro:
+        "Law firms, accounting practices and consultancies use WBConnect+ so partners and associates can talk to clients on WhatsApp without losing the audit trail.",
+      examples: [
+        { title: "Consultation Flow", desc: "Prospective client picks practice area, urgency and slot inside WhatsApp." },
+        { title: "Document collection", desc: "Quick-reply triggers a templated checklist of pending documents." },
+        { title: "Matter updates", desc: "Status changes auto-notify the client with a templated update." },
+      ],
+      outcomes: ["Faster matter turnaround", "Cleaner audit trail", "Higher client satisfaction"],
+    },
   },
 ];
 
 export function Industries() {
   const [active, setActive] = useState(0);
+  const [open, setOpen] = useState(false);
   const Item = industries[active];
   const Icon = Item.icon;
 
@@ -52,6 +229,9 @@ export function Industries() {
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Built for the way <span className="text-gradient-brand">your team</span> sells & supports.
           </h2>
+          <p className="mt-3 text-slate-600">
+            From real estate to financial services, teams across industries run their WhatsApp playbooks inside Salesforce with WBConnect+.
+          </p>
         </motion.div>
 
         <div className="mt-10 flex flex-wrap justify-center gap-2">
@@ -59,12 +239,13 @@ export function Industries() {
             <button
               key={ind.name}
               onClick={() => setActive(i)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
                 i === active
                   ? "bg-[#2BB5D4] text-white shadow-md shadow-[#2BB5D4]/30"
                   : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300"
               }`}
             >
+              <ind.icon className="h-3.5 w-3.5" />
               {ind.name}
             </button>
           ))}
@@ -85,12 +266,12 @@ export function Industries() {
               </div>
               <h3 className="mt-5 text-2xl font-bold text-slate-900">{Item.headline}</h3>
               <p className="mt-3 text-slate-600">{Item.body}</p>
-              <a
-                href="#cta"
+              <button
+                onClick={() => setOpen(true)}
                 className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[#2BB5D4] hover:gap-2 transition-all"
               >
                 See full use case <ArrowRight className="h-4 w-4" />
-              </a>
+              </button>
             </motion.div>
           </AnimatePresence>
 
@@ -104,7 +285,7 @@ export function Industries() {
               className="rounded-3xl glass p-8 shadow-xl shadow-slate-200/40"
             >
               <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                WhatsApp Flow
+                Example WhatsApp Flow / Automation
               </div>
               <ol className="mt-5 space-y-4">
                 {Item.flow.map((step, idx) => (
@@ -128,6 +309,53 @@ export function Industries() {
           </AnimatePresence>
         </div>
       </div>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <div className="flex items-center gap-3">
+              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-[#2BB5D4] to-[#22C55E] grid place-items-center text-white">
+                <Icon className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-[#2BB5D4]">{Item.name}</div>
+                <DialogTitle className="text-2xl">{Item.headline}</DialogTitle>
+              </div>
+            </div>
+            <DialogDescription className="pt-3 text-slate-600 text-base">
+              {Item.details.intro}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-2">
+            <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
+              Example playbooks
+            </div>
+            <div className="space-y-2">
+              {Item.details.examples.map((ex) => (
+                <div key={ex.title} className="rounded-xl border border-slate-200 p-3">
+                  <div className="font-semibold text-slate-900 text-sm">{ex.title}</div>
+                  <div className="text-sm text-slate-600 mt-0.5">{ex.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
+              Typical outcomes
+            </div>
+            <ul className="space-y-1.5">
+              {Item.details.outcomes.map((o) => (
+                <li key={o} className="flex items-start gap-2 text-sm text-slate-700">
+                  <CheckCircle2 className="h-4 w-4 text-[#22C55E] mt-0.5 flex-shrink-0" />
+                  {o}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

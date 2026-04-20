@@ -7,11 +7,11 @@ const cols = [
     title: "Standard WhatsApp App",
     sub: "The lonely silo",
     points: [
-      "Manual data entry into CRM",
-      "Zero two-way sync",
-      "Conversations on personal phones",
-      "Phone storage fills up fast",
-      "256-recipient broadcast cap",
+      "Agents use personal numbers for customer chats",
+      "When an agent leaves, the chat history walks out the door",
+      "No brand identity — customers see a personal contact",
+      "Manual data entry, zero CRM sync",
+      "256-recipient broadcast cap, phone storage fills fast",
     ],
   },
   {
@@ -31,11 +31,11 @@ const cols = [
     title: "WBConnect+",
     sub: "The native engine",
     points: [
-      "Direct Meta Cloud API billing",
-      "Automated AWS S3 media offload",
-      "Native no-code flow builder",
-      "Any standard / custom object",
-      "Unlimited broadcasts at scale",
+      "One centralised WhatsApp Business number for the whole org",
+      "Customers message the brand, not an individual — trust & recognition",
+      "Full chat history stays inside Salesforce, owned by the company",
+      "Direct Meta Cloud API billing · automated AWS S3 media offload",
+      "Native no-code flow & template builders, unlimited broadcasts",
     ],
   },
 ];

@@ -169,43 +169,211 @@ function GlobalChatVisual() {
 }
 
 function FlowBuilderVisual() {
+  const palette = [
+    { label: "Heading", color: "bg-[#2BB5D4]" },
+    { label: "Text Input", color: "bg-[#22C55E]" },
+    { label: "Dropdown", color: "bg-amber-500" },
+    { label: "Date Picker", color: "bg-violet-500" },
+    { label: "Submit", color: "bg-slate-700" },
+  ];
   return (
-    <div className="rounded-3xl bg-slate-50 border border-slate-200 p-6 shadow-xl shadow-slate-200/50 relative overflow-hidden">
-      <div className="text-xs font-semibold text-slate-500 mb-4">Flow Canvas</div>
-      <svg viewBox="0 0 400 220" className="w-full h-auto">
-        <defs>
-          <linearGradient id="flowGrad" x1="0" x2="1">
-            <stop offset="0" stopColor="#2BB5D4" />
-            <stop offset="1" stopColor="#22C55E" />
-          </linearGradient>
-        </defs>
-        <motion.path
-          d="M 90 60 C 180 60, 200 160, 290 160"
-          stroke="url(#flowGrad)"
-          strokeWidth="3"
-          fill="none"
-          strokeLinecap="round"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.6, ease: "easeInOut" }}
-        />
-      </svg>
-      <div className="absolute top-10 left-6 rounded-xl bg-white shadow-lg border border-slate-200 px-3 py-2 text-xs">
-        <div className="font-semibold text-slate-900">Customer replies</div>
-        <div className="text-slate-500">"Yes"</div>
+    <div className="rounded-3xl bg-slate-50 border border-slate-200 p-5 shadow-xl shadow-slate-200/50 relative overflow-hidden">
+      <div className="grid grid-cols-[140px_1fr_180px] gap-4">
+        {/* Component palette */}
+        <div>
+          <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Components</div>
+          <div className="space-y-1.5">
+            {palette.map((p, i) => (
+              <motion.div
+                key={p.label}
+                initial={{ opacity: 0, x: -8 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="flex items-center gap-2 rounded-md bg-white border border-slate-200 px-2 py-1.5 text-[11px] shadow-sm cursor-grab"
+              >
+                <span className={`h-2 w-2 rounded-full ${p.color}`} />
+                {p.label}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Canvas */}
+        <div className="rounded-xl bg-white border-2 border-dashed border-slate-200 p-3 min-h-[260px] relative">
+          <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-2">Flow Screen · "Book a visit"</div>
+          <div className="space-y-2">
+            {[
+              { label: "Heading: Schedule a site visit", color: "border-[#2BB5D4]" },
+              { label: "Text Input: Full name", color: "border-[#22C55E]" },
+              { label: "Dropdown: Property type", color: "border-amber-500" },
+              { label: "Date Picker: Preferred date", color: "border-violet-500" },
+            ].map((b, i) => (
+              <motion.div
+                key={b.label}
+                initial={{ opacity: 0, y: 6 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 + i * 0.12 }}
+                className={`rounded-md bg-slate-50 border-l-4 ${b.color} px-3 py-2 text-[11px] text-slate-700`}
+              >
+                {b.label}
+              </motion.div>
+            ))}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 1.0 }}
+              className="rounded-md bg-slate-900 text-white text-[11px] text-center py-2 font-semibold"
+            >
+              Submit
+            </motion.div>
+          </div>
+          <motion.div
+            animate={{ x: [-20, 100, 60], y: [10, 80, 140] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 left-0 text-slate-700"
+          >
+            <MousePointer2 className="h-4 w-4 fill-slate-700" />
+          </motion.div>
+        </div>
+
+        {/* Live WhatsApp preview */}
+        <div>
+          <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Live Preview</div>
+          <div className="rounded-2xl bg-[#075E54] p-1.5 shadow-lg">
+            <div className="rounded-xl bg-[#ECE5DD] p-2 min-h-[240px]">
+              <div className="bg-white rounded-lg p-2 shadow-sm space-y-1.5 text-[10px]">
+                <div className="font-bold text-slate-900 text-[11px]">Schedule a site visit</div>
+                <div className="rounded border border-slate-200 px-1.5 py-1 text-slate-400">Full name</div>
+                <div className="rounded border border-slate-200 px-1.5 py-1 text-slate-400 flex justify-between">Property type <span>▾</span></div>
+                <div className="rounded border border-slate-200 px-1.5 py-1 text-slate-400">📅 Preferred date</div>
+                <div className="rounded bg-[#22C55E] text-white text-center py-1 font-semibold mt-1">Submit</div>
+              </div>
+              <div className="text-[9px] text-slate-500 mt-1.5 text-center">as it appears in WhatsApp</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="absolute bottom-10 right-6 rounded-xl bg-white shadow-lg border-2 border-[#22C55E] px-3 py-2 text-xs">
-        <div className="font-semibold text-slate-900">Update Lead</div>
-        <div className="text-[#22C55E] font-medium">Status → Hot</div>
+    </div>
+  );
+}
+
+function TemplateBuilderVisual() {
+  return (
+    <div className="rounded-3xl bg-white p-6 shadow-2xl shadow-slate-300/40 border border-slate-200">
+      <div className="grid grid-cols-2 gap-5">
+        <div>
+          <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Template Editor</div>
+          <div className="space-y-2 text-[11px]">
+            <div className="rounded bg-slate-50 border border-slate-200 px-2 py-1.5">
+              <span className="text-slate-500">Category: </span><span className="font-semibold text-slate-800">Marketing</span>
+            </div>
+            <div className="rounded bg-slate-50 border border-slate-200 px-2 py-1.5">
+              <span className="text-slate-500">Header: </span><span className="font-semibold text-slate-800">Image</span>
+            </div>
+            <div className="rounded bg-slate-50 border border-slate-200 px-2 py-2 leading-relaxed">
+              Hi <span className="rounded bg-[#2BB5D4]/15 text-[#0b5cab] px-1 font-semibold">{"{{Contact.FirstName}}"}</span>, your quote for <span className="rounded bg-[#22C55E]/15 text-emerald-700 px-1 font-semibold">{"{{Opportunity.Name}}"}</span> is ready.
+            </div>
+            <div className="flex gap-1.5">
+              <div className="flex-1 rounded bg-slate-900 text-white text-center py-1 font-semibold">Quick Reply: Yes</div>
+              <div className="flex-1 rounded bg-slate-900 text-white text-center py-1 font-semibold">Quick Reply: No</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Preview · Personalised</div>
+          <div className="rounded-2xl bg-[#ECE5DD] p-2 min-h-[200px]">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-white rounded-lg p-2 shadow-sm text-[11px] space-y-1.5"
+            >
+              <div className="h-16 rounded bg-gradient-to-br from-[#2BB5D4] to-[#22C55E]" />
+              <div className="text-slate-800">Hi <b>Sara</b>, your quote for <b>Acme Realty – Tower B</b> is ready.</div>
+              <div className="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
+                <div className="text-center text-[#2BB5D4] font-semibold">Yes</div>
+                <div className="text-center text-[#2BB5D4] font-semibold">No</div>
+              </div>
+            </motion.div>
+            <div className="text-[9px] text-slate-500 mt-1.5 text-center">Meta-approved · merge-field powered</div>
+          </div>
+        </div>
       </div>
-      <motion.div
-        animate={{ x: [60, 280], y: [70, 160] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-0 left-0 text-slate-700"
-      >
-        <MousePointer2 className="h-4 w-4 fill-slate-700" />
-      </motion.div>
+    </div>
+  );
+}
+
+function AutomationBuilderVisual() {
+  return (
+    <div className="rounded-3xl bg-gradient-to-br from-slate-50 to-white p-6 shadow-2xl shadow-slate-300/40 border border-slate-200">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-3">Trigger → Action</div>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="text-[10px] uppercase text-slate-500 font-semibold">When</div>
+          <div className="text-sm font-semibold text-slate-900 mt-0.5">Customer taps quick reply</div>
+          <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-[#2BB5D4]/10 text-[#0b5cab] text-[11px] font-semibold px-2 py-1">
+            Button: "Interested"
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <motion.div
+            animate={{ y: [0, 4, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity }}
+            className="text-[#22C55E]"
+          >
+            <ArrowRight className="h-5 w-5 rotate-90" />
+          </motion.div>
+        </div>
+        <div className="rounded-xl border-2 border-[#22C55E]/40 bg-emerald-50/50 p-3 shadow-sm">
+          <div className="text-[10px] uppercase text-emerald-700 font-semibold">Then send template</div>
+          <div className="text-sm font-semibold text-slate-900 mt-0.5">"brochure_followup_v2"</div>
+          <div className="mt-2 rounded-md bg-white border border-emerald-200 p-2 text-[11px] text-slate-700">
+            Great! Here's the brochure for {"{{Property.Name}}"}. Tap below to book a visit.
+          </div>
+          <div className="mt-2 flex gap-1.5">
+            <div className="flex-1 rounded bg-[#22C55E] text-white text-center py-1 text-[11px] font-semibold">Book a visit</div>
+            <div className="flex-1 rounded bg-white border border-slate-200 text-slate-700 text-center py-1 text-[11px] font-semibold">Talk to agent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function S3IntegrationVisual() {
+  return (
+    <div className="rounded-3xl bg-slate-900 p-6 shadow-2xl shadow-slate-900/30 border border-slate-700">
+      <div className="flex items-center justify-between text-white mb-4">
+        <div className="flex items-center gap-2">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-orange-400 to-yellow-500 grid place-items-center text-[10px] font-bold text-white">S3</div>
+          <div>
+            <div className="text-sm font-semibold">Bring Your Own Bucket</div>
+            <div className="text-[11px] text-slate-400">customer-owned · IAM secured</div>
+          </div>
+        </div>
+        <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+      </div>
+      <div className="rounded-xl bg-slate-800/60 border border-slate-700 p-3 space-y-2 text-[11px] font-mono">
+        <div className="text-slate-400">AWS_BUCKET = <span className="text-emerald-400">"acme-wa-media"</span></div>
+        <div className="text-slate-400">AWS_REGION = <span className="text-emerald-400">"ap-south-1"</span></div>
+        <div className="text-slate-400">KMS_KEY_ID = <span className="text-emerald-400">"arn:aws:kms:..."</span></div>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <div className="rounded-xl bg-slate-800/60 p-3 border border-slate-700">
+          <div className="text-[10px] uppercase text-slate-400">Salesforce file storage</div>
+          <div className="text-lg font-bold text-rose-400 line-through">$$$ / GB</div>
+        </div>
+        <div className="rounded-xl bg-emerald-500/10 p-3 border border-emerald-500/30">
+          <div className="text-[10px] uppercase text-emerald-400">Your S3</div>
+          <div className="text-lg font-bold text-emerald-300">¢ / GB</div>
+        </div>
+      </div>
+      <div className="mt-3 text-[11px] text-slate-300 flex items-center gap-2">
+        <HardDrive className="h-3.5 w-3.5 text-emerald-400" /> Files never leave your AWS account.
+      </div>
     </div>
   );
 }
@@ -322,14 +490,14 @@ export function FeatureShowcase() {
 
         <div id="solutions">
           <Row
-            badge="Visual Flow Builder"
-            title="Drag, drop, automate."
-            desc="A no-code canvas to design WhatsApp Flows, conditional branches, and direct Salesforce actions — without writing a single line of Apex."
+            badge="WhatsApp Flow Builder"
+            title="Drag, drop, collect — inside WhatsApp."
+            desc="WhatsApp Flows let you collect customer details right inside a WhatsApp message — forms, menus, date pickers, dropdowns. Meta's Cloud API expects raw JSON; we replaced that with a visual select-and-drag canvas plus a live preview that mirrors exactly how the Flow renders in your customer's WhatsApp app."
             bullets={[
-              "Visual node graph with branching logic",
-              "Direct field updates on any object",
-              "Reusable templates and reusable subflows",
-              "Live test mode with sandbox WABA",
+              "Drag components onto the canvas — no JSON authoring",
+              "Live WhatsApp-app preview as you build",
+              "Auto-publishes a Meta-compliant Flow JSON in the background",
+              "Reusable screens for forms, menus & conditional fields",
             ]}
             visual={<FlowBuilderVisual />}
           />
@@ -337,14 +505,54 @@ export function FeatureShowcase() {
 
         <Row
           reverse
+          badge="Template Builder"
+          title="Personalised templates with merge fields."
+          desc="Design every WhatsApp message template Meta supports — Marketing, Utility, Authentication — with rich headers, body copy, footers and quick-reply or call-to-action buttons. Drop in Salesforce merge fields so each customer receives a fully personalised message."
+          bullets={[
+            "All Meta-supported template categories & header types",
+            "Merge fields from any Standard or Custom object",
+            "Quick-reply, URL and phone-number button support",
+            "Submit for Meta approval in one click — track status inside Salesforce",
+          ]}
+          visual={<TemplateBuilderVisual />}
+        />
+
+        <Row
+          badge="Automation Builder"
+          title="Reply to a quick-reply, automatically."
+          desc="When a customer taps a quick-reply button on one of your templates, fire off the next template instantly — perfect for follow-ups, brochures, booking links and multi-step nurtures. Set it up once, run it forever."
+          bullets={[
+            "Trigger on any quick-reply button across any template",
+            "Chain follow-up templates without writing Apex",
+            "Branch by which button was tapped",
+            "Logged on the contact timeline for full visibility",
+          ]}
+          visual={<AutomationBuilderVisual />}
+        />
+
+        <Row
+          reverse
+          badge="AWS S3 Integration"
+          title="Bring your own S3 bucket for media."
+          desc="Salesforce standard storage gets very expensive the moment you start moving images, video and PDFs over WhatsApp. WBConnect+ lets you plug in your own AWS S3 bucket — your files never leave your AWS account, and you sidestep Salesforce file-storage costs entirely."
+          bullets={[
+            "Customer-owned bucket — we never hold your media",
+            "IAM & KMS encryption respected end-to-end",
+            "Cuts Salesforce file-storage cost dramatically",
+            "Works with any region, including data-residency-restricted ones",
+          ]}
+          visual={<S3IntegrationVisual />}
+        />
+
+        <Row
           badge="Broadcast & Analytics"
           title="Send millions. Measure everything."
           desc="High-volume broadcasts with smart throttling, opt-out management, and a real-time analytics dashboard tied back to opportunity revenue."
           bullets={[
-            "Native template builder + Meta approvals",
             "Delivery, read, click, reply attribution",
             "ROI dashboard linked to Opportunity stages",
             "Audience segmentation from any SOQL query",
+            "Smart throttling to respect Meta rate limits",
           ]}
           visual={<AnalyticsVisual />}
         />
