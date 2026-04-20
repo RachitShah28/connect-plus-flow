@@ -12,7 +12,6 @@ import {
   Dumbbell,
   Briefcase,
   ArrowRight,
-  X,
   CheckCircle2,
 } from "lucide-react";
 import {
