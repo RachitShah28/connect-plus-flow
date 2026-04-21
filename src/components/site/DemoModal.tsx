@@ -5,7 +5,7 @@ import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
 /* ─── grecaptcha type augment ────────────────────────────────────────────── */
 declare global {
   interface Window {
-    grecaptcha: {
+    grecaptcha?: {
       render: (container: HTMLElement, params: object) => number;
       reset: (widgetId?: number) => void;
       getResponse: (widgetId?: number) => string;
@@ -349,11 +349,11 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
 
     // Wait for the modal animation to settle before rendering
     const delay = setTimeout(() => {
-      if (window.grecaptcha?.render) {
+      if (window.grecaptcha) {
         tryRender();
       } else {
         const poll = setInterval(() => {
-          if (window.grecaptcha?.render) {
+          if (window.grecaptcha) {
             tryRender();
             clearInterval(poll);
           }
