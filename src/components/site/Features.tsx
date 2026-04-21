@@ -4,30 +4,30 @@ import { MessageSquare, Database, Workflow, BarChart, LayoutTemplate } from "luc
 const features = [
   {
     icon: MessageSquare,
-    title: "Global Chat Window",
-    desc: "Access live WhatsApp conversations from any Salesforce screen — Lightning, Console or mobile.",
+    title: "Global WhatsApp Chat Window",
+    desc: "Access live WhatsApp conversations from any Salesforce screen — Lightning, Console or Mobile.",
     span: "md:col-span-2",
     accent: "from-[#2BB5D4]/10 to-[#22C55E]/10",
   },
   {
     icon: Database,
-    title: "Object Agnostic",
-    desc: "Native support for Standard & Custom objects. Map any field, in seconds.",
+    title: "Object Agnostic Salesforce Integration",
+    desc: "Native support for Standard and Custom Salesforce objects. Map any field in seconds.",
   },
   {
     icon: Workflow,
-    title: "No-Code Flow Builder",
-    desc: "Visual builder for WhatsApp Flows — forms, menus, conditional logic.",
+    title: "No-Code WhatsApp Flow Builder",
+    desc: "Visual builder for WhatsApp Flows — forms, menus and conditional logic inside WhatsApp.",
   },
   {
     icon: BarChart,
-    title: "Broadcast & Analytics",
-    desc: "Mass messaging with delivery, read & ROI dashboards in real time.",
+    title: "WhatsApp Broadcast and Analytics",
+    desc: "Mass WhatsApp messaging with delivery, read and ROI dashboards in real time.",
   },
   {
     icon: LayoutTemplate,
-    title: "Template Builder",
-    desc: "Native template builder + Meta approval submission for instant deployment.",
+    title: "WhatsApp Template Builder",
+    desc: "Native WhatsApp template builder with Meta approval submission for instant deployment inside Salesforce.",
     span: "md:col-span-2",
     accent: "from-[#22C55E]/10 to-[#2BB5D4]/10",
   },
@@ -46,7 +46,7 @@ export function Features() {
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Features</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Everything you need to message at scale.
+            Everything you need to send WhatsApp messages at scale from Salesforce.
           </h2>
         </motion.div>
 

@@ -41,16 +41,16 @@ const industries: Industry[] = [
     name: "Real Estate",
     headline: "Close site visits faster.",
     body: "Send rich property cards, schedule site visits and auto-log responses against the Lead record.",
-    flow: ["Property card sent", "Lead replies 'Visit Sat 4PM'", "Salesforce creates Event"],
+    flow: ["Property card sent via WhatsApp", "Lead replies with preferred visit time", "Salesforce creates Event automatically"],
     details: {
       intro:
         "Brokers and developers run on speed. WBConnect+ turns every WhatsApp inbound into a CRM-tracked opportunity and lets agents send brochures, floor plans and visit invites without leaving Salesforce.",
       examples: [
-        { title: "Property drop", desc: "Broadcast 3-BHK listings to a saved-search audience with image carousels." },
-        { title: "Site-visit booking Flow", desc: "WhatsApp Flow collects name, preferred date and property type — Salesforce creates an Event automatically." },
-        { title: "Post-visit follow-up", desc: "Automation sends a feedback template 2 hours after the visit; replies update Opportunity stage." },
+        { title: "Property broadcast", desc: "Broadcast 3-BHK listings to a saved-search audience with WhatsApp image carousels." },
+        { title: "Site visit booking via WhatsApp Flow", desc: "WhatsApp Flow collects name, preferred date and property type and Salesforce creates an Event automatically." },
+        { title: "Post-visit follow-up automation", desc: "Automation sends a feedback template 2 hours after the visit and replies update Opportunity stage." },
       ],
-      outcomes: ["3.2× more booked site visits", "65% faster lead first-response", "Zero leakage between marketing & sales"],
+      outcomes: ["3.2 times more booked site visits", "65% faster lead first response", "Zero leakage between marketing and sales"],
     },
   },
   {
@@ -58,33 +58,33 @@ const industries: Industry[] = [
     name: "Healthcare",
     headline: "Reduce no-shows by 40%.",
     body: "Appointment reminders, prescription refills and pre-visit forms — synced to the Patient object.",
-    flow: ["Reminder sent", "Patient replies 'Confirm'", "Status → Confirmed"],
+    flow: ["Appointment reminder sent via WhatsApp", "Patient confirms appointment", "Status updated to Confirmed"],
     details: {
       intro:
         "Hospitals and clinics use WBConnect+ to remind, confirm and triage patients on a channel they actually open — while keeping every interaction inside their EHR-linked Salesforce org.",
       examples: [
-        { title: "Pre-visit intake Flow", desc: "Patient fills symptoms, allergies and insurance details inside WhatsApp; pushed to the Patient record." },
-        { title: "Appointment reminders", desc: "Template fires 24h before with quick replies — Confirm / Reschedule / Cancel — and updates the Appointment object." },
-        { title: "Refill requests", desc: "Quick-reply button triggers an automated refill template routed to the assigned pharmacist." },
+        { title: "Pre-visit intake WhatsApp Flow", desc: "Patient fills symptoms, allergies and insurance details inside a WhatsApp Flow and data is pushed to the Patient record." },
+        { title: "Appointment reminders", desc: "WhatsApp template fires 24 hours before with quick replies for Confirm, Reschedule or Cancel and updates the Appointment object." },
+        { title: "Prescription refill requests", desc: "Quick-reply button triggers an automated refill template routed to the assigned pharmacist." },
       ],
-      outcomes: ["40% fewer no-shows", "Faster triage with structured intake", "HIPAA-friendly with bring-your-own-S3"],
+      outcomes: ["40% fewer no-shows", "Faster triage with structured intake", "HIPAA-friendly with bring-your-own S3"],
     },
   },
   {
     icon: ShoppingBag,
-    name: "E-commerce & Retail",
+    name: "E-commerce and Retail",
     headline: "Recover abandoned carts.",
     body: "Trigger cart recovery, order updates and post-purchase NPS — all from your Salesforce Orders.",
-    flow: ["Cart abandoned", "Offer sent on WhatsApp", "Checkout completed"],
+    flow: ["Cart abandoned", "WhatsApp recovery offer sent", "Customer completes checkout"],
     details: {
       intro:
         "Turn WhatsApp into a revenue channel. Recover carts, confirm orders, share tracking and run post-purchase NPS — all tied to the Order and Customer records.",
       examples: [
-        { title: "Cart recovery", desc: "Automation sends a 10%-off template 1h after abandonment with a deep link back to checkout." },
-        { title: "Order tracking", desc: "Status changes in Salesforce push templated updates to the customer in real time." },
-        { title: "Post-purchase NPS Flow", desc: "WhatsApp Flow collects star rating + comment 7 days after delivery, written back to the Order record." },
+        { title: "Cart recovery via WhatsApp", desc: "Automation sends a 10 percent off template 1 hour after abandonment with a deep link back to checkout." },
+        { title: "Order tracking updates", desc: "Status changes in Salesforce push templated WhatsApp updates to the customer in real time." },
+        { title: "Post-purchase NPS WhatsApp Flow", desc: "WhatsApp Flow collects star rating and comment 7 days after delivery, written back to the Order record." },
       ],
-      outcomes: ["12–18% cart recovery uplift", "5× higher CSAT response rate vs email", "Direct attribution to revenue"],
+      outcomes: ["12 to 18 percent cart recovery uplift", "5 times higher CSAT response rate versus email", "Direct attribution to revenue"],
     },
   },
   {
@@ -92,48 +92,48 @@ const industries: Industry[] = [
     name: "Education",
     headline: "Engage students at scale.",
     body: "Admission updates, fee reminders and broadcast announcements native to your Education Cloud.",
-    flow: ["Application received", "Docs requested", "Admission confirmed"],
+    flow: ["Application received", "Documents requested via WhatsApp", "Admission confirmed"],
     details: {
       intro:
         "From inquiry to alumni, run the entire student lifecycle on WhatsApp without losing a single touchpoint inside Education Cloud.",
       examples: [
-        { title: "Application Flow", desc: "Prospect fills program, intake and contact details inside a WhatsApp Flow — creates a Lead in Education Cloud." },
-        { title: "Document collection", desc: "Quick-reply triggers a follow-up template that lists pending documents per applicant." },
-        { title: "Fee reminders", desc: "Scheduled broadcast 5 days before due date, with a Pay Now CTA button." },
+        { title: "Application WhatsApp Flow", desc: "Prospect fills program, intake and contact details inside a WhatsApp Flow and a Lead is created in Education Cloud." },
+        { title: "Document collection via WhatsApp", desc: "Quick-reply triggers a follow-up template that lists pending documents per applicant." },
+        { title: "Fee payment reminders", desc: "Scheduled broadcast 5 days before due date with a Pay Now CTA button." },
       ],
-      outcomes: ["2× faster application-to-admit cycle", "90%+ open rate on fee reminders", "Lower call-centre load"],
+      outcomes: ["2 times faster application-to-admit cycle", "90 percent or more open rate on fee reminders", "Lower call centre load"],
     },
   },
   {
     icon: Plane,
-    name: "Travel & Hospitality",
+    name: "Travel and Hospitality",
     headline: "Be the concierge in their pocket.",
     body: "Booking confirmations, check-in reminders, upgrades and on-trip support — all on WhatsApp.",
-    flow: ["Booking confirmed", "Check-in reminder", "Upgrade accepted"],
+    flow: ["Booking confirmed via WhatsApp", "Check-in reminder sent", "Upgrade accepted"],
     details: {
       intro:
         "Airlines, hotels and OTAs use WBConnect+ to handle the entire journey — from search to post-stay review — without making the guest install another app.",
       examples: [
-        { title: "Check-in Flow", desc: "Guest picks seat / room preferences inside WhatsApp 24h before arrival." },
-        { title: "Upsell automation", desc: "Quick-reply on the confirmation template offers a paid upgrade with one-tap acceptance." },
-        { title: "On-trip support", desc: "Live agent handover from the Global Chat Window with full booking context." },
+        { title: "Check-in WhatsApp Flow", desc: "Guest picks seat and room preferences inside WhatsApp 24 hours before arrival." },
+        { title: "Upsell automation via WhatsApp", desc: "Quick-reply on the confirmation template offers a paid upgrade with one-tap acceptance." },
+        { title: "On-trip WhatsApp support", desc: "Live agent handover from the Global Chat Window with full booking context." },
       ],
-      outcomes: ["+22% ancillary revenue", "Lower call-centre minutes per booking", "Higher review scores"],
+      outcomes: ["+22% ancillary revenue", "Lower call centre minutes per booking", "Higher review scores"],
     },
   },
   {
     icon: Banknote,
-    name: "Banking & Financial Services",
-    headline: "Onboard, service & cross-sell.",
+    name: "Banking and Financial Services",
+    headline: "Onboard, Service and Cross-Sell.",
     body: "KYC collection, statement delivery, loan offers and dispute handling — secured inside your CRM.",
-    flow: ["KYC link sent", "Documents submitted", "Account activated"],
+    flow: ["KYC link sent via WhatsApp", "Documents submitted", "Account activated"],
     details: {
       intro:
         "Banks, NBFCs and insurers run secure customer journeys on WhatsApp with full audit trails inside Salesforce Financial Services Cloud.",
       examples: [
-        { title: "KYC Flow", desc: "Customer uploads PAN/Aadhaar inside a WhatsApp Flow; files land in your S3 bucket, references on the record." },
-        { title: "Loan pre-approval", desc: "Personalised template with eligible amount + Apply quick-reply triggers the loan-application automation." },
-        { title: "Statement delivery", desc: "Monthly statement template with secure deep link, opens authenticated portal." },
+        { title: "KYC WhatsApp Flow", desc: "Customer uploads PAN and Aadhaar inside a WhatsApp Flow and files land in your S3 bucket with references on the Salesforce record." },
+        { title: "Loan pre-approval via WhatsApp", desc: "Personalised template with eligible amount and an Apply quick-reply that triggers the loan application automation." },
+        { title: "Statement delivery via WhatsApp", desc: "Monthly statement template with a secure deep link that opens an authenticated portal." },
       ],
       outcomes: ["50% faster KYC turnaround", "Higher cross-sell conversion", "Full regulatory audit trail"],
     },
@@ -143,48 +143,48 @@ const industries: Industry[] = [
     name: "Automotive",
     headline: "From test drive to service.",
     body: "Test drive booking, finance offers, delivery updates and service reminders — all on one number.",
-    flow: ["Test drive booked", "Finance offer sent", "Delivery scheduled"],
+    flow: ["Test drive booked via WhatsApp", "Finance offer sent", "Delivery scheduled"],
     details: {
       intro:
         "Dealerships and OEMs use WBConnect+ to nurture leads from the showroom inquiry through ownership and service.",
       examples: [
-        { title: "Test-drive Flow", desc: "Choose model, dealership and slot — appointment created in Salesforce." },
-        { title: "Service reminder", desc: "Automation 11 months after delivery suggests next service with a Book Now button." },
-        { title: "Finance offers", desc: "Personalised EMI template per lead, with Apply quick-reply." },
+        { title: "Test drive booking WhatsApp Flow", desc: "Customer chooses model, dealership and slot and the appointment is created in Salesforce." },
+        { title: "Service reminder via WhatsApp", desc: "Automation 11 months after delivery suggests next service with a Book Now button." },
+        { title: "Personalised finance offers on WhatsApp", desc: "Personalised EMI template per lead with an Apply quick-reply button." },
       ],
-      outcomes: ["+30% test-drive show-up", "Higher service retention", "Centralised conversation history per VIN"],
+      outcomes: ["+30% test drive show-up rate", "Higher service retention", "Centralised conversation history per VIN"],
     },
   },
   {
     icon: Utensils,
-    name: "Food & Delivery",
-    headline: "Orders, OTPs & feedback.",
+    name: "Food and Delivery",
+    headline: "Orders, OTPs and Feedback.",
     body: "Take orders, send delivery OTPs and capture feedback — all inside WhatsApp.",
-    flow: ["Menu sent", "Order placed", "Delivery OTP shared"],
+    flow: ["WhatsApp menu sent to customer", "Order placed via WhatsApp", "Delivery OTP shared"],
     details: {
       intro:
         "Cloud kitchens and restaurant chains use WBConnect+ for direct ordering, freeing them from aggregator commissions.",
       examples: [
-        { title: "Menu Flow", desc: "Customer browses categories, adds items and confirms inside a WhatsApp Flow." },
-        { title: "Delivery OTP", desc: "Utility template fires when rider is 5 minutes away." },
-        { title: "Feedback Flow", desc: "Star rating + comment captured 30 minutes after delivery." },
+        { title: "WhatsApp Menu Flow", desc: "Customer browses categories, adds items and confirms order inside a WhatsApp Flow." },
+        { title: "Delivery OTP via WhatsApp", desc: "Utility template fires when the rider is 5 minutes away." },
+        { title: "Post-delivery Feedback WhatsApp Flow", desc: "Star rating and comment captured 30 minutes after delivery." },
       ],
       outcomes: ["Higher repeat-order rate", "Lower aggregator dependence", "Real-time CSAT"],
     },
   },
   {
     icon: Dumbbell,
-    name: "Fitness & Wellness",
-    headline: "Class bookings & retention.",
+    name: "Fitness and Wellness",
+    headline: "Class Bookings and Member Retention.",
     body: "Class schedules, trainer chat, renewal reminders and progress check-ins on WhatsApp.",
-    flow: ["Class slots sent", "Member books", "Reminder fires"],
+    flow: ["Class slots sent via WhatsApp", "Member books a class", "Reminder fires automatically"],
     details: {
       intro:
         "Gyms, studios and wellness apps cut churn by staying in touch on the channel members actually open.",
       examples: [
-        { title: "Class booking Flow", desc: "Member picks studio, class and slot — booking pushed to Salesforce." },
-        { title: "Renewal nudge", desc: "Personalised template with renew-now CTA 7 days before expiry." },
-        { title: "Trainer chat", desc: "Direct line to assigned trainer, logged on member record." },
+        { title: "Class booking WhatsApp Flow", desc: "Member picks studio, class and slot and the booking is pushed to Salesforce." },
+        { title: "Membership renewal nudge via WhatsApp", desc: "Personalised template with a renew now CTA 7 days before expiry." },
+        { title: "Direct trainer WhatsApp chat", desc: "Direct line to assigned trainer, logged on the member record in Salesforce." },
       ],
       outcomes: ["Lower churn", "Higher class fill-rate", "Personalised at scale"],
     },
@@ -192,16 +192,16 @@ const industries: Industry[] = [
   {
     icon: Briefcase,
     name: "Professional Services",
-    headline: "Client comms, organised.",
+    headline: "Client Communications, Organised.",
     body: "Consultations, document requests, status updates and invoices — every message tied to the matter.",
-    flow: ["Consultation booked", "Docs requested", "Invoice shared"],
+    flow: ["Consultation booked via WhatsApp", "Documents requested", "Invoice shared on WhatsApp"],
     details: {
       intro:
         "Law firms, accounting practices and consultancies use WBConnect+ so partners and associates can talk to clients on WhatsApp without losing the audit trail.",
       examples: [
-        { title: "Consultation Flow", desc: "Prospective client picks practice area, urgency and slot inside WhatsApp." },
-        { title: "Document collection", desc: "Quick-reply triggers a templated checklist of pending documents." },
-        { title: "Matter updates", desc: "Status changes auto-notify the client with a templated update." },
+        { title: "Consultation booking WhatsApp Flow", desc: "Prospective client picks practice area, urgency and slot inside a WhatsApp Flow." },
+        { title: "Document collection via WhatsApp", desc: "Quick-reply triggers a templated checklist of pending documents." },
+        { title: "Matter status updates via WhatsApp", desc: "Status changes auto-notify the client with a personalised templated update." },
       ],
       outcomes: ["Faster matter turnaround", "Cleaner audit trail", "Higher client satisfaction"],
     },
@@ -226,10 +226,10 @@ export function Industries() {
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Industries</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Built for the way <span className="text-gradient-brand">your team</span> sells & supports.
+            Built for the way <span className="text-gradient-brand">your team</span> sells and supports.
           </h2>
           <p className="mt-3 text-slate-600">
-            From real estate to financial services, teams across industries run their WhatsApp playbooks inside Salesforce with WBConnect+.
+            From real estate to financial services, teams across industries run their WhatsApp Business playbooks inside Salesforce with WBConnect+.
           </p>
         </motion.div>
 

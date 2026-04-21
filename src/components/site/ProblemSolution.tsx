@@ -9,10 +9,10 @@ const problems = [
 ];
 
 const solutions = [
-  "Unified inbox inside every Salesforce record",
-  "Two-way sync between WhatsApp & CRM data",
-  "Automated logging, templates and AI replies",
-  "Full audit log + role-based access controls",
+  "Unified WhatsApp inbox inside every Salesforce record",
+  "Two-way sync between WhatsApp Business and Salesforce CRM data",
+  "Automated logging, WhatsApp templates and reply automation",
+  "Full WhatsApp audit log with role-based access controls",
 ];
 
 export function ProblemSolution() {
@@ -31,7 +31,7 @@ export function ProblemSolution() {
             <span className="text-gradient-brand">flow.</span>
           </h2>
           <p className="mt-3 text-slate-600">
-            See what your team trades when WhatsApp lives outside the CRM — and what changes with WBConnect+.
+            See what your team loses when WhatsApp lives outside Salesforce — and what changes when you use WBConnect+.
           </p>
         </motion.div>
 

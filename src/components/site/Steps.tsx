@@ -6,22 +6,22 @@ const steps = [
   {
     icon: Download,
     title: "Direct Package Installation",
-    desc: "Install the WBConnect+ Managed Package straight into your Salesforce org via secure install link — no marketplace dependencies.",
+    desc: "Install the WBConnect+ WhatsApp Salesforce Managed Package straight into your Salesforce org via a secure install link with no marketplace dependencies.",
   },
   {
     icon: Layers,
-    title: "Map Standard & Custom Objects",
-    desc: "Point-and-click mapping for any Salesforce object, field or relationship. Bring your own data model.",
+    title: "Map Standard and Custom Objects",
+    desc: "Point-and-click mapping for any Salesforce object, field or relationship. Bring your own Salesforce data model.",
   },
   {
     icon: KeyRound,
-    title: "Authenticate Meta & AWS S3",
-    desc: "Embedded Signup for WhatsApp Cloud API + a guided wizard to wire up your S3 bucket and KMS keys.",
+    title: "Authenticate Meta and AWS S3",
+    desc: "Embedded Signup for WhatsApp Cloud API with a guided wizard to connect your S3 bucket and KMS keys for secure media storage.",
   },
   {
     icon: Rocket,
-    title: "Launch Global Operations",
-    desc: "Go live with broadcasts, flows and a unified inbox across teams, regions and brands.",
+    title: "Launch WhatsApp Operations Globally",
+    desc: "Go live with WhatsApp broadcasts, flows and a unified inbox across teams, regions and brands inside Salesforce.",
   },
 ];
 
@@ -34,7 +34,7 @@ export function Steps() {
   const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
-    <section className="py-24 bg-slate-50">
+    <section id="implementation" className="py-24 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -45,7 +45,7 @@ export function Steps() {
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Implementation</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Live in <span className="text-gradient-brand">four guided milestones.</span>
+            Live in <span className="text-gradient-brand">four guided milestones</span> with WBConnect+.
           </h2>
         </motion.div>
 

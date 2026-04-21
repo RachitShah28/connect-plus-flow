@@ -1,35 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { ShieldCheck, HardDrive, Coins, Rocket } from "lucide-react";
+import { Zap, MessageSquare, RefreshCw } from "lucide-react";
 
 const stats = [
   {
-    icon: ShieldCheck,
+    icon: Zap,
+    value: 30,
+    suffix: "%",
+    label: "Faster Response",
+    sub: "Teams respond 30% faster with WhatsApp natively inside Salesforce",
+  },
+  {
+    icon: MessageSquare,
+    value: 3.2,
+    suffix: "×",
+    label: "Higher Engagement",
+    sub: "WhatsApp messages see 3.2× higher engagement than email",
+  },
+  {
+    icon: RefreshCw,
     value: 100,
     suffix: "%",
-    label: "Data Ownership",
-    sub: "Direct Meta Cloud API · zero middleman",
-  },
-  {
-    icon: HardDrive,
-    value: 90,
-    suffix: "%",
-    label: "Storage Savings",
-    sub: "Automated AWS S3 offloading",
-  },
-  {
-    icon: Coins,
-    value: 0,
-    suffix: "%",
-    label: "Middleman Tax",
-    sub: "Pay Meta directly · no per-msg markup",
-  },
-  {
-    icon: Rocket,
-    value: 5,
-    suffix: "×",
-    label: "Faster Deployment",
-    sub: "Native managed package · live in days",
+    label: "Data Sync",
+    sub: "Every conversation synced to Salesforce in real time with zero lag",
   },
 ];
 
@@ -46,7 +39,7 @@ function Counter({ to, suffix }: { to: number; suffix: string }) {
     const tick = (t: number) => {
       const p = Math.min((t - start) / duration, 1);
       const eased = 1 - Math.pow(1 - p, 3);
-      setN(Math.round(to * eased));
+      setN(Math.round(to * eased * 10) / 10);
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -74,11 +67,11 @@ export function Benefits() {
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Measurable ROI</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Numbers that move the board deck.
+            Numbers that prove the business case for WhatsApp inside Salesforce.
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}

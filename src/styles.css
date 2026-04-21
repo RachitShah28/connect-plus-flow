@@ -78,6 +78,10 @@
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
+  /* Offset all anchor sections below the fixed floating navbar (mt-4 + nav height ≈ 84px) */
+  section[id] {
+    scroll-margin-top: 88px;
+  }
 }
 
 @layer utilities {
@@ -111,6 +115,28 @@
     border: 2px solid transparent;
   }
 }
+
+@keyframes shimmer-sweep {
+  0%   { transform: translateX(-100%); opacity: 1; }
+  100% { transform: translateX(200%); opacity: 1; }
+}
+
+/* One-way shimmer: plays on hover-in only, no reverse animation */
+.group:hover .shimmer-btn {
+  animation: shimmer-sweep 0.7s ease-in-out forwards;
+}
+.shimmer-btn {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.38), transparent);
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.group:hover .shimmer-btn {
+  opacity: 1;
+}
+
 
 @font-face {
   font-family: "Inter";

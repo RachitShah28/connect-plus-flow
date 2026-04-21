@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 
 const rows = [
-  { feature: "Salesforce Native (Managed Package)", us: true, them: false, themLabel: "External app" },
-  { feature: "Pricing Model", us: "Direct Cloud API pricing", them: "Marked-up per message" },
-  { feature: "No-Code Flow Builder", us: true, them: false, themLabel: "Requires external tool" },
-  { feature: "Object & Field Mapping", us: "Any standard/custom", them: "Limited objects" },
-  { feature: "Data Residency", us: "Stays in your Salesforce", them: "3rd-party servers" },
-  { feature: "Embedded Signup (Meta Cloud API)", us: true, them: false },
+  { feature: "Salesforce Native Managed Package", us: true, them: false, themLabel: "External app" },
+  { feature: "Pricing Model", us: "Direct Meta Cloud API pricing", them: "Marked-up per message" },
+  { feature: "No-Code WhatsApp Flow Builder", us: true, them: false, themLabel: "Requires external tool" },
+  { feature: "Salesforce Object and Field Mapping", us: "Any standard or custom object", them: "Limited objects" },
+  { feature: "WhatsApp Data Residency", us: "Stays in your Salesforce org", them: "Third-party servers" },
+  { feature: "Embedded Signup via Meta Cloud API", us: true, them: false },
 ];
 
 function Cell({ value, fallback }: { value: boolean | string; fallback?: string }) {
@@ -30,7 +30,7 @@ function Cell({ value, fallback }: { value: boolean | string; fallback?: string 
 
 export function Compare() {
   return (
-    <section id="compare" className="py-24 bg-slate-50">
+    <section id="why-choose-us" className="py-24 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -39,18 +39,19 @@ export function Compare() {
           transition={{ duration: 0.5 }}
           className="text-center max-w-2xl mx-auto mb-12"
         >
-          <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Comparison</div>
+          <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Why Choose Us</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Why teams pick WBConnect+.
+            Why Salesforce teams choose WBConnect+ for WhatsApp.
           </h2>
         </motion.div>
 
+        {/* Desktop Table */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="rounded-3xl bg-white shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden"
+          className="hidden md:block rounded-3xl bg-white shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden"
         >
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px]">
@@ -58,7 +59,7 @@ export function Compare() {
                 <tr className="text-left text-xs uppercase tracking-wider text-slate-500 border-b border-slate-100">
                   <th className="px-6 py-4 font-semibold">Feature</th>
                   <th className="px-6 py-4 font-semibold bg-[#2BB5D4]/5 text-[#2BB5D4]">WBConnect+</th>
-                  <th className="px-6 py-4 font-semibold">Third-Party Alternatives</th>
+                  <th className="px-6 py-4 font-semibold">Third-Party WhatsApp Integrations</th>
                 </tr>
               </thead>
               <tbody>
@@ -80,6 +81,42 @@ export function Compare() {
             </table>
           </div>
         </motion.div>
+
+        {/* Mobile Card layout */}
+        <div className="md:hidden space-y-4">
+          {/* Header labels */}
+          <div className="grid grid-cols-2 gap-3 px-1">
+            <div className="rounded-xl bg-[#2BB5D4]/10 border border-[#2BB5D4]/30 px-4 py-2 text-center text-xs font-bold text-[#2BB5D4] uppercase tracking-wider">
+              WBConnect+
+            </div>
+            <div className="rounded-xl bg-slate-100 border border-slate-200 px-4 py-2 text-center text-xs font-bold text-slate-500 uppercase tracking-wider">
+              Others
+            </div>
+          </div>
+
+          {rows.map((r, i) => (
+            <motion.div
+              key={r.feature}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="rounded-2xl bg-white border border-slate-100 shadow-sm overflow-hidden"
+            >
+              <div className="px-4 py-3 text-sm font-semibold text-slate-800 border-b border-slate-100 bg-slate-50">
+                {r.feature}
+              </div>
+              <div className="grid grid-cols-2 divide-x divide-slate-100">
+                <div className="px-4 py-3 flex items-center justify-center bg-[#2BB5D4]/5">
+                  <Cell value={r.us} />
+                </div>
+                <div className="px-4 py-3 flex items-center justify-center">
+                  <Cell value={r.them} fallback={r.themLabel} />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

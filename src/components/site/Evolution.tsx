@@ -10,8 +10,8 @@ const cols = [
       "Agents use personal numbers for customer chats",
       "When an agent leaves, the chat history walks out the door",
       "No brand identity — customers see a personal contact",
-      "Manual data entry, zero CRM sync",
-      "256-recipient broadcast cap, phone storage fills fast",
+      "Manual data entry with zero CRM sync",
+      "256 recipient broadcast cap and phone storage fills fast",
     ],
   },
   {
@@ -19,11 +19,11 @@ const cols = [
     title: "Middleman Competitors",
     sub: "The tangled tax",
     points: [
-      "Per-message markup billing",
-      "Stored on third-party servers",
-      "Expensive Salesforce file usage",
-      "Clunky external integrations",
-      "Limited custom-object support",
+      "Per-message markup billing eats into margins",
+      "Data stored on third-party servers outside your control",
+      "Expensive Salesforce file usage costs",
+      "Clunky external integrations that break",
+      "Limited custom object support",
     ],
   },
   {
@@ -31,11 +31,11 @@ const cols = [
     title: "WBConnect+",
     sub: "The native engine",
     points: [
-      "One centralised WhatsApp Business number for the whole org",
-      "Customers message the brand, not an individual — trust & recognition",
+      "One centralised WhatsApp Business number for the whole organisation",
+      "Customers message the brand, not an individual, building trust and recognition",
       "Full chat history stays inside Salesforce, owned by the company",
-      "Direct Meta Cloud API billing · automated AWS S3 media offload",
-      "Native no-code flow & template builders, unlimited broadcasts",
+      "Direct Meta Cloud API billing with automated AWS S3 media offload",
+      "Native no-code flow and template builders plus unlimited broadcasts",
     ],
   },
 ];
@@ -102,8 +102,8 @@ export function Evolution() {
           className="text-center max-w-2xl mx-auto mb-14"
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">The Evolution</div>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            WBConnect+ vs. Standard WhatsApp vs. Middlemen.
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900" aria-label="WBConnect+ compared to Standard WhatsApp and third-party middlemen">
+            WBConnect+ versus Standard WhatsApp and Third-Party Middlemen
           </h2>
         </motion.div>
 

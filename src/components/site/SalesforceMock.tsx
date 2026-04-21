@@ -69,7 +69,7 @@ export function SalesforceMock() {
             <div className="mt-5 rounded-xl border border-dashed border-slate-200 p-3 text-[11px] text-slate-500 flex items-center gap-2">
               <Database className="h-3.5 w-3.5 text-[#22C55E]" />
               CRM storage usage{" "}
-              <span className="ml-auto text-[#22C55E] font-semibold">2.4 MB · S3 offload active</span>
+              <span className="ml-auto text-[#22C55E] font-semibold">2.4 MB, S3 offload active</span>
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@ export function SalesforceMock() {
           <div className="h-7 w-7 rounded-full bg-white/20 grid place-items-center text-xs font-semibold">SK</div>
           <div className="text-xs">
             <div className="font-semibold leading-none">Sara Kapoor</div>
-            <div className="text-[10px] opacity-80 mt-0.5">online · synced to CRM</div>
+            <div className="text-[10px] opacity-80 mt-0.5">online, synced to CRM</div>
           </div>
         </div>
         <div className="p-3 space-y-2 bg-[#ECE5DD] text-xs">
@@ -98,7 +98,7 @@ export function SalesforceMock() {
             className="ml-auto bg-[#DCF8C6] rounded-lg rounded-tr-none px-3 py-2 max-w-[80%] shadow-sm flex items-center gap-1"
           >
             <ImageIcon className="h-3 w-3 text-emerald-700" />
-            <span>floor-plan.jpg · 18 MB</span>
+            <span>floor-plan.jpg (18 MB)</span>
             <CheckCheck className="h-3 w-3 text-[#22C55E] ml-1" />
           </motion.div>
         </div>

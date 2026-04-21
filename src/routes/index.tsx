@@ -14,33 +14,39 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "WBConnect+ — Salesforce-native WhatsApp engine with AWS S3 storage" },
+      { title: "WBConnect+ | WhatsApp Business Integration for Salesforce by MV Clouds" },
       {
         name: "description",
         content:
-          "WBConnect+ by MV Clouds: a Salesforce-native managed package on Meta Cloud API with automated AWS S3 media offloading, no-code flow builder, broadcasts and analytics.",
+          "WBConnect+ by MV Clouds brings WhatsApp Business natively into Salesforce. Send broadcasts, automate replies with WhatsApp flows, build message templates and keep every conversation tracked inside your CRM — built on Meta Cloud API with zero middleman markup.",
       },
-      { property: "og:title", content: "WBConnect+ — Enterprise WhatsApp inside Salesforce" },
+      {
+        name: "keywords",
+        content:
+          "WhatsApp Salesforce integration, WBConnect Plus, WhatsApp Business API, Salesforce WhatsApp, WhatsApp CRM, WhatsApp broadcast Salesforce, WhatsApp flow builder, Meta Cloud API Salesforce, WhatsApp automation, Salesforce managed package WhatsApp, WhatsApp for enterprise Salesforce, MV Clouds WhatsApp",
+      },
+      { property: "og:title", content: "WBConnect+ | WhatsApp Business Integration for Salesforce" },
       {
         property: "og:description",
         content:
-          "Direct Meta Cloud API. Automated AWS S3 offloading. Zero middleman markup. The Salesforce-native WhatsApp engine built for enterprise volume.",
+          "Your customers are already on WhatsApp. Now your CRM is too. WBConnect+ is a Salesforce-native managed package built on Meta Cloud API with no-code flow builders, broadcast messaging and full conversation audit trail inside Salesforce.",
       },
+      { property: "og:url", content: "https://wbconnectplus.com/" },
     ],
   }),
 });
 
 function Index() {
   return (
-    <main className="min-h-screen bg-white text-slate-900">
+    <main className="min-h-screen bg-white text-slate-900" aria-label="WBConnect+ WhatsApp Business integration for Salesforce">
       <Navbar />
       <Hero />
       <Evolution />
       <FeatureShowcase />
+      <Compare />
       <Industries />
       <Benefits />
       <Steps />
-      <Compare />
       <Pricing />
       <CTAFooter />
     </main>
