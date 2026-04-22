@@ -138,6 +138,34 @@
 }
 
 
+/* ── reCAPTCHA mobile scale fix ───────────────────────────────────────────
+   The reCAPTCHA widget is always rendered at 304 px wide. On narrow phones
+   (≤ 360px) this overflows the modal. We scale it down so it always fits.
+   transform-origin: left keeps it left-aligned inside the form. */
+.captcha-scale-wrapper {
+  width: 100%;
+  overflow: visible;
+}
+
+/* Phones 320-359px wide */
+@media (max-width: 359px) {
+  .captcha-scale-wrapper {
+    transform: scale(0.85);
+    transform-origin: left center;
+    /* compensate for the shrunken height so there's no gap below */
+    margin-bottom: -10px;
+  }
+}
+
+/* Phones 360-374px wide */
+@media (min-width: 360px) and (max-width: 374px) {
+  .captcha-scale-wrapper {
+    transform: scale(0.9);
+    transform-origin: left center;
+    margin-bottom: -7px;
+  }
+}
+
 @font-face {
   font-family: "Inter";
   font-style: normal;

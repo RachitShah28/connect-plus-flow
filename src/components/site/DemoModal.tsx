@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
+import { sendDemoRequest } from "../../lib/emailService";
 
 /* ─── grecaptcha type augment ────────────────────────────────────────────── */
 declare global {
@@ -101,10 +102,10 @@ function ModalInner({
         </button>
       </div>
 
-      {/* Body */}
-      <div className="px-5 sm:px-8 py-5 sm:py-6 max-h-[72vh] overflow-y-auto">
-        {submitted ? (
-          /* ── Success state ── */
+      {/* Body — split into scrollable fields + pinned captcha/actions */}
+      {submitted ? (
+        /* ── Success state (no scroll needed) ── */
+        <div className="px-5 sm:px-8 py-5 sm:py-6">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -133,11 +134,14 @@ function ModalInner({
               Close
             </button>
           </motion.div>
-        ) : (
-          /* ── Salesforce Web-to-Lead form ── */
-          <form onSubmit={handleSubmit} className="space-y-3.5">
-            {/* First + Last Name */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        </div>
+      ) : (
+        /* ── Salesforce Web-to-Lead form ── */
+        <form onSubmit={handleSubmit}>
+          {/* ── Scrollable fields area ─────────────────────────────────── */}
+          <div className="px-5 sm:px-8 pt-4 pb-2 space-y-2.5 max-h-[38vh] overflow-y-auto">
+            {/* First + Last Name — always side by side to save vertical space */}
+            <div className="grid grid-cols-2 gap-2.5">
               <div>
                 <label
                   htmlFor="first_name"
@@ -178,50 +182,50 @@ function ModalInner({
               </div>
             </div>
 
-            {/* Email + Company */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-xs font-semibold text-slate-700 mb-1"
-                >
-                  Work Email <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  maxLength={80}
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="jane@company.com"
-                  className={inputCls}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="company"
-                  className="block text-xs font-semibold text-slate-700 mb-1"
-                >
-                  Company <span className="text-red-500">*</span>
-                </label>
-                <input
-                  id="company"
-                  type="text"
-                  name="company"
-                  maxLength={40}
-                  value={form.company}
-                  onChange={handleChange}
-                  required
-                  placeholder="Acme Inc."
-                  className={inputCls}
-                />
-              </div>
+            {/* Work Email */}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-xs font-semibold text-slate-700 mb-1"
+              >
+                Work Email <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                maxLength={80}
+                value={form.email}
+                onChange={handleChange}
+                required
+                placeholder="jane@company.com"
+                className={inputCls}
+              />
             </div>
 
-            {/* City + State */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Company */}
+            <div>
+              <label
+                htmlFor="company"
+                className="block text-xs font-semibold text-slate-700 mb-1"
+              >
+                Company <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="company"
+                type="text"
+                name="company"
+                maxLength={40}
+                value={form.company}
+                onChange={handleChange}
+                required
+                placeholder="Acme Inc."
+                className={inputCls}
+              />
+            </div>
+
+            {/* City + State — side by side */}
+            <div className="grid grid-cols-2 gap-2.5">
               <div>
                 <label
                   htmlFor="city"
@@ -259,9 +263,12 @@ function ModalInner({
                 />
               </div>
             </div>
+          </div>
 
-            {/* reCAPTCHA — programmatically rendered via ref */}
-            <div className="pt-1 flex flex-col gap-1">
+          {/* ── Pinned: reCAPTCHA + actions — always visible, never scrolled away ── */}
+          <div className="px-5 sm:px-8 pt-3 pb-5 sm:pb-6 border-t border-slate-100 bg-white">
+            {/* reCAPTCHA */}
+            <div className="mb-3 captcha-scale-wrapper">
               <div ref={recaptchaRef} />
               {captchaError && (
                 <p className="text-xs text-red-500 mt-1">{captchaError}</p>
@@ -269,7 +276,7 @@ function ModalInner({
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center justify-between">
               <button
                 type="button"
                 onClick={handleClose}
@@ -296,9 +303,9 @@ function ModalInner({
                 <span className="shimmer-btn" aria-hidden />
               </button>
             </div>
-          </form>
-        )}
-      </div>
+          </div>
+        </form>
+      )}
     </>
   );
 }
@@ -431,6 +438,16 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
       // Cleanup the temporary form after submission
       setTimeout(() => document.body.removeChild(formEl), 1000);
 
+      // Also send our internal email notification
+      await sendDemoRequest({
+        firstName: form.first_name,
+        lastName: form.last_name,
+        email: form.email,
+        company: form.company,
+        city: form.city,
+        state: form.state,
+      });
+
       // Brief delay before showing success
       await new Promise((r) => setTimeout(r, 700));
       setSubmitted(true);
@@ -473,51 +490,31 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
       <AnimatePresence>
         {open && (
           <>
-            {/* ── MOBILE backdrop ── */}
+            {/* ── Single backdrop ── */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[199] bg-slate-900/50 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-[199] bg-slate-900/50 backdrop-blur-sm"
               onClick={handleClose}
             />
 
-            {/* ── MOBILE: centred modal ── */}
-            <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:hidden">
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 30, scale: 0.96 }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
-                className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden"
-                style={{
-                  boxShadow:
-                    "0 32px 80px -8px rgba(43,181,212,0.25), 0 8px 32px rgba(0,0,0,0.15)",
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <ModalInner {...innerProps} />
-              </motion.div>
-            </div>
-
-            {/* ── DESKTOP backdrop ── */}
+            {/* ── Single modal: centered on mobile, bottom-right on desktop ──
+                Using ONE ModalInner so recaptchaRef is never duplicated.
+                CSS handles the positioning difference. */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[199] bg-slate-900/40 backdrop-blur-sm hidden md:block"
-              onClick={handleClose}
-            />
-
-            {/* ── DESKTOP: bottom-right floating modal ── */}
-            <motion.div
-              initial={{ opacity: 0, y: 40, scale: 0.97 }}
+              initial={{ opacity: 0, y: 30, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 40, scale: 0.97 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="fixed bottom-6 right-6 z-[200] w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden hidden md:block"
+              exit={{ opacity: 0, y: 30, scale: 0.97 }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              className={[
+                "fixed z-[200] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden",
+                // Mobile: centered
+                "inset-x-4 top-1/2 -translate-y-1/2 w-auto",
+                // Desktop: bottom-right floating
+                "md:inset-x-auto md:top-auto md:translate-y-0 md:bottom-6 md:right-6 md:w-full md:max-w-xl",
+              ].join(" ")}
               style={{
                 boxShadow:
                   "0 32px 80px -8px rgba(43,181,212,0.25), 0 8px 32px rgba(0,0,0,0.15)",
