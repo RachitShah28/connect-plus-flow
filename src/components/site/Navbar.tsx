@@ -81,7 +81,7 @@ export function Navbar() {
               <a
                 href={PACKAGE_URL}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener"
                 aria-label="Start free trial of WBConnect+ WhatsApp Salesforce managed package"
                 className="relative overflow-hidden inline-flex items-center rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors group"
               >
@@ -146,7 +146,7 @@ export function Navbar() {
                   <a
                     href={PACKAGE_URL}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener"
                     onClick={() => setMenuOpen(false)}
                     className="w-full text-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors"
                   >

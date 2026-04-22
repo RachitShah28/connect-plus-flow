@@ -47,8 +47,7 @@ export function Hero() {
               <span className="text-gradient-brand">Now your CRM is too.</span>
             </h1>
             <p className="mt-5 text-base md:text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
-              WBConnect+ is the Salesforce-native WhatsApp Business integration by MV Clouds. Every message tracked,
-              every lead assigned and every conversation stored inside your CRM the moment it arrives, built directly on Meta Cloud API.
+              WBConnect+ is a CRM-native WhatsApp Business integration by MV Clouds: Track messages, assign leads, and store conversations instantly via Meta Cloud API.
             </p>
             <div className="mt-7 flex flex-wrap items-center justify-center md:justify-start gap-3">
               <a

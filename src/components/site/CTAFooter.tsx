@@ -12,6 +12,10 @@ const ecosystem = [
   { label: "EstateXpert",           href: "https://mvclouds.com/solutions/estatexpert" },
 ];
 
+const legal = [
+  { label: "Privacy Policy", href: "https://mvclouds.com/privacypolicy", aria: "WBConnect+ Privacy Policy" }
+];
+
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
 
 const WA_URL =
@@ -149,7 +153,8 @@ export function CTAFooter() {
                   <a
                     href={item.href}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener"
+                    aria-label={`Visit ${item.label} by MV Clouds`}
                     className="text-sm text-slate-400 hover:text-white transition-colors"
                   >
                     {item.label}
@@ -195,16 +200,19 @@ export function CTAFooter() {
           <div>
             <div className="text-xs font-semibold uppercase tracking-wider text-white mb-4">Legal</div>
             <ul className="space-y-2">
-              <li>
-                <a
-                  href="https://mvclouds.com/privacypolicy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-slate-400 hover:text-white transition-colors"
-                >
-                  Privacy Policy
-                </a>
-              </li>
+              {legal.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.aria}
+                    className="text-sm text-slate-400 hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

@@ -1,0 +1,61 @@
+# robots.txt — WBConnectPlus.com
+# Generated: April 2026
+
+# ──────────────────────────────────────────────
+# Allow all legitimate search-engine bots
+# ──────────────────────────────────────────────
+User-agent: *
+Allow: /
+
+# ──────────────────────────────────────────────
+# Block sensitive / private paths
+# ──────────────────────────────────────────────
+
+# API endpoints & backend routes
+Disallow: /api/
+Disallow: /api/*
+
+# Authentication & admin
+Disallow: /admin/
+Disallow: /admin/*
+Disallow: /login
+Disallow: /logout
+Disallow: /auth/
+Disallow: /auth/*
+
+# Internal / developer assets
+Disallow: /src/
+Disallow: /.env
+Disallow: /.env.*
+Disallow: /config/
+Disallow: /config/*
+
+# User-generated or private data
+Disallow: /private/
+Disallow: /private/*
+Disallow: /internal/
+Disallow: /internal/*
+Disallow: /dashboard/
+Disallow: /dashboard/*
+
+# Salesforce / integration callback paths
+Disallow: /oauth/
+Disallow: /oauth/*
+Disallow: /webhook/
+Disallow: /webhook/*
+Disallow: /callback/
+Disallow: /callback/*
+
+# Temporary / build artefacts
+Disallow: /dist/
+Disallow: /.wrangler/
+
+# ──────────────────────────────────────────────
+# Crawl-rate hint (optional, respected by Google)
+# ──────────────────────────────────────────────
+Crawl-delay: 10
+
+# ──────────────────────────────────────────────
+# Sitemap
+# ──────────────────────────────────────────────
+Sitemap: https://wbconnectplus.com/sitemap.xml

@@ -281,24 +281,24 @@ export function Industries() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.35, delay: 0.05 }}
-              className="rounded-3xl glass p-8 shadow-xl shadow-slate-200/40"
+              className="rounded-3xl glass p-8 shadow-xl shadow-slate-200/40 flex flex-col items-center justify-center"
             >
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 text-center w-full">
                 Example WhatsApp Flow / Automation
               </div>
-              <ol className="mt-5 space-y-4">
+              <ol className="mt-5 space-y-4 w-full">
                 {Item.flow.map((step, idx) => (
                   <motion.li
                     key={step}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.1 }}
-                    className="flex items-start gap-3"
+                    className="flex items-center gap-3"
                   >
                     <div className="h-7 w-7 rounded-full bg-[#22C55E] text-white text-xs font-bold grid place-items-center flex-shrink-0">
                       {idx + 1}
                     </div>
-                    <div className="rounded-xl bg-white px-4 py-3 text-sm text-slate-800 shadow-sm border border-slate-100 flex-1">
+                    <div className="rounded-xl bg-white px-4 py-3 text-sm text-slate-800 shadow-sm border border-slate-100 flex-1 text-center">
                       {step}
                     </div>
                   </motion.li>

@@ -1,57 +1,126 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Primary Meta -->
-    <title>WBConnect+ | WhatsApp Business Integration for Salesforce</title>
-    <meta
-      name="description"
-      content="WBConnect+ by MV Clouds is the only Salesforce-native managed package for WhatsApp Business. Send broadcasts, run WhatsApp flows, automate replies and keep every message inside your CRM. Built on Meta Cloud API with no per-message markup."
-    />
-    <meta
-      name="keywords"
-      content="WhatsApp Salesforce integration, WhatsApp Business API Salesforce, WBConnect+, WhatsApp CRM, WhatsApp Business managed package, Salesforce WhatsApp, Meta Cloud API Salesforce, WhatsApp broadcast Salesforce, WhatsApp automation Salesforce, MV Clouds, WhatsApp for Salesforce, Salesforce native WhatsApp, WhatsApp flow builder, WhatsApp template builder, WhatsApp messaging Salesforce, WBConnect Plus"
-    />
-    <meta name="author" content="MV Clouds Pvt Ltd" />
-    <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#2BB5D4" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Canonical -->
-    <link rel="canonical" href="https://wbconnectplus.com/" />
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="WBConnect+" />
-    <meta property="og:title" content="WBConnect+ | WhatsApp Business Integration for Salesforce" />
-    <meta
-      property="og:description"
-      content="The Salesforce-native managed package that puts WhatsApp Business inside your CRM. Broadcasts, flows, templates, automation and full audit trails — all built on Meta Cloud API with zero middleman markup."
-    />
-    <meta property="og:url" content="https://wbconnectplus.com/" />
-    <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6147a5cf-c74b-4a9a-8680-dc245c355385/id-preview-a2c07831--00193c38-fb00-4750-a1fc-e67867c3b103.lovable.app-1776678419620.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="WBConnect+ — WhatsApp Business inside Salesforce" />
-    <meta property="og:locale" content="en_US" />
+  <!-- Primary Meta -->
+  <title>WBConnectPlus | WhatsApp Business Integration for CRM</title>
+  <meta name="description"
+    content="WBConnect+ is a CRM-native WhatsApp Business integration by MV Clouds—track messages, assign leads, and store conversations instantly via Meta Cloud API." />
+  <meta name="keywords"
+    content="WBConnect, WBConnectPlus, WBConnect+, WB Connect, WB Connect Plus, WhatsApp integration, WhatsApp Salesforce integration, WhatsApp Business integration, WhatsApp Salesforce integration, WBConnect+ by MV Clouds, WhatsApp Business API Salesforce, WBConnect+, WhatsApp CRM, WhatsApp Business managed package, Salesforce WhatsApp, Meta Cloud API Salesforce, WhatsApp broadcast Salesforce, WhatsApp automation Salesforce, MV Clouds, WhatsApp for Salesforce, Salesforce native WhatsApp, WhatsApp flow builder, WhatsApp template builder, WhatsApp messaging Salesforce, WBConnect Plus" />
+  <meta name="author" content="MV Clouds Pvt Ltd" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2BB5D4" />
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@mvclouds" />
-    <meta name="twitter:creator" content="@mvclouds" />
-    <meta name="twitter:title" content="WBConnect+ | WhatsApp Business Integration for Salesforce" />
-    <meta
-      name="twitter:description"
-      content="Salesforce-native WhatsApp integration by MV Clouds. Broadcasts, flows, templates, automation — all inside your CRM on Meta Cloud API."
-    />
-    <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6147a5cf-c74b-4a9a-8680-dc245c355385/id-preview-a2c07831--00193c38-fb00-4750-a1fc-e67867c3b103.lovable.app-1776678419620.png" />
+  <!-- Canonical & Discovery -->
+  <link rel="canonical" href="https://wbconnectplus.com/" />
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
-    <!-- reCAPTCHA -->
-    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+  <!-- Resource hints: preconnect to external origins to avoid redirect overhead -->
+  <link rel="preconnect" href="https://www.google.com" />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
 
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="WBConnect+" />
+  <meta property="og:title" content="WBConnect+ | WhatsApp Business Integration for Salesforce" />
+  <meta property="og:description"
+    content="The Salesforce-native managed package that puts WhatsApp Business inside your CRM. Broadcasts, flows, templates, automation and full audit trails — all built on Meta Cloud API with zero middleman markup." />
+  <meta property="og:url" content="https://wbconnectplus.com/" />
+  <meta property="og:image"
+    content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6147a5cf-c74b-4a9a-8680-dc245c355385/id-preview-a2c07831--00193c38-fb00-4750-a1fc-e67867c3b103.lovable.app-1776678419620.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="WBConnect+ — WhatsApp Business inside Salesforce" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@mvclouds" />
+  <meta name="twitter:creator" content="@mvclouds" />
+  <meta name="twitter:title" content="WBConnect+ | WhatsApp Business Integration for Salesforce" />
+  <meta name="twitter:description"
+    content="WBConnect+ is a CRM-native WhatsApp Business integration by MV Clouds—track messages, assign leads, and store conversations instantly via Meta Cloud API." />
+  <meta name="twitter:image"
+    content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/6147a5cf-c74b-4a9a-8680-dc245c355385/id-preview-a2c07831--00193c38-fb00-4750-a1fc-e67867c3b103.lovable.app-1776678419620.png" />
+
+  <!-- reCAPTCHA: defer so it doesn't block render or create redirect chains -->
+  <script src="https://www.google.com/recaptcha/api.js?render=explicit&hl=en" async defer></script>
+
+  <!-- JSON-LD Structured Data -->
+
+  <!-- WebSite Schema -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org/",
+        "@type": "WebSite",
+        "name": "WBConnect+",
+        "alternateName": "WBConnectPlus",
+        "url": "https://wbconnectplus.com/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://wbconnectplus.com/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+  <!-- Organisation Schema -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "MV Clouds Pvt Ltd",
+        "alternateName": "MV Clouds",
+        "url": "https://mvclouds.com/",
+        "logo": "https://wbconnectplus.com/favicon.svg",
+        "sameAs": [
+          "https://www.linkedin.com/company/mv-clouds-private-limited/",
+          "https://www.instagram.com/mvcloudsync/",
+          "https://www.facebook.com/profile.php?id=100063698268170",
+          "https://x.com/mvclouds_tech"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-9558019600",
+          "contactType": "sales",
+          "email": "info@mvclouds.com",
+          "availableLanguage": "English"
+        },
+        "address": [
+          {
+            "@type": "PostalAddress",
+            "streetAddress": "D-404, The First Synthesis, B/H Keshavbaug Party Plot",
+            "addressLocality": "Ahmedabad",
+            "addressRegion": "Gujarat",
+            "postalCode": "380015",
+            "addressCountry": "IN"
+          },
+          {
+            "@type": "PostalAddress",
+            "streetAddress": "Meydan Grandstand, 6th floor, Meydan Road, Nad Al Sheba",
+            "addressLocality": "Dubai",
+            "addressCountry": "AE"
+          }
+        ]
+      }
+    </script>
+
+  <!-- Software Application Schema -->
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
@@ -59,12 +128,13 @@
         "alternateName": "WBConnect Plus",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Salesforce",
-        "description": "WBConnect+ is a Salesforce-native managed package that brings WhatsApp Business into your CRM. Features include broadcast messaging, WhatsApp flow builder, template builder, automation and AWS S3 media storage — all built on Meta Cloud API.",
+        "description": "WBConnect+ is a Salesforce-native managed package that brings WhatsApp Business directly into your CRM. Features include broadcast messaging, a no-code WhatsApp Flow Builder, Template Builder with Meta approval, automation for quick-reply triggers, full conversation timelines on every Salesforce record, and AWS S3 media storage — all built on Meta Cloud API with zero middleman markup.",
         "url": "https://wbconnectplus.com/",
         "offers": {
           "@type": "Offer",
           "price": "29",
           "priceCurrency": "USD",
+          "description": "WBConnect+ Standard — WhatsApp Business inside Salesforce for unlimited users.",
           "priceSpecification": {
             "@type": "UnitPriceSpecification",
             "price": "29",
@@ -72,23 +142,125 @@
             "unitText": "MONTH"
           }
         },
-        "author": {
+        "creator": {
           "@type": "Organization",
           "name": "MV Clouds Pvt Ltd",
-          "url": "https://mvclouds.com/",
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+91-9558019600",
-            "contactType": "sales",
-            "email": "info@mvclouds.com"
-          }
+          "url": "https://mvclouds.com/"
         },
-        "keywords": "WhatsApp Salesforce, WhatsApp Business API, Salesforce WhatsApp integration, WhatsApp CRM, Meta Cloud API, WhatsApp broadcast, WhatsApp automation"
+        "featureList": [
+          "Native Salesforce WhatsApp messaging UI",
+          "No-code WhatsApp Flow Builder",
+          "WhatsApp Template Builder with Meta approval",
+          "WhatsApp broadcast messaging",
+          "Automation for quick-reply triggers",
+          "Full conversation timeline on every Salesforce record",
+          "AWS S3 media storage with bring-your-own bucket",
+          "Global Chat Window for live agent handover",
+          "Unlimited Salesforce users at flat monthly price",
+          "Meta Cloud API with no middleman markup",
+          "Multi-team and multi-org Salesforce setup (Enterprise)",
+          "Industry playbooks: Real Estate, Healthcare, E-commerce, Education, Banking, Automotive, Travel and more"
+        ],
+        "keywords": "WBConnect, WBConnectPlus, WBConnect+, WB Connect Plus, WhatsApp Salesforce integration, WhatsApp Business API Salesforce, WhatsApp CRM, Meta Cloud API Salesforce, WhatsApp broadcast Salesforce, WhatsApp automation Salesforce, WhatsApp flow builder Salesforce, MV Clouds"
       }
     </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is WBConnect+?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WBConnect+ is a Salesforce-native managed package built by MV Clouds that brings WhatsApp Business directly into your CRM. It lets your team send messages, broadcast campaigns, build WhatsApp flows, manage templates and store media — all without leaving Salesforce and with no middleman markup on Meta Cloud API."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much does WBConnect+ cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WBConnect+ Standard starts at $29 per month for unlimited Salesforce users, 1 WhatsApp Business Account number, broadcast messaging, no-code flow builder, template builder, automation and full conversation timelines. Enterprise pricing is custom — contact the MV Clouds sales team for multi-org and multi-WABA requirements."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What WhatsApp features does WBConnect+ include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WBConnect+ includes: a native Salesforce WhatsApp messaging UI, no-code WhatsApp Flow Builder, WhatsApp Template Builder with Meta approval, broadcast messaging, automation for quick-reply triggers, a Global Chat Window for live-agent handover, full conversation timelines on every Salesforce record, and AWS S3 media storage with your own bucket and KMS keys."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I install WBConnect+ in my Salesforce org?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Getting live takes four milestones: (1) Install the managed package directly into your Salesforce org via the secure install link — no AppExchange or marketplace dependencies. (2) Map any standard or custom Salesforce objects and fields with point-and-click configuration. (3) Authenticate Meta Cloud API via Embedded Signup and connect your AWS S3 bucket and KMS keys. (4) Go live with broadcasts, flows and a unified WhatsApp inbox across your teams globally."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which industries does WBConnect+ support?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WBConnect+ supports 10+ industries including Real Estate (property cards, site visit booking), Healthcare (appointment reminders, reduce no-shows by 40%), E-commerce and Retail (cart recovery, order updates), Education (admissions, fee reminders), Travel and Hospitality (check-in flows, upsell automation), Banking and Financial Services (KYC collection, loan offers), Automotive (test drive booking, service reminders), Food and Delivery (WhatsApp ordering, delivery OTPs), Fitness and Wellness (class bookings, member renewal nudges), and Professional Services (consultation booking, document collection)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is WBConnect+ different from other WhatsApp Salesforce integrations?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WBConnect+ is 100% Salesforce-native — built as a managed package, not a middleware connector. This means all data stays inside your Salesforce org, conversations are stored on the exact record they relate to, and you pay zero middleman markup on Meta Cloud API messaging. Competitors typically use third-party servers, charge per-message fees on top of Meta rates, and lack the no-code Flow Builder and bring-your-own S3 media storage that WBConnect+ provides."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does WBConnect+ work with WhatsApp Flow Builder?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. WBConnect+ includes a no-code WhatsApp Flow Builder that lets you build interactive WhatsApp forms — collecting customer data, booking appointments, running surveys or completing KYC — entirely inside Salesforce. Responses are written back automatically to the relevant Salesforce record with no coding required."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there a per-message fee with WBConnect+?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. WBConnect+ charges no per-message fees of its own. All plans include unlimited WhatsApp conversations. You only pay Meta's standard WhatsApp Business API conversation rates directly — there is no middleman markup."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does WBConnect+ store WhatsApp media files?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "WBConnect+ lets you bring your own AWS S3 bucket and KMS keys for media storage. Images, documents, audio and video exchanged on WhatsApp are stored in your own S3 bucket — you retain full ownership and control. This approach meets enterprise data residency and compliance requirements."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use WBConnect+ for WhatsApp broadcast messaging?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. WBConnect+ supports WhatsApp broadcast messaging directly from Salesforce. You can target broadcast audiences using any Salesforce list view, report or campaign, personalise messages with Salesforce merge fields, schedule campaigns and track delivery status — all logged back to the relevant Salesforce records."
+            }
+          }
+        ]
+      }
+    </script>
+
+  <meta name="google-site-verification" content="ltVdxffMDRER_VrKZIbGz9ZwA0XfBvgYYQDTKINa4V0" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

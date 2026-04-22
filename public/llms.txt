@@ -1,0 +1,40 @@
+# WBConnect+
+> WBConnect+ is a Salesforce-native managed package that brings WhatsApp Business natively into your CRM — built on Meta's Cloud API with zero middleman markup.
+
+## Product
+WBConnect+ by MV Clouds Pvt Ltd enables Salesforce organisations to send and receive WhatsApp Business messages, run broadcast campaigns, build automated WhatsApp flows, manage templates, and store media on AWS S3 — all from within the Salesforce platform. No third-party proxy; direct Meta Cloud API integration.
+
+## Key Features
+- **Salesforce-native**: Installs as a managed package. Works inside any Salesforce org.
+- **Broadcast Messaging**: Send bulk WhatsApp messages to leads, contacts, and custom lists.
+- **Flow Builder**: No-code WhatsApp conversation flow builder inside Salesforce.
+- **Template Manager**: Create, submit, and manage WhatsApp Business message templates.
+- **Global Chat Window**: Unified inbox for two-way WhatsApp conversations inside Salesforce.
+- **AWS S3 Media Storage**: All media (images, PDFs, videos) stored on your own S3 bucket.
+- **Full Audit Trail**: Every message logged as a Salesforce record for compliance.
+- **Meta Cloud API**: Direct connection — no middleman, no per-message markup.
+
+## Pricing
+Starting at USD $29/month per organisation. Free 30-day trial available via Salesforce AppExchange.
+
+## Company
+**MV Clouds Pvt Ltd**
+- Website: https://mvclouds.com/
+- Product page: https://wbconnectplus.com/
+- Email: info@mvclouds.com
+- Phone: +91 9558019600
+- Headquarters: Ahmedabad, Gujarat, India
+- Regional office: Dubai, U.A.E.
+
+## Use-Cases
+Real estate, financial services, healthcare, e-commerce, education, logistics, banking, insurance — any Salesforce-driven business that needs WhatsApp as a customer-communication channel.
+
+## Install
+https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX
+
+## Sitemap
+https://wbconnectplus.com/sitemap.xml
+
+## Optional
+- Privacy Policy: https://mvclouds.com/privacypolicy
+- LinkedIn: https://www.linkedin.com/company/mv-clouds-private-limited/
