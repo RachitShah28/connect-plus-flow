@@ -440,8 +440,8 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
 
       // Also send our internal email notification
       await sendDemoRequest({
-        firstName: form.first_name,
-        lastName: form.last_name,
+        first_name: form.first_name,
+        last_name: form.last_name,
         email: form.email,
         company: form.company,
         city: form.city,
