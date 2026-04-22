@@ -138,8 +138,8 @@ function ModalInner({
       ) : (
         /* ── Salesforce Web-to-Lead form ── */
         <form onSubmit={handleSubmit}>
-          {/* ── Scrollable fields area ─────────────────────────────────── */}
-          <div className="px-5 sm:px-8 pt-4 pb-2 space-y-2.5 max-h-[38vh] overflow-y-auto">
+          {/* ── Scrollable area: ALL fields + reCAPTCHA together ── */}
+          <div className="px-5 sm:px-8 pt-4 pb-4 space-y-3 max-h-[55vh] overflow-y-auto">
             {/* First + Last Name — always side by side to save vertical space */}
             <div className="grid grid-cols-2 gap-2.5">
               <div>
@@ -263,19 +263,18 @@ function ModalInner({
                 />
               </div>
             </div>
-          </div>
 
-          {/* ── Pinned: reCAPTCHA + actions — always visible, never scrolled away ── */}
-          <div className="px-5 sm:px-8 pt-3 pb-5 sm:pb-6 border-t border-slate-100 bg-white">
-            {/* reCAPTCHA */}
-            <div className="mb-3 captcha-scale-wrapper">
+            {/* ── reCAPTCHA — sits naturally after the fields ── */}
+            <div>
               <div ref={recaptchaRef} />
               {captchaError && (
-                <p className="text-xs text-red-500 mt-1">{captchaError}</p>
+                <p className="text-xs text-red-500 mt-1.5">{captchaError}</p>
               )}
             </div>
+          </div>
 
-            {/* Actions */}
+          {/* ── Pinned: action buttons only ── */}
+          <div className="px-5 sm:px-8 pt-3 pb-5 sm:pb-6 border-t border-slate-100 bg-white">
             <div className="flex items-center justify-between">
               <button
                 type="button"
@@ -321,7 +320,7 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
   const recaptchaRef = useRef<HTMLDivElement | null>(null);
   const recaptchaWidgetId = useRef<number | null>(null);
 
-  /* ─── Programmatic reCAPTCHA render + timestamp refresh ── */
+  /* ─── Lazy-inject reCAPTCHA script + render widget ─────────────────── */
   useEffect(() => {
     if (!open) return;
 
@@ -354,20 +353,42 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
       }
     };
 
-    // Wait for the modal animation to settle before rendering
-    const delay = setTimeout(() => {
-      if (window.grecaptcha) {
-        tryRender();
-      } else {
-        const poll = setInterval(() => {
-          if (window.grecaptcha) {
-            tryRender();
-            clearInterval(poll);
-          }
-        }, 200);
-        return () => clearInterval(poll);
-      }
-    }, 150);
+    const RECAPTCHA_SRC =
+      "https://www.google.com/recaptcha/api.js?render=explicit&hl=en";
+
+    const injectAndRender = () => {
+      // Wait for the modal animation to settle before rendering
+      const delay = setTimeout(() => {
+        if (window.grecaptcha) {
+          tryRender();
+        } else {
+          const poll = setInterval(() => {
+            if (window.grecaptcha) {
+              tryRender();
+              clearInterval(poll);
+            }
+          }, 200);
+          return () => clearInterval(poll);
+        }
+      }, 150);
+      return delay;
+    };
+
+    let delay: ReturnType<typeof setTimeout>;
+
+    // Inject the script tag only once — if it doesn't already exist
+    if (!document.querySelector(`script[src="${RECAPTCHA_SRC}"]`)) {
+      const script = document.createElement("script");
+      script.src = RECAPTCHA_SRC;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        delay = injectAndRender();
+      };
+      document.head.appendChild(script);
+    } else {
+      delay = injectAndRender();
+    }
 
     return () => {
       clearTimeout(delay);

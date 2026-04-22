@@ -173,3 +173,82 @@
   font-display: swap;
   src: url("https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2") format("woff2");
 }
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoapqROInb0mFXiBd-nh_exAnGX5qWGn7A_mQMiuUPcmXiTpX4Gv1W47jw.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── Hero CSS animations (replaces framer-motion on critical path) ─────────
+   These run entirely on the GPU compositor thread so they never block FCP/LCP. */
+
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hero-fade-up-delayed {
+  0%, 20%  { opacity: 0; transform: translateY(28px); }
+  100%     { opacity: 1; transform: translateY(0); }
+}
+@keyframes navbar-drop-in {
+  from { opacity: 0; transform: translateY(-30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes blob-spin-cw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes blob-spin-ccw {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+@keyframes arrow-nudge {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(4px); }
+}
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(43, 181, 212, 0.4); }
+  50%      { box-shadow: 0 0 0 8px rgba(43, 181, 212, 0); }
+}
+
+/* Navbar drops in from above */
+.navbar-drop-in {
+  animation: navbar-drop-in 0.45s ease-out both;
+}
+
+/* Hero section text block — fades in immediately on paint */
+.hero-content {
+  animation: hero-fade-up 0.55s ease-out both;
+}
+
+/* Salesforce mock visual — slight delay so text paints first */
+.hero-visual {
+  animation: hero-fade-up-delayed 0.75s ease-out both;
+}
+
+/* Badge pulse — subtle attention ring */
+.hero-badge {
+  animation: badge-pulse 2s ease-in-out infinite;
+}
+
+/* Arrow in CTA button */
+.hero-arrow {
+  animation: arrow-nudge 1.4s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* Blob rotations — GPU layer, long duration so they don't consume CPU */
+.hero-blob-blue {
+  will-change: transform;
+  animation: blob-spin-cw 60s linear infinite;
+  transform-origin: center;
+}
+.hero-blob-green {
+  will-change: transform;
+  animation: blob-spin-ccw 80s linear infinite;
+  transform-origin: center;
+}

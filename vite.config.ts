@@ -14,6 +14,9 @@ export default defineConfig({
     // Raise the warning limit so CI stays clean; actual chunks are split below
     chunkSizeWarningLimit: 600,
 
+    // Split CSS per-chunk so lazy sections don't bloat initial CSS
+    cssCodeSplit: true,
+
     rollupOptions: {
       output: {
         manualChunks(id) {
@@ -49,6 +52,14 @@ export default defineConfig({
           // Charting — only used in specific components
           if (id.includes("node_modules/recharts/")) {
             return "vendor-recharts";
+          }
+
+          // DemoModal + emailService — only needed when user opens the modal
+          if (
+            id.includes("src/components/site/DemoModal") ||
+            id.includes("src/lib/emailService")
+          ) {
+            return "feature-demo-modal";
           }
         },
       },

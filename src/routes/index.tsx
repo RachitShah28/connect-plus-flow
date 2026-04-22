@@ -60,13 +60,24 @@ function Index() {
       <Navbar />
       <Hero />
 
+      {/* Author byline — E-E-A-T signal for search engines */}
+      <address className="sr-only" aria-label="Content author">
+        Published by{" "}
+        <a href="https://mvclouds.com/about" rel="author">MV Clouds Pvt Ltd</a>,
+        Salesforce ISV Partner with 11 years of CRM expertise.
+      </address>
+
       {/* Below-the-fold: lazy-loaded to reduce initial JS */}
       <Suspense fallback={<SectionSkeleton />}>
         <Evolution />
       </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <FeatureShowcase />
-      </Suspense>
+      {/* FeatureShowcase — id="features" on the wrapper ensures the fragment
+           target exists in the DOM immediately, even before lazy-load */}
+      <div id="features" style={{ scrollMarginTop: '88px' }}>
+        <Suspense fallback={<SectionSkeleton />}>
+          <FeatureShowcase />
+        </Suspense>
+      </div>
       <Suspense fallback={<SectionSkeleton />}>
         <Compare />
       </Suspense>

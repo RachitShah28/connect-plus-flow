@@ -1,8 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { DemoModal } from "./DemoModal";
 import { WBCLogo } from "./WBCLogo";
+
+// Lazy-load DemoModal — it's never visible on initial paint, so keep it out of the critical bundle
+const DemoModal = lazy(() =>
+  import("./DemoModal").then((m) => ({ default: m.DemoModal }))
+);
 
 const links = [
   { href: "#top", label: "Home", aria: "WBConnect+ home" },
@@ -45,11 +49,8 @@ export function Navbar() {
 
   return (
     <>
-      <motion.header
-        initial={{ y: -30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="fixed top-0 inset-x-0 z-50"
+      <header
+        className="fixed top-0 inset-x-0 z-50 navbar-drop-in"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
           <nav
@@ -60,6 +61,7 @@ export function Navbar() {
             {/* Logo */}
             <a href="#top" aria-label="WBConnect+ home — WhatsApp Salesforce integration" className="flex items-center">
               <WBCLogo height={36} />
+              <span className="sr-only">WBConnect+ Home</span>
             </a>
 
             {/* Desktop nav links */}
@@ -163,7 +165,7 @@ export function Navbar() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
 
       {/* Backdrop for mobile menu */}
       <AnimatePresence>
@@ -178,7 +180,9 @@ export function Navbar() {
         )}
       </AnimatePresence>
 
-      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
+      <Suspense fallback={null}>
+        <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
+      </Suspense>
     </>
   );
 }

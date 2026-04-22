@@ -13,7 +13,11 @@ const ecosystem = [
 ];
 
 const legal = [
-  { label: "Privacy Policy", href: "https://mvclouds.com/privacypolicy", aria: "WBConnect+ Privacy Policy" }
+  { label: "Privacy Policy",    href: "https://mvclouds.com/privacypolicy",       aria: "WBConnect+ Privacy Policy" },
+  { label: "Terms of Service",  href: "https://mvclouds.com/terms-of-service",    aria: "WBConnect+ Terms of Service" },
+  { label: "About MV Clouds",   href: "https://mvclouds.com/about",               aria: "About MV Clouds — the team behind WBConnect+" },
+  { label: "Contact Us",        href: "https://mvclouds.com/contact",             aria: "Contact MV Clouds sales team" },
+  { label: "Editorial Policy",  href: "https://mvclouds.com/editorial-policy",    aria: "WBConnect+ editorial and content policy" },
 ];
 
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
@@ -135,10 +139,12 @@ export function CTAFooter() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={s.label}
+                  aria-label={`Follow MV Clouds on ${s.label}`}
+                  title={`MV Clouds on ${s.label}`}
                   className="h-9 w-9 rounded-lg border border-white/15 bg-white/5 grid place-items-center text-slate-300 hover:text-[#22C55E] hover:border-[#22C55E] transition-colors"
                 >
                   {s.icon}
+                  <span className="sr-only">{s.label}</span>
                 </a>
               ))}
             </div>
