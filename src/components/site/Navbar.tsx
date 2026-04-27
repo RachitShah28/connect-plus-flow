@@ -22,6 +22,14 @@ const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp
 export function Navbar() {
   const [demoOpen, setDemoOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Track scroll position to switch navbar to opaque background
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close menu on resize to desktop
   useEffect(() => {
@@ -56,7 +64,12 @@ export function Navbar() {
           <nav
             role="navigation"
             aria-label="WBConnect+ main navigation"
-            className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-2xl shadow-lg shadow-slate-200/50 flex items-center justify-between px-4 sm:px-6 py-3"
+            className={[
+              "backdrop-blur-xl border rounded-2xl shadow-lg shadow-slate-200/50 flex items-center justify-between px-4 sm:px-6 py-3 transition-colors duration-300",
+              scrolled
+                ? "bg-white border-slate-200/80"
+                : "bg-white/70 border-white/40",
+            ].join(" ")}
           >
             {/* Logo */}
             <a href="#top" aria-label="WBConnect+ home — WhatsApp Salesforce integration" className="flex items-center">

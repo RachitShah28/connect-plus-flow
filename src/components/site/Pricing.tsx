@@ -8,7 +8,7 @@ const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp
 const tiers = [
   {
     name: "WBConnect+ Standard",
-    price: "$29",
+    price: "$189",
     suffix: "/mo",
     desc: "Everything you need to start using WhatsApp Business inside Salesforce for your whole team at one flat monthly price.",
     features: [
@@ -72,7 +72,7 @@ export function Pricing() {
               Simple, transparent pricing for WhatsApp Business in Salesforce.
             </h2>
             <p className="mt-4 text-slate-600">
-              Start for a flat $29 per month or talk to us for a custom plan built around your team size and WhatsApp workflows.
+              Start for a flat $189 per month or talk to us for a custom plan built around your team size and WhatsApp workflows.
             </p>
           </motion.div>
 

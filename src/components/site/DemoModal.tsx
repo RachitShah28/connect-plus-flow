@@ -320,6 +320,18 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
   const recaptchaRef = useRef<HTMLDivElement | null>(null);
   const recaptchaWidgetId = useRef<number | null>(null);
 
+  /* ─── Lock body scroll while modal is open ────────────────────────── */
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   /* ─── Lazy-inject reCAPTCHA script + render widget ─────────────────── */
   useEffect(() => {
     if (!open) return;

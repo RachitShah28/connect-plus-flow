@@ -15,7 +15,7 @@ WBConnect+ by MV Clouds Pvt Ltd enables Salesforce organisations to send and rec
 - **Meta Cloud API**: Direct connection — no middleman, no per-message markup.
 
 ## Pricing
-Starting at USD $29/month per organisation. Free 30-day trial available via Salesforce AppExchange.
+Starting at USD $189/month per organisation. Free 30-day trial available via Salesforce AppExchange.
 
 ## Company
 **MV Clouds Pvt Ltd**
