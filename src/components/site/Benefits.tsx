@@ -56,22 +56,22 @@ function Counter({ to, suffix }: { to: number; suffix: string }) {
 
 export function Benefits() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-12 md:py-16 bg-slate-50/50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto mb-14"
+          className="text-center max-w-2xl mx-auto mb-10"
         >
-          <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Measurable ROI</div>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
+          <div className="text-xs font-bold tracking-wider uppercase text-emerald-600 mb-2">Measurable ROI</div>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             Numbers that prove the business case for WhatsApp inside Salesforce.
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {stats.map((s, i) => (
             <motion.div
               key={s.label}
@@ -79,19 +79,18 @@ export function Benefits() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              whileHover={{ scale: 1.02, y: -5 }}
-              className="rounded-3xl bg-gradient-to-br from-slate-50 to-white p-7 border border-slate-200 shadow-xl shadow-slate-200/50 relative overflow-hidden"
+              className="group rounded-2xl bg-white p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all duration-300 relative overflow-hidden"
             >
-              <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-[#2BB5D4]/10 to-[#22C55E]/10 blur-2xl" />
+              <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-emerald-50 blur-3xl group-hover:bg-emerald-100 transition-colors duration-500" />
               <div className="relative">
-                <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-[#2BB5D4] to-[#22C55E] grid place-items-center text-white shadow-lg shadow-[#2BB5D4]/20">
-                  <s.icon className="h-5 w-5" />
+                <div className="h-12 w-12 rounded-xl bg-emerald-50 group-hover:bg-emerald-100 grid place-items-center text-emerald-600 transition-colors duration-300">
+                  <s.icon className="h-6 w-6" />
                 </div>
-                <div className="mt-5 text-4xl font-bold tracking-tight text-slate-900">
+                <div className="mt-6 text-4xl font-extrabold tracking-tight text-slate-900">
                   <Counter to={s.value} suffix={s.suffix} />
                 </div>
-                <div className="mt-1 text-sm font-semibold text-slate-900">{s.label}</div>
-                <div className="mt-1 text-xs text-slate-500">{s.sub}</div>
+                <div className="mt-2 text-base font-bold text-slate-900">{s.label}</div>
+                <div className="mt-1.5 text-sm text-slate-600 leading-relaxed">{s.sub}</div>
               </div>
             </motion.div>
           ))}

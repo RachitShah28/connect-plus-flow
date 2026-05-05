@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Cloud, Search, Bell, User, Briefcase, Users, BarChart3, Settings, CheckCheck, Image as ImageIcon, Database } from "lucide-react";
 
 export function SalesforceMock() {
@@ -75,11 +74,9 @@ export function SalesforceMock() {
         </div>
       </div>
 
-      {/* Floating WhatsApp chat */}
-      <motion.div
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -bottom-6 -right-2 sm:-right-8 w-64 rounded-2xl shadow-2xl shadow-emerald-200/60 border border-white overflow-hidden bg-white"
+      {/* Floating WhatsApp chat — CSS animation instead of Framer Motion infinite loop */}
+      <div
+        className="absolute -bottom-6 -right-2 sm:-right-8 w-64 rounded-2xl shadow-2xl shadow-emerald-200/60 border border-white overflow-hidden bg-white sf-chat-float"
       >
         <div className="bg-[#075E54] text-white px-3 py-2 flex items-center gap-2">
           <div className="h-7 w-7 rounded-full bg-white/20 grid place-items-center text-xs font-semibold">SK</div>
@@ -92,34 +89,27 @@ export function SalesforceMock() {
           <div className="bg-white rounded-lg rounded-tl-none px-3 py-2 max-w-[80%] shadow-sm">
             Site visit tomorrow 4 PM. Confirm?
           </div>
-          <motion.div
-            animate={{ x: [0, 4, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
+          <div
             className="ml-auto bg-[#DCF8C6] rounded-lg rounded-tr-none px-3 py-2 max-w-[80%] shadow-sm flex items-center gap-1"
           >
             <ImageIcon className="h-3 w-3 text-emerald-700" />
             <span>floor-plan.jpg (18 MB)</span>
             <CheckCheck className="h-3 w-3 text-[#22C55E] ml-1" />
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* S3 bucket vector + animation */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6 }}
-        className="absolute -left-4 sm:-left-10 bottom-10 w-44"
+      {/* S3 bucket vector — CSS animation instead of infinite Framer Motion */}
+      <div
+        className="absolute -left-4 sm:-left-10 bottom-10 w-44 sf-s3-fade-in"
       >
         <div className="relative">
-          {/* falling photo */}
-          <motion.div
-            animate={{ y: [-40, 30, -40], opacity: [0, 1, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute left-10 top-0 h-8 w-8 rounded-md bg-gradient-to-br from-[#2BB5D4] to-[#22C55E] shadow-lg grid place-items-center text-white"
+          {/* falling photo — CSS animation */}
+          <div
+            className="absolute left-10 top-0 h-8 w-8 rounded-md bg-gradient-to-br from-[#2BB5D4] to-[#22C55E] shadow-lg grid place-items-center text-white sf-photo-fall"
           >
             <ImageIcon className="h-4 w-4" />
-          </motion.div>
+          </div>
 
           <div className="mt-12 rounded-2xl bg-white shadow-2xl shadow-slate-300/50 border border-slate-200 p-3">
             <div className="flex items-center gap-2">
@@ -131,17 +121,14 @@ export function SalesforceMock() {
                 <div className="text-[10px] text-slate-500">media-archive</div>
               </div>
             </div>
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-              className="mt-2 text-[10px] rounded-md bg-emerald-50 text-emerald-700 px-2 py-1 font-semibold inline-block"
+            <div
+              className="mt-2 text-[10px] rounded-md bg-emerald-50 text-emerald-700 px-2 py-1 font-semibold inline-block sf-s3-badge"
             >
               +90% Space Saved
-            </motion.div>
+            </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

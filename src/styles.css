@@ -66,7 +66,7 @@
     border-color: var(--color-border);
   }
   html {
-    scroll-behavior: smooth;
+    /* removed scroll-behavior: smooth as it causes laggy scrolling on Mac trackpads */
   }
   body {
     background-color: var(--color-background);
@@ -251,4 +251,91 @@
   will-change: transform;
   animation: blob-spin-ccw 80s linear infinite;
   transform-origin: center;
+}
+
+/* ── CSS replacements for Framer Motion infinite loops ─────────────────────
+   These run entirely on the GPU compositor thread so they never block scroll. */
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes float-y-lg {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes bounce-arrow {
+  0%, 100% { transform: rotate(90deg) translateX(0); }
+  50%      { transform: rotate(90deg) translateX(4px); }
+}
+@keyframes cursor-drift {
+  0%   { transform: translate(-20px, 10px); }
+  33%  { transform: translate(100px, 80px); }
+  66%  { transform: translate(60px, 140px); }
+  100% { transform: translate(-20px, 10px); }
+}
+@keyframes photo-fall {
+  0%, 100% { transform: translateY(-40px); opacity: 0; }
+  50%      { transform: translateY(30px);  opacity: 1; }
+}
+@keyframes sweep-x {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes s3-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes s3-badge-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* SalesforceMock floating chat */
+.sf-chat-float {
+  will-change: transform;
+  animation: float-y-lg 6s ease-in-out infinite;
+}
+/* SalesforceMock falling photo */
+.sf-photo-fall {
+  will-change: transform, opacity;
+  animation: photo-fall 5s ease-in-out infinite;
+}
+/* SalesforceMock S3 panel fade-in */
+.sf-s3-fade-in {
+  animation: s3-fade-in 0.8s ease-out 0.6s both;
+}
+.sf-s3-badge {
+  animation: s3-badge-in 0.6s ease-out 1.2s both;
+}
+
+/* FeatureShowcase floating chat panel */
+.feature-chat-float {
+  will-change: transform;
+  animation: float-y 5s ease-in-out infinite;
+}
+/* Automation arrow bounce */
+.automation-arrow-bounce {
+  will-change: transform;
+  animation: bounce-arrow 2.4s ease-in-out infinite;
+}
+/* Flow builder cursor */
+.flow-cursor-drift {
+  will-change: transform;
+  animation: cursor-drift 5s ease-in-out infinite;
+}
+/* CTA sweep */
+.cta-sweep {
+  will-change: transform;
+  animation: sweep-x 12s linear infinite;
+  pointer-events: none;
+}
+
+/* ── Reduce motion for users who prefer it ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

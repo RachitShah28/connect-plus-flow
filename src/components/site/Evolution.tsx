@@ -69,10 +69,8 @@ function Vector({ tone }: { tone: string }) {
   }
   return (
     <div className="relative h-32 grid place-items-center">
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        className="absolute h-28 w-28 rounded-full border-2 border-dashed border-[#2BB5D4]/40"
+      <div
+        className="absolute h-28 w-28 rounded-full border-2 border-dashed border-[#2BB5D4]/40 hero-blob-blue"
       />
       <div className="relative flex items-center gap-3">
         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#22C55E] to-emerald-400 grid place-items-center text-white shadow-lg">
@@ -92,7 +90,7 @@ function Vector({ tone }: { tone: string }) {
 
 export function Evolution() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-16 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -118,28 +116,24 @@ export function Evolution() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className={`rounded-3xl p-7 border ${
-                  isBrand
+                className={`rounded-3xl p-7 border ${isBrand
                     ? "bg-gradient-to-br from-[#2BB5D4]/10 via-white to-[#22C55E]/10 border-[#22C55E]/30 shadow-2xl shadow-[#2BB5D4]/20 ring-1 ring-[#2BB5D4]/20"
                     : isWarn
                       ? "bg-amber-50/40 border-amber-200"
                       : "bg-slate-50 border-slate-200"
-                }`}
+                  }`}
               >
                 <Vector tone={c.tone} />
                 <div className="mt-4">
                   <div
-                    className={`text-xs font-semibold uppercase tracking-wider ${
-                      isBrand ? "text-[#22C55E]" : isWarn ? "text-amber-600" : "text-slate-500"
-                    }`}
+                    className={`text-xs font-semibold uppercase tracking-wider ${isBrand ? "text-[#22C55E]" : isWarn ? "text-amber-600" : "text-slate-500"
+                      }`}
                   >
                     {c.sub}
                   </div>
                   <h3
-                    className={`mt-1 text-xl font-bold ${
-                      isBrand ? "text-slate-900" : isWarn ? "text-slate-700" : "text-slate-600"
-                    }`}
+                    className={`mt-1 text-xl font-bold ${isBrand ? "text-slate-900" : isWarn ? "text-slate-700" : "text-slate-600"
+                      }`}
                   >
                     {c.title}
                   </h3>
@@ -147,14 +141,12 @@ export function Evolution() {
                     {c.points.map((p) => (
                       <li
                         key={p}
-                        className={`flex items-start gap-2 text-sm ${
-                          isBrand ? "text-slate-800" : "text-slate-600"
-                        }`}
+                        className={`flex items-start gap-2 text-sm ${isBrand ? "text-slate-800" : "text-slate-600"
+                          }`}
                       >
                         <span
-                          className={`mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0 ${
-                            isBrand ? "bg-[#22C55E]" : isWarn ? "bg-amber-500" : "bg-slate-400"
-                          }`}
+                          className={`mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0 ${isBrand ? "bg-[#22C55E]" : isWarn ? "bg-amber-500" : "bg-slate-400"
+                            }`}
                         />
                         {p}
                       </li>

@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+import { memo } from "react";
 import { motion } from "framer-motion";
 import {
   Cloud,
@@ -12,7 +14,7 @@ import {
   MousePointer2,
 } from "lucide-react";
 
-function Row({
+const Row = memo(function Row({
   reverse,
   badge,
   title,
@@ -60,7 +62,7 @@ function Row({
       </motion.div>
     </div>
   );
-}
+});
 
 function S3Visual() {
   return (
@@ -117,12 +119,12 @@ function S3Visual() {
   );
 }
 
-function GlobalChatVisual() {
+export const GlobalChatVisual = memo(function GlobalChatVisual() {
   const messages = [
     { from: "them", text: "Hi, I'm interested in Tower B units. Can you send details?" },
-    { from: "me",   text: "Hi Sara! Sending the brochure now 📎" },
+    { from: "me", text: "Hi Sara! Sending the brochure now 📎" },
     { from: "them", text: "Perfect! Can I book a site visit?" },
-    { from: "me",   text: "Sure — pick a slot below 👇" },
+    { from: "me", text: "Sure — pick a slot below 👇" },
   ];
 
   const ChatPanel = ({ animated }: { animated?: boolean }) => (
@@ -148,17 +150,15 @@ function GlobalChatVisual() {
               transition={{ delay: i * 0.18 }}
               className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}
             >
-              <div className={`rounded-lg px-2.5 py-1.5 text-[10px] shadow-sm max-w-[85%] leading-snug ${
-                m.from === "me" ? "bg-[#DCF8C6] text-slate-800" : "bg-white text-slate-800"
-              }`}>
+              <div className={`rounded-lg px-2.5 py-1.5 text-[10px] shadow-sm max-w-[85%] leading-snug ${m.from === "me" ? "bg-[#DCF8C6] text-slate-800" : "bg-white text-slate-800"
+                }`}>
                 {m.text}
               </div>
             </motion.div>
           ) : (
             <div key={i} className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}>
-              <div className={`rounded-lg px-2.5 py-1.5 text-[10px] shadow-sm max-w-[85%] leading-snug ${
-                m.from === "me" ? "bg-[#DCF8C6] text-slate-800" : "bg-white text-slate-800"
-              }`}>
+              <div className={`rounded-lg px-2.5 py-1.5 text-[10px] shadow-sm max-w-[85%] leading-snug ${m.from === "me" ? "bg-[#DCF8C6] text-slate-800" : "bg-white text-slate-800"
+                }`}>
                 {m.text}
               </div>
             </div>
@@ -207,7 +207,7 @@ function GlobalChatVisual() {
         {/* Fields grid */}
         <div className="px-4 py-3 grid grid-cols-2 gap-x-4 gap-y-3 border-b border-slate-100">
           {[
-            { label: "Industry",      value: "Real Estate" },
+            { label: "Industry", value: "Real Estate" },
             { label: "Account Owner", value: "Rahul Mehta" },
           ].map((f) => (
             <div key={f.label}>
@@ -223,7 +223,7 @@ function GlobalChatVisual() {
           <div className="space-y-2">
             {[
               { icon: "💬", text: "Sara replied to brochure template", time: "2m ago", color: "bg-emerald-50 border-emerald-200" },
-              { icon: "📤", text: "Broadcast: Tower B Launch sent",    time: "1h ago", color: "bg-blue-50 border-blue-200" },
+              { icon: "📤", text: "Broadcast: Tower B Launch sent", time: "1h ago", color: "bg-blue-50 border-blue-200" },
             ].map((a) => (
               <div key={a.text} className={`flex items-start gap-2 rounded-lg border px-3 py-2 text-[11px] ${a.color}`}>
                 <span className="mt-0.5 flex-shrink-0">{a.icon}</span>
@@ -245,19 +245,17 @@ function GlobalChatVisual() {
         </div>
       </div>
 
-      {/* Desktop: absolute floating WhatsApp overlay */}
-      <motion.div
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        className="hidden md:block absolute -right-6 top-6 w-64 rounded-2xl bg-white shadow-2xl shadow-emerald-200/60 border border-white/80 overflow-hidden z-10"
+      {/* Desktop: absolute floating WhatsApp overlay — CSS animation */}
+      <div
+        className="hidden md:block absolute -right-6 top-6 w-64 rounded-2xl bg-white shadow-2xl shadow-emerald-200/60 border border-white/80 overflow-hidden z-10 feature-chat-float"
       >
         <ChatPanel animated={true} />
-      </motion.div>
+      </div>
     </div>
   );
-}
+});
 
-function FlowBuilderVisual() {
+export const FlowBuilderVisual = memo(function FlowBuilderVisual() {
   const palette = [
     { label: "Heading", color: "bg-[#2BB5D4]" },
     { label: "Text Input", color: "bg-[#22C55E]" },
@@ -320,13 +318,11 @@ function FlowBuilderVisual() {
               Submit
             </motion.div>
           </div>
-          <motion.div
-            animate={{ x: [-20, 100, 60], y: [10, 80, 140] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-0 left-0 text-slate-700"
+          <div
+            className="absolute top-0 left-0 text-slate-700 flow-cursor-drift"
           >
             <MousePointer2 className="h-4 w-4 fill-slate-700" />
-          </motion.div>
+          </div>
         </div>
 
         {/* Live WhatsApp preview — hidden on mobile */}
@@ -348,9 +344,9 @@ function FlowBuilderVisual() {
       </div>
     </div>
   );
-}
+});
 
-function TemplateBuilderVisual() {
+export const TemplateBuilderVisual = memo(function TemplateBuilderVisual() {
   return (
     <div className="rounded-3xl bg-white p-4 sm:p-6 shadow-2xl shadow-slate-300/40 border border-slate-200">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -394,9 +390,9 @@ function TemplateBuilderVisual() {
       </div>
     </div>
   );
-}
+});
 
-function AutomationBuilderVisual() {
+const AutomationBuilderVisual = memo(function AutomationBuilderVisual() {
   return (
     <div className="rounded-3xl bg-gradient-to-br from-slate-50 to-white p-6 shadow-2xl shadow-slate-300/40 border border-slate-200">
       <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-3">Trigger to Action</div>
@@ -409,13 +405,11 @@ function AutomationBuilderVisual() {
           </div>
         </div>
         <div className="flex justify-center">
-          <motion.div
-            animate={{ y: [0, 4, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity }}
-            className="text-[#22C55E]"
+          <div
+            className="text-[#22C55E] automation-arrow-bounce"
           >
-            <ArrowRight className="h-5 w-5 rotate-90" />
-          </motion.div>
+            <ArrowRight className="h-5 w-5" />
+          </div>
         </div>
         <div className="rounded-xl border-2 border-[#22C55E]/40 bg-emerald-50/50 p-3 shadow-sm">
           <div className="text-[10px] uppercase text-emerald-700 font-semibold">Then send template</div>
@@ -431,9 +425,9 @@ function AutomationBuilderVisual() {
       </div>
     </div>
   );
-}
+});
 
-function S3IntegrationVisual() {
+const S3IntegrationVisual = memo(function S3IntegrationVisual() {
   return (
     <div className="rounded-3xl bg-slate-900 p-6 shadow-2xl shadow-slate-900/30 border border-slate-700">
       <div className="flex items-center justify-between text-white mb-4">
@@ -466,9 +460,9 @@ function S3IntegrationVisual() {
       </div>
     </div>
   );
-}
+});
 
-function AnalyticsVisual() {
+const AnalyticsVisual = memo(function AnalyticsVisual() {
   const bars = [40, 65, 50, 80, 95, 70, 88];
   return (
     <div className="rounded-3xl bg-white p-6 shadow-2xl shadow-slate-300/40 border border-slate-200">
@@ -529,11 +523,11 @@ function AnalyticsVisual() {
       </div>
     </div>
   );
-}
+});
 
 export function FeatureShowcase() {
   return (
-    <section className="py-16 md:py-24 bg-slate-50 relative overflow-x-hidden">
+    <section className="pt-16 md:pt-24 pb-10 md:pb-16 bg-slate-50 relative overflow-x-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50 via-transparent to-transparent pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14 md:space-y-28">
         <motion.div
@@ -592,45 +586,25 @@ export function FeatureShowcase() {
           visual={<TemplateBuilderVisual />}
         />
 
-        <Row
-          badge="WhatsApp Automation Builder"
-          title="Automate Replies to WhatsApp Quick Reply Buttons"
-          desc="When a customer taps a quick-reply button on one of your WhatsApp templates, fire off the next template instantly. Perfect for follow-ups, brochures, booking links and multi-step nurture journeys inside Salesforce. Set it up once and run it forever."
-          bullets={[
-            "Trigger on any quick-reply button across any WhatsApp template",
-            "Chain follow-up templates without writing Apex code",
-            "Branch logic based on which button was tapped",
-            "Logged on the Salesforce contact timeline for full visibility",
-          ]}
-          visual={<AutomationBuilderVisual />}
-        />
-
-        <Row
-          reverse
-          badge="AWS S3 Media Storage"
-          title="Bring Your Own S3 Bucket for WhatsApp Media"
-          desc="Salesforce standard storage gets very expensive the moment you start moving images, video and PDFs over WhatsApp. WBConnect+ lets you plug in your own AWS S3 bucket so your files never leave your AWS account, and you sidestep Salesforce file-storage costs entirely."
-          bullets={[
-            "Customer-owned bucket so we never hold your WhatsApp media",
-            "IAM and KMS encryption respected end to end",
-            "Cuts Salesforce file-storage cost dramatically",
-            "Works with any region including data-residency restricted ones",
-          ]}
-          visual={<S3IntegrationVisual />}
-        />
-
-        <Row
-          badge="WhatsApp Broadcast and Analytics"
-          title="Send Millions of WhatsApp Messages. Measure Everything."
-          desc="High-volume WhatsApp broadcasts with smart throttling, opt-out management and a real-time analytics dashboard tied back to Salesforce opportunity revenue."
-          bullets={[
-            "Delivery, read, click and reply attribution",
-            "ROI dashboard linked to Salesforce Opportunity stages",
-            "Audience segmentation from any SOQL query",
-            "Smart throttling to respect Meta rate limits",
-          ]}
-          visual={<AnalyticsVisual />}
-        />
+        {/* View More — navigates to /capabilities, changing the URL */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center gap-3 pt-2"
+        >
+          <p className="text-sm text-slate-500">Explore more of what WBConnect+ can do</p>
+          <Link
+            to="/capabilities"
+            hash="feature-4"
+            id="capabilities-view-more"
+            className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-cyan-200/60 hover:shadow-xl hover:shadow-cyan-200/80 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+          >
+            View More Features
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

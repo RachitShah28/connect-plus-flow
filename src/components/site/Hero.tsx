@@ -31,8 +31,8 @@ export function Hero() {
             </div>
             {/* LCP element — visible immediately, no opacity:0 */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]">
-              Your customers are already on WhatsApp.{" "}
-              <span className="text-gradient-brand">Now your CRM is too.</span>
+              Close Deals Faster with a{" "}
+              <span className="text-gradient-brand">Powerful WhatsApp Automation Tool</span>
             </h1>
             <p className="mt-5 text-base md:text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
               WBConnect+ is a CRM-native WhatsApp Business integration by MV Clouds: Track messages, assign leads, and store conversations instantly via Meta Cloud API.

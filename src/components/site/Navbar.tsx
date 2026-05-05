@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { WBCLogo } from "./WBCLogo";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 // Lazy-load DemoModal — it's never visible on initial paint, so keep it out of the critical bundle
 const DemoModal = lazy(() =>
@@ -26,7 +27,16 @@ export function Navbar() {
 
   // Track scroll position to switch navbar to opaque background
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 10);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -46,13 +56,34 @@ export function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  const handleNavClick = (href: string) => {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  // Build the correct href for nav links:
+  // On the homepage, keep bare anchors (#features). On any other page,
+  // prefix with / so clicking "Features" navigates to /#features instead
+  // of /capabilities#features.
+  const resolveHref = (anchor: string) => (isHome ? anchor : `/${anchor.replace(/^\//, "")}`);
+
+  const navigate = useNavigate();
+
+  const handleNavClick = (anchor: string) => {
     setMenuOpen(false);
-    // Small delay to let menu close animation play
-    setTimeout(() => {
-      const el = document.querySelector(href);
+    if (isHome) {
+      // Update the URL hash so the address bar reflects the active section
+      history.pushState(null, "", anchor);
+      const el = document.querySelector(anchor);
       if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 150);
+    } else {
+      // Client-side navigation to home — no full page reload.
+      const hashId = anchor.replace("#", "");
+      navigate({ to: "/", hash: hashId }).then(() => {
+        setTimeout(() => {
+          const el = document.getElementById(hashId) ?? document.querySelector(anchor);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 200);
+      });
+    }
   };
 
   return (
@@ -65,25 +96,26 @@ export function Navbar() {
             role="navigation"
             aria-label="WBConnect+ main navigation"
             className={[
-              "backdrop-blur-xl border rounded-2xl shadow-lg shadow-slate-200/50 flex items-center justify-between px-4 sm:px-6 py-3 transition-colors duration-300",
+              "transition-all duration-300 border rounded-2xl flex items-center justify-between px-4 sm:px-6 py-3",
               scrolled
-                ? "bg-white border-slate-200/80"
-                : "bg-white/70 border-white/40",
+                ? "bg-white border-slate-200/80 shadow-lg shadow-slate-200/50"
+                : "bg-white/70 border-white/40 shadow-lg shadow-slate-200/20 backdrop-blur-md",
             ].join(" ")}
           >
             {/* Logo */}
-            <a href="#top" aria-label="WBConnect+ home — WhatsApp Salesforce integration" className="flex items-center">
+            <a href={isHome ? "#top" : "/"} aria-label="WBConnect+ home — WhatsApp Salesforce integration" className="flex items-center">
               <WBCLogo height={36} />
               <span className="sr-only">WBConnect+ Home</span>
             </a>
 
-            {/* Desktop nav links */}
+            {/* Desktop nav links — always intercept to use client-side navigation */}
             <div className="hidden md:flex items-center gap-6">
               {links.map((l) => (
                 <a
                   key={l.href}
-                  href={l.href}
+                  href={resolveHref(l.href)}
                   aria-label={l.aria}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(l.href); }}
                   className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
                 >
                   {l.label}

@@ -5,19 +5,19 @@ import { DemoModal } from "./DemoModal";
 import { WBCLogo } from "./WBCLogo";
 
 const ecosystem = [
-  { label: "WBConnect Plus",        href: "https://mvclouds.com/solutions/wbconnect-plus" },
-  { label: "QuickForm",             href: "https://mvclouds.com/solutions/quickform" },
-  { label: "Signature Anywhere",    href: "https://mvclouds.com/solutions/signature-anywhere" },
-  { label: "DocGenius",             href: "https://mvclouds.com/solutions/docgenius" },
-  { label: "EstateXpert",           href: "https://mvclouds.com/solutions/estatexpert" },
+  { label: "QuickForm", href: "https://mvclouds.com/solutions/quickform" },
+  { label: "Signature Anywhere", href: "https://mvclouds.com/solutions/signature-anywhere" },
+  { label: "DocGenius", href: "https://mvclouds.com/solutions/docgenius" },
+  { label: "EstateXpert", href: "https://mvclouds.com/solutions/estatexpert" },
 ];
 
-const legal = [
-  { label: "Privacy Policy",    href: "https://mvclouds.com/privacypolicy",       aria: "WBConnect+ Privacy Policy" },
-  { label: "Terms of Service",  href: "https://mvclouds.com/terms-of-service",    aria: "WBConnect+ Terms of Service" },
-  { label: "About MV Clouds",   href: "https://mvclouds.com/about",               aria: "About MV Clouds — the team behind WBConnect+" },
-  { label: "Contact Us",        href: "https://mvclouds.com/contact",             aria: "Contact MV Clouds sales team" },
-  { label: "Editorial Policy",  href: "https://mvclouds.com/editorial-policy",    aria: "WBConnect+ editorial and content policy" },
+const quickLinks = [
+  { label: "Home", href: "/" },
+  { label: "Features", href: "/#features" },
+  { label: "Why WBConnect+", href: "/#why" },
+  { label: "Industries", href: "/#industries" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "FAQs", href: "/#faqs" },
 ];
 
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
@@ -72,167 +72,201 @@ export function CTAFooter() {
 
   return (
     <>
-      {/* CTA Banner */}
-      <section id="cta" className="px-4 sm:px-6 lg:px-8 py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-7xl mx-auto rounded-3xl bg-[#0F172A] text-white p-8 sm:p-12 md:p-16 relative overflow-hidden"
-        >
+      {/* CTA Banner & Footer Wrapper */}
+      <div className="relative mt-16 sm:mt-24">
+        {/* Dark background connection block to eliminate white gap */}
+        <div className="absolute inset-x-0 bottom-0 top-32 bg-[#0F172A]" aria-hidden="true" />
+
+        {/* CTA Banner */}
+        <section id="cta" className="relative z-10 px-4 sm:px-6 lg:px-8">
           <motion.div
-            animate={{ x: ["-100%", "100%"] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-[#2BB5D4]/15 to-transparent pointer-events-none"
-          />
-          <div className="absolute -top-20 -right-20 h-80 w-80 rounded-full bg-[#22C55E]/20 blur-3xl" />
-          <div className="relative max-w-2xl">
-            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight">
-              Ready to bring <span className="text-gradient-brand">WhatsApp Business</span> natively into Salesforce?
-            </h2>
-            <p className="mt-4 text-slate-300 text-base md:text-lg">
-              Join 500+ Salesforce orgs running WhatsApp Business natively with unlimited AWS S3 media storage, zero
-              middleman markup and a no-code flow builder built for serious WhatsApp volume.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                href={PACKAGE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-xl bg-[#2BB5D4] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  Get the WBConnect+ Managed Package
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </span>
-                <span className="shimmer-btn" aria-hidden />
-              </a>
-              <button
-                onClick={() => setDemoOpen(true)}
-                className="relative overflow-hidden inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition-colors group"
-              >
-                <span className="relative z-10">Book a 15-minute strategy call</span>
-                <span className="shimmer-btn" aria-hidden />
-              </button>
-            </div>
-          </div>
-        </motion.div>
-      </section>
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-6xl mx-auto rounded-[2rem] bg-[#162032] border border-white/10 text-white p-10 sm:p-14 lg:p-20 relative overflow-hidden shadow-2xl"
+          >
+            {/* Ambient glows inside the card */}
+            <div className="absolute -top-32 -right-32 h-[30rem] w-[30rem] rounded-full bg-[#2BB5D4]/10 blur-[80px] pointer-events-none" />
+            <div className="absolute -bottom-32 -left-32 h-[30rem] w-[30rem] rounded-full bg-[#22C55E]/10 blur-[80px] pointer-events-none" />
 
-      {/* Footer */}
-      <footer className="bg-[#0F172A] text-slate-300 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
-
-          {/* Brand */}
-          <div className="sm:col-span-2 md:col-span-1">
-            <WBCLogo height={32} />
-            <p className="mt-4 text-sm text-slate-400 max-w-xs leading-relaxed">
-              Built by <span className="text-white font-semibold">MV Clouds Pvt Ltd</span>. Turning
-              ideas into intelligent Salesforce CRM solutions with 11 years of certified Salesforce expertise.
-            </p>
-            {/* Social icons */}
-            <div className="mt-5 flex items-center gap-2 flex-wrap">
-              {socials.map((s) => (
+            <div className="relative max-w-3xl mx-auto text-center flex flex-col items-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+                Ready to bring <span className="text-gradient-brand">WhatsApp Business</span> natively into Salesforce?
+              </h2>
+              <p className="mt-5 text-slate-300 text-lg sm:text-xl font-medium max-w-2xl leading-relaxed">
+                Join 500+ Salesforce orgs running WhatsApp Business natively with unlimited AWS S3 media storage, zero
+                middleman markup and a no-code flow builder.
+              </p>
+              <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
                 <a
-                  key={s.label}
-                  href={s.href}
+                  href={PACKAGE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Follow MV Clouds on ${s.label}`}
-                  title={`MV Clouds on ${s.label}`}
-                  className="h-9 w-9 rounded-lg border border-white/15 bg-white/5 grid place-items-center text-slate-300 hover:text-[#22C55E] hover:border-[#22C55E] transition-colors"
+                  className="group relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-8 py-4 text-base font-semibold text-white shadow-lg shadow-[#22C55E]/20 hover:shadow-xl hover:shadow-[#22C55E]/30 transition-all hover:-translate-y-0.5"
                 >
-                  {s.icon}
-                  <span className="sr-only">{s.label}</span>
+                  <span className="relative z-10 flex items-center gap-2">
+                    Get the Managed Package
+                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                  <span className="shimmer-btn" aria-hidden />
                 </a>
-              ))}
+                <button
+                  onClick={() => setDemoOpen(true)}
+                  className="group relative overflow-hidden inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all hover:-translate-y-0.5"
+                >
+                  <span className="relative z-10">Book a Strategy Call</span>
+                  <span className="shimmer-btn" aria-hidden />
+                </button>
+              </div>
             </div>
-          </div>
+          </motion.div>
+        </section>
 
-          {/* Our Ecosystem */}
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-white mb-4">Our Ecosystem</div>
-            <ul className="space-y-2">
-              {ecosystem.map((item) => (
-                <li key={item.label}>
+        {/* Footer */}
+        <footer className="relative bg-[#0F172A] text-slate-300 pt-16 lg:pt-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-16">
+
+            {/* Brand */}
+            <div className="lg:col-span-4 pr-0 lg:pr-8">
+              <WBCLogo height={36} white />
+              <p className="mt-6 text-sm text-slate-400 leading-relaxed max-w-sm">
+                The ultimate native WhatsApp Business integration for Salesforce. Automate messaging, engage customers, and scale your operations effortlessly.
+              </p>
+              <div className="mt-6">
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold mb-2">Powered by</p>
+                <img
+                  src="/mv-clouds-logo.svg"
+                  alt="MV Clouds"
+                  className="h-6 w-auto opacity-70 hover:opacity-100 transition-opacity"
+                  style={{ filter: "brightness(0) invert(1)" }}
+                  loading="lazy"
+                />
+              </div>
+              <div className="mt-8 flex items-center gap-3">
+                {socials.map((s) => (
                   <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener"
-                    aria-label={`Visit ${item.label} by MV Clouds`}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact & Sales */}
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-white mb-4">Contact &amp; Sales</div>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2 text-slate-400">
-                <Phone className="h-4 w-4 mt-0.5 text-[#22C55E] flex-shrink-0" />
-                <a href="tel:+919558019600" className="hover:text-white transition-colors">
-                  +91 9558019600
-                </a>
-              </li>
-              <li className="flex items-start gap-2 text-slate-400">
-                <Mail className="h-4 w-4 mt-0.5 text-[#22C55E] flex-shrink-0" />
-                <a href="mailto:info@mvclouds.com" className="hover:text-white transition-colors break-all">
-                  info@mvclouds.com
-                </a>
-              </li>
-              <li className="flex items-start gap-2 text-slate-400">
-                <MapPin className="h-4 w-4 mt-1 text-[#22C55E] flex-shrink-0" />
-                <div className="space-y-2.5">
-                  <div>
-                    <span className="text-white font-semibold text-xs block mb-0.5">India (Headquarter)</span>
-                    D-404, The First Synthesis, B/H Keshavbaug Party Plot, Ahmedabad, Gujarat – 380015
-                  </div>
-                  <div>
-                    <span className="text-white font-semibold text-xs block mb-0.5">U.A.E.</span>
-                    Meydan Grandstand, 6th floor, Meydan Road, Nad Al Sheba, Dubai, U.A.E.
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-white mb-4">Legal</div>
-            <ul className="space-y-2">
-              {legal.map((item) => (
-                <li key={item.label}>
-                  <a
-                    href={item.href}
+                    key={s.label}
+                    href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={item.aria}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
+                    aria-label={`Follow MV Clouds on ${s.label}`}
+                    title={`MV Clouds on ${s.label}`}
+                    className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-[#22C55E]/10 hover:text-[#22C55E] hover:border-[#22C55E]/30 transition-all"
                   >
-                    {item.label}
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Our Ecosystem */}
+            <div className="lg:col-span-2">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-5">Our Ecosystem</h3>
+              <ul className="space-y-3">
+                {ecosystem.map((item) => (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener"
+                      aria-label={`Visit ${item.label} by MV Clouds`}
+                      className="text-sm text-slate-400 hover:text-white transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Quick Links */}
+            <div className="lg:col-span-2">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-5">Quick Links</h3>
+              <ul className="space-y-3">
+                {quickLinks.map((item) => (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      aria-label={item.label}
+                      className="text-sm text-slate-400 hover:text-white transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div className="lg:col-span-4 lg:pl-8">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-5">Contact Us</h3>
+              <ul className="space-y-4 text-sm">
+                <li className="flex items-start gap-3 text-slate-400 group">
+                  <div className="mt-0.5 p-1.5 rounded-md bg-white/5 border border-white/10 group-hover:border-[#22C55E]/50 group-hover:text-[#22C55E] transition-colors">
+                    <Mail className="h-3.5 w-3.5 flex-shrink-0" />
+                  </div>
+                  <a href="mailto:info@mvclouds.com" className="hover:text-white transition-colors pt-1">
+                    info@mvclouds.com
                   </a>
                 </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="border-t border-white/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
-            <div>© {new Date().getFullYear()} MV Clouds Pvt Ltd. All rights reserved.</div>
-            <div className="text-center sm:text-right">
-              WBConnect+ is a Salesforce-native managed package for WhatsApp Business. WhatsApp is a trademark of Meta Platforms, Inc.
+                <li className="flex items-start gap-3 text-slate-400 group">
+                  <div className="mt-0.5 p-1.5 rounded-md bg-white/5 border border-white/10 group-hover:border-[#22C55E]/50 group-hover:text-[#22C55E] transition-colors">
+                    <Phone className="h-3.5 w-3.5 flex-shrink-0" />
+                  </div>
+                  <a href="tel:+919558019600" className="hover:text-white transition-colors pt-1">
+                    +91 9558019600
+                  </a>
+                </li>
+                <li className="flex items-start gap-3 text-slate-400 group">
+                  <div className="mt-0.5 p-1.5 rounded-md bg-white/5 border border-white/10 group-hover:border-[#22C55E]/50 group-hover:text-[#22C55E] transition-colors">
+                    <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                  </div>
+                  <div className="space-y-3 pt-1">
+                    <div>
+                      <span className="text-white font-semibold text-xs block mb-1">India (Headquarters)</span>
+                      <span className="leading-relaxed">D-404, The First Synthesis, B/H Keshavbaug Party Plot, Ahmedabad, Gujarat – 380015</span>
+                    </div>
+                    <div>
+                      <span className="text-white font-semibold text-xs block mb-1">U.A.E.</span>
+                      <span className="leading-relaxed">Meydan Grandstand, 6th floor, Meydan Road, Nad Al Sheba, Dubai, U.A.E.</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
-        </div>
-      </footer>
+
+          {/* Bottom bar */}
+          <div className="border-t border-white/10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-sm text-slate-400">
+              <div className="flex items-center gap-1.5">
+                <span>© {new Date().getFullYear()} WBConnect+. All rights reserved.</span>
+              </div>
+
+              <div className="flex items-center gap-6">
+                <a
+                  href="https://mvclouds.com/privacypolicy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Privacy Policy
+                </a>
+                <span className="hidden sm:inline text-white/20">|</span>
+                <a
+                  href="https://mvclouds.com/about-mv-clouds"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  About Us
+                </a>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
 
       <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </>

@@ -215,7 +215,7 @@ export function Industries() {
   const Icon = Item.icon;
 
   return (
-    <section id="industries" className="py-24 bg-slate-50">
+    <section id="industries" className="py-16 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -238,11 +238,10 @@ export function Industries() {
             <button
               key={ind.name}
               onClick={() => setActive(i)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-                i === active
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${i === active
                   ? "bg-[#2BB5D4] text-white shadow-md shadow-[#2BB5D4]/30"
                   : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300"
-              }`}
+                }`}
             >
               <ind.icon className="h-3.5 w-3.5" />
               {ind.name}

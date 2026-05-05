@@ -4,6 +4,9 @@ import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 
 // Lazy-load below-the-fold sections to reduce initial JS payload
+const Problem = lazy(() =>
+  import("@/components/site/Problem").then((m) => ({ default: m.Problem }))
+);
 const Evolution = lazy(() =>
   import("@/components/site/Evolution").then((m) => ({ default: m.Evolution }))
 );
@@ -25,6 +28,9 @@ const Benefits = lazy(() =>
 );
 const Steps = lazy(() =>
   import("@/components/site/Steps").then((m) => ({ default: m.Steps }))
+);
+const Testimonials = lazy(() =>
+  import("@/components/site/Testimonials").then((m) => ({ default: m.Testimonials }))
 );
 const Pricing = lazy(() =>
   import("@/components/site/Pricing").then((m) => ({ default: m.Pricing }))
@@ -68,31 +74,46 @@ function Index() {
       </address>
 
       {/* Below-the-fold: lazy-loaded to reduce initial JS */}
+      {/* 1. Problem */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <Problem />
+      </Suspense>
+      {/* 2. Evolution */}
       <Suspense fallback={<SectionSkeleton />}>
         <Evolution />
       </Suspense>
-      {/* FeatureShowcase — id="features" on the wrapper ensures the fragment
+      {/* 3. Capabilities — id="features" on the wrapper ensures the fragment
            target exists in the DOM immediately, even before lazy-load */}
       <div id="features" style={{ scrollMarginTop: '88px' }}>
         <Suspense fallback={<SectionSkeleton />}>
           <FeatureShowcase />
         </Suspense>
       </div>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Compare />
-      </Suspense>
+      {/* 4. Industry */}
       <Suspense fallback={<SectionSkeleton />}>
         <Industries />
       </Suspense>
+      {/* 5. Why Choose Us */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <Compare />
+      </Suspense>
+      {/* 6. ROI */}
       <Suspense fallback={<SectionSkeleton />}>
         <Benefits />
       </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Steps />
-      </Suspense>
+      {/* 7. Pricing */}
       <Suspense fallback={<SectionSkeleton />}>
         <Pricing />
       </Suspense>
+      {/* 8. Testimonials */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <Testimonials />
+      </Suspense>
+      {/* 9. Implementation */}
+      <Suspense fallback={<SectionSkeleton />}>
+        <Steps />
+      </Suspense>
+      {/* 10. CTA + Footer */}
       <Suspense fallback={<SectionSkeleton />}>
         <CTAFooter />
       </Suspense>
