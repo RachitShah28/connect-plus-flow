@@ -166,15 +166,15 @@ export function CTAFooter() {
 
             <div className="relative flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
               {/* Left Side: Image */}
-              <div className="hidden lg:flex w-full lg:w-1/2 justify-center lg:py-16 px-6 sm:px-10 lg:pl-16 xl:pl-20 lg:pr-0">
+              <div className="hidden lg:flex w-full lg:w-1/2 justify-center items-center lg:py-12 px-6 sm:px-10 lg:pl-12 lg:pr-0">
                 <motion.img
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  src="/cta-desktop-image.svg"
+                  src="/cta-desktop-image.png"
                   alt="WBConnect+ Platform Preview"
-                  className="w-full max-w-lg lg:max-w-full h-auto object-contain drop-shadow-2xl"
+                  className="w-full max-w-md xl:max-w-lg h-auto object-contain drop-shadow-2xl"
                   loading="lazy"
                 />
               </div>

@@ -18,9 +18,9 @@ export function Hero() {
         id="top"
         className="relative flex items-center pt-24 pb-12 md:pt-32 md:pb-16 md:min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-green-50 to-white"
       >
-        {/* Background blobs — CSS animation, no JS required */}
-        <div className="hero-blob-blue absolute -top-40 -left-40 h-[300px] w-[300px] md:h-[500px] md:w-[500px] rounded-full bg-[#2BB5D4]/30 blur-3xl pointer-events-none" />
-        <div className="hero-blob-green absolute -bottom-40 -right-40 h-[300px] w-[300px] md:h-[600px] md:w-[600px] rounded-full bg-[#22C55E]/20 blur-3xl pointer-events-none" />
+        {/* Background blobs — using highly performant radial gradients instead of expensive CSS blur filters */}
+        <div className="hero-blob-blue absolute -top-40 -left-40 h-[300px] w-[300px] md:h-[500px] md:w-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle at center, rgba(43, 181, 212, 0.25) 0%, transparent 60%)' }} />
+        <div className="hero-blob-green absolute -bottom-40 -right-40 h-[300px] w-[300px] md:h-[600px] md:w-[600px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle at center, rgba(34, 197, 94, 0.15) 0%, transparent 60%)' }} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-10 md:gap-12 items-center w-full">
           {/* Hero text — CSS fade-in so LCP h1 is visible on first paint */}

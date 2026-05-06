@@ -220,14 +220,12 @@
   animation: navbar-drop-in 0.45s ease-out both;
 }
 
-/* Hero section text block — fades in immediately on paint */
+/* Hero section text block — no animation so LCP text paints immediately */
 .hero-content {
-  animation: hero-fade-up 0.55s ease-out both;
 }
 
-/* Salesforce mock visual — slight delay so text paints first */
+/* Salesforce mock visual — no delay so LCP paints immediately */
 .hero-visual {
-  animation: hero-fade-up-delayed 0.75s ease-out both;
 }
 
 /* Badge pulse — subtle attention ring */
@@ -241,16 +239,10 @@
   display: inline-block;
 }
 
-/* Blob rotations — GPU layer, long duration so they don't consume CPU */
+/* Blobs — removed infinite spinning animation on blurred elements to fix LCP/GPU hangs */
 .hero-blob-blue {
-  will-change: transform;
-  animation: blob-spin-cw 60s linear infinite;
-  transform-origin: center;
 }
 .hero-blob-green {
-  will-change: transform;
-  animation: blob-spin-ccw 80s linear infinite;
-  transform-origin: center;
 }
 
 /* ── CSS replacements for Framer Motion infinite loops ─────────────────────
