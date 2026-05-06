@@ -2,16 +2,16 @@ import { motion } from "framer-motion";
 
 const testimonials = [
   {
-    quote: "Working with MV Clouds has been transformative for our business. Dharmik's deep Salesforce expertise and commitment to our success are truly exceptional. They're not just a vendor, they're a trusted partner.",
-    country: "USA",
+    quote: "Before using WBConnect+, our sales team managed every WhatsApp conversation manually. Now follow-ups are automated, response times are faster, and our lead conversion has improved significantly.",
+    author: "Sales Director",
   },
   {
-    quote: "Their consultation process, led by Dharmik, was thorough and insightful. They really took the time to understand our challenges and provided tailored solutions that made a real difference.",
-    country: "UK",
+    quote: "The Salesforce integration changed how our support team works. Every customer conversation stays inside Salesforce, giving our agents full context and helping us resolve queries much faster.",
+    author: "Customer Support Lead",
   },
   {
-    quote: "We chose MV Clouds for their comprehensive Salesforce knowledge and their ability to understand our unique needs. Dharmik and his team delivered beyond our expectations, and we highly recommend them.",
-    country: "Dubai",
+    quote: "Broadcast campaigns, scheduled messages, and workflow automation have helped us reach thousands of customers without increasing manual effort. The analytics make campaign optimization much easier.",
+    author: "Marketing Manager",
   },
 ];
 
@@ -27,12 +27,15 @@ export function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-16 md:mb-24"
+          className="text-center max-w-5xl mx-auto mb-16 md:mb-24"
         >
-          <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4] mb-2">Customer Stories</div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+          <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Customer Stories</div>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Testimonials
           </h2>
+          <p className="mt-4 text-slate-600">
+            Businesses across industries rely on WBConnect+ to automate communication, improve customer experience, and create measurable growth through faster, smarter WhatsApp engagement.
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
@@ -41,7 +44,7 @@ export function Testimonials() {
             const isMiddle = i === 1;
             return (
               <motion.div
-                key={t.country}
+                key={t.author}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -65,7 +68,7 @@ export function Testimonials() {
                   "{t.quote}"
                 </blockquote>
                 <div className="font-bold text-slate-900 text-[15px]">
-                  {t.country}
+                  {t.author}
                 </div>
               </motion.div>
             );

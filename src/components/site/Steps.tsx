@@ -41,12 +41,15 @@ export function Steps() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          className="text-center max-w-5xl mx-auto mb-16"
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Implementation</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Live in <span className="text-gradient-brand">four guided milestones</span> with WBConnect+.
+            Get Started Without Complex Setup
           </h2>
+          <p className="mt-4 text-slate-600 text-base md:text-lg">
+            From onboarding to deployment, our implementation team helps you launch quickly with minimal technical effort.
+          </p>
         </motion.div>
 
         <div ref={ref} className="relative max-w-3xl mx-auto">

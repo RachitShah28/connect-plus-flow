@@ -222,14 +222,14 @@ export function Industries() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto"
+          className="text-center max-w-5xl mx-auto"
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Industries</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Built for the way <span className="text-gradient-brand">your team</span> sells and supports.
           </h2>
-          <p className="mt-3 text-slate-600">
-            From real estate to financial services, teams across industries run their WhatsApp Business playbooks inside Salesforce with WBConnect+.
+          <p className="mt-4 text-slate-600">
+            From real estate to financial services, teams across industries run their WhatsApp Business playbooks inside Salesforce with WBConnect+. Designed for teams that depend on fast customer communication and consistent follow-ups.
           </p>
         </motion.div>
 
@@ -239,8 +239,8 @@ export function Industries() {
               key={ind.name}
               onClick={() => setActive(i)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${i === active
-                  ? "bg-[#2BB5D4] text-white shadow-md shadow-[#2BB5D4]/30"
-                  : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300"
+                ? "bg-[#2BB5D4] text-white shadow-md shadow-[#2BB5D4]/30"
+                : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300"
                 }`}
             >
               <ind.icon className="h-3.5 w-3.5" />

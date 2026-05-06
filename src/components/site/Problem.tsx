@@ -36,13 +36,17 @@ export function Problem() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-20 lg:mb-24"
+          className="text-center max-w-6xl mx-auto mb-16 lg:mb-20"
         >
-          <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4] mb-3">The Challenge</div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight leading-tight">
-            WhatsApp is where your customers are. <br className="hidden sm:block" />
-            But it creates a headache for your CRM.
+          <div className="inline-flex items-center rounded-full bg-[#2BB5D4]/10 px-3 py-1 text-xs font-semibold tracking-wider uppercase text-[#2BB5D4] mb-5">
+            The Challenge
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 tracking-tight leading-tight">
+            Your Customers Are on WhatsApp. <br className="hidden sm:block" /> <span className="text-slate-400">Your CRM isn't.</span>
           </h2>
+          <p className="mt-6 text-base sm:text-lg md:text-[19px] text-slate-600 max-w-6xl mx-auto leading-relaxed">
+            When your team handles WhatsApp conversations manually, important follow-ups often get delayed, customer queries go unanswered, and sales opportunities slip away. As conversations increase, managing chats without a WhatsApp automation tool creates bottlenecks in sales, support, and marketing, making it harder to scale efficiently.
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 lg:gap-y-20 max-w-6xl mx-auto">

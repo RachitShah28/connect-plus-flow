@@ -133,7 +133,7 @@ export const GlobalChatVisual = memo(function GlobalChatVisual() {
       <div className="bg-[#075E54] text-white px-3 py-2 flex items-center gap-2">
         <div className="h-6 w-6 rounded-full bg-white/20 grid place-items-center text-[10px] font-bold flex-shrink-0">S</div>
         <div>
-          <div className="text-[11px] font-semibold leading-none">Sara Kapoor</div>
+          <div className="text-[11px] font-semibold leading-none">Payal Shah</div>
           <div className="text-[9px] text-white/70 mt-0.5">online</div>
         </div>
         <div className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -529,18 +529,21 @@ export function FeatureShowcase() {
   return (
     <section className="pt-16 md:pt-24 pb-10 md:pb-16 bg-slate-50 relative overflow-x-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50 via-transparent to-transparent pointer-events-none" />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14 md:space-y-28">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto"
+          className="text-center max-w-5xl mx-auto"
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Capabilities</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Everything your team needs to run WhatsApp Business inside Salesforce.
           </h2>
+          <p className="mt-4 text-slate-600">
+            From one-to-one conversations to enterprise campaigns, WBConnect Plus gives your team everything needed to automate customer communication and scale faster.
+          </p>
         </motion.div>
 
         <Row

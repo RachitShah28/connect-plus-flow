@@ -10,12 +10,13 @@ const DemoModal = lazy(() =>
 );
 
 const links = [
-  { href: "#top", label: "Home", aria: "WBConnect+ home" },
-  { href: "#features", label: "Features", aria: "WBConnect+ WhatsApp Salesforce features" },
-  { href: "#why-choose-us", label: "Why Choose Us", aria: "Why choose WBConnect+ over other integrations" },
-  { href: "#industries", label: "Industries", aria: "Industries using WBConnect+ WhatsApp Salesforce" },
-  { href: "#implementation", label: "Implementation", aria: "WBConnect+ implementation steps" },
-  { href: "#pricing", label: "Pricing", aria: "WBConnect+ WhatsApp Salesforce pricing" },
+  { href: "#top", label: "Home", aria: "WBConnect+ home", page: false },
+  { href: "#features", label: "Features", aria: "WBConnect+ WhatsApp Salesforce features", page: false },
+  { href: "#industries", label: "Industries", aria: "Industries using WBConnect+ WhatsApp Salesforce", page: false },
+  { href: "#why-choose-us", label: "Why Choose Us", aria: "Why choose WBConnect+ over other integrations", page: false },
+  { href: "#pricing", label: "Pricing", aria: "WBConnect+ WhatsApp Salesforce pricing", page: false },
+  { href: "#implementation", label: "Implementation", aria: "WBConnect+ implementation steps", page: false },
+  { href: "/faqs", label: "FAQs", aria: "WBConnect+ frequently asked questions", page: true },
 ];
 
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
@@ -67,21 +68,36 @@ export function Navbar() {
 
   const navigate = useNavigate();
 
-  const handleNavClick = (anchor: string) => {
+  const handleNavClick = (anchor: string, isPage = false) => {
     setMenuOpen(false);
+    if (isPage) {
+      if (location.pathname === anchor) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        navigate({ to: anchor as any }).then(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+      return;
+    }
     if (isHome) {
-      // Update the URL hash so the address bar reflects the active section
-      history.pushState(null, "", anchor);
       const el = document.querySelector(anchor);
       if (el) el.scrollIntoView({ behavior: "smooth" });
     } else {
       // Client-side navigation to home — no full page reload.
+      // We navigate without the hash to prevent the router from jumping instantly,
+      // and then smoothly scroll to the section.
       const hashId = anchor.replace("#", "");
-      navigate({ to: "/", hash: hashId }).then(() => {
-        setTimeout(() => {
+      navigate({ to: "/" }).then(() => {
+        let attempts = 0;
+        const checkExist = setInterval(() => {
           const el = document.getElementById(hashId) ?? document.querySelector(anchor);
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        }, 200);
+          if (el) {
+            clearInterval(checkExist);
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+          if (++attempts > 20) clearInterval(checkExist);
+        }, 100);
       });
     }
   };
@@ -113,9 +129,9 @@ export function Navbar() {
               {links.map((l) => (
                 <a
                   key={l.href}
-                  href={resolveHref(l.href)}
+                  href={l.page ? l.href : resolveHref(l.href)}
                   aria-label={l.aria}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(l.href); }}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(l.href, l.page); }}
                   className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
                 >
                   {l.label}
@@ -182,7 +198,7 @@ export function Navbar() {
                   {links.map((l) => (
                     <button
                       key={l.href}
-                      onClick={() => handleNavClick(l.href)}
+                      onClick={() => handleNavClick(l.href, l.page)}
                       className="w-full text-left px-5 py-3.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
                     >
                       {l.label}

@@ -78,15 +78,16 @@ export function Pricing() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-center max-w-2xl mx-auto mb-14"
+            className="text-center max-w-5xl mx-auto mb-14"
           >
             <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Pricing</div>
             <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-white">
-              Simple, transparent pricing for{" "}
-              <span className="text-gradient-brand">WhatsApp Business</span> in Salesforce.
+              Affordable Pricing Built for Growing Businesses
             </h2>
-            <p className="mt-4 text-slate-400">
-              Start for a flat $189 per month or talk to us for a custom plan built around your team size and WhatsApp workflows.
+            <p className="mt-4 text-slate-400 text-base md:text-lg">
+              Get enterprise-grade WhatsApp automation without enterprise-level costs.
+              <br className="hidden sm:block" />
+              Simple plans. Transparent pricing. No hidden platform markups.
             </p>
           </motion.div>
 

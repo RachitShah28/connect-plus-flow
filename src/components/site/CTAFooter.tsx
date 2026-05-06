@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Linkedin, Facebook, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 import { DemoModal } from "./DemoModal";
 import { WBCLogo } from "./WBCLogo";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 
 const ecosystem = [
   { label: "QuickForm", href: "https://mvclouds.com/solutions/quickform" },
@@ -12,12 +13,13 @@ const ecosystem = [
 ];
 
 const quickLinks = [
-  { label: "Home", href: "/" },
-  { label: "Features", href: "/#features" },
-  { label: "Why WBConnect+", href: "/#why" },
-  { label: "Industries", href: "/#industries" },
-  { label: "Pricing", href: "/#pricing" },
-  { label: "FAQs", href: "/#faqs" },
+  { label: "Home", href: "/", page: false },
+  { label: "Features", href: "/#features", page: false },
+  { label: "Why WBConnect+", href: "/#why-choose-us", page: false },
+  { label: "Industries", href: "/#industries", page: false },
+  { label: "Pricing", href: "/#pricing", page: false },
+  { label: "Capabilities", href: "/capabilities", page: true },
+  { label: "FAQs", href: "/faqs", page: true },
 ];
 
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
@@ -69,6 +71,78 @@ const socials = [
 
 export function CTAFooter() {
   const [demoOpen, setDemoOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHome = location.pathname === "/";
+
+  const handleNavClick = (href: string, isPage = false) => {
+    if (isPage) {
+      if (location.pathname === href) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        navigate({ to: href as any }).then(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+      return;
+    }
+    if (href === "/") {
+      if (isHome) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        navigate({ to: "/" });
+      }
+      return;
+    }
+
+    const hashId = href.replace("/#", "");
+
+    if (isHome) {
+      const el = document.getElementById(hashId);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      navigate({ to: "/" }).then(() => {
+        let attempts = 0;
+        const checkExist = setInterval(() => {
+          const el = document.getElementById(hashId);
+          if (el) {
+            clearInterval(checkExist);
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+          if (++attempts > 20) clearInterval(checkExist);
+        }, 100);
+      });
+    }
+  };
+
+  // ── Page-aware CTA content ─────────────────────────────────────────────────
+  const isCapabilities = location.pathname === "/capabilities";
+
+  const cta = isCapabilities
+    ? {
+        headline: (
+          <>
+            Ready to Turn WhatsApp Into Your{" "}
+            <span className="text-gradient-brand">Highest-Converting Channel?</span>
+          </>
+        ),
+        sub: "Launch your first automated workflow in minutes.",
+        primaryLabel: "Schedule Demo",
+        secondaryLabel: "Start Free Trial",
+        secondaryHref: PACKAGE_URL,
+      }
+    : {
+        headline: (
+          <>
+            Ready to Automate{" "}
+            <span className="text-gradient-brand">WhatsApp Conversations?</span>
+          </>
+        ),
+        sub: "Book a personalised demo and see how WBConnect+ can help your team close deals faster, automate conversations, and scale customer engagement.",
+        primaryLabel: "Book Free Demo",
+        secondaryLabel: "Start Free Trial",
+        secondaryHref: PACKAGE_URL,
+      };
 
   return (
     <>
@@ -84,40 +158,59 @@ export function CTAFooter() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="max-w-6xl mx-auto rounded-[2rem] bg-[#162032] border border-white/10 text-white p-10 sm:p-14 lg:p-20 relative overflow-hidden shadow-2xl"
+            className="max-w-6xl mx-auto rounded-[2rem] bg-[#162032] border border-white/10 text-white relative overflow-hidden shadow-2xl"
           >
             {/* Ambient glows inside the card */}
             <div className="absolute -top-32 -right-32 h-[30rem] w-[30rem] rounded-full bg-[#2BB5D4]/10 blur-[80px] pointer-events-none" />
             <div className="absolute -bottom-32 -left-32 h-[30rem] w-[30rem] rounded-full bg-[#22C55E]/10 blur-[80px] pointer-events-none" />
 
-            <div className="relative max-w-3xl mx-auto text-center flex flex-col items-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
-                Ready to bring <span className="text-gradient-brand">WhatsApp Business</span> natively into Salesforce?
-              </h2>
-              <p className="mt-5 text-slate-300 text-lg sm:text-xl font-medium max-w-2xl leading-relaxed">
-                Join 500+ Salesforce orgs running WhatsApp Business natively with unlimited AWS S3 media storage, zero
-                middleman markup and a no-code flow builder.
-              </p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
-                <a
-                  href={PACKAGE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-8 py-4 text-base font-semibold text-white shadow-lg shadow-[#22C55E]/20 hover:shadow-xl hover:shadow-[#22C55E]/30 transition-all hover:-translate-y-0.5"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    Get the Managed Package
-                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </span>
-                  <span className="shimmer-btn" aria-hidden />
-                </a>
-                <button
-                  onClick={() => setDemoOpen(true)}
-                  className="group relative overflow-hidden inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all hover:-translate-y-0.5"
-                >
-                  <span className="relative z-10">Book a Strategy Call</span>
-                  <span className="shimmer-btn" aria-hidden />
-                </button>
+            <div className="relative flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+              {/* Left Side: Image */}
+              <div className="hidden lg:flex w-full lg:w-1/2 justify-center lg:py-16 px-6 sm:px-10 lg:pl-16 xl:pl-20 lg:pr-0">
+                <motion.img
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  src="/cta-desktop-image.svg"
+                  alt="WBConnect+ Platform Preview"
+                  className="w-full max-w-lg lg:max-w-full h-auto object-contain drop-shadow-2xl"
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Right Side: Content */}
+              <div className="w-full lg:w-1/2 text-center lg:text-left flex flex-col items-center lg:items-start z-10 p-10 sm:p-14 lg:py-20 lg:pr-16 xl:pr-20 lg:pl-0">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight">
+                  {cta.headline}
+                </h2>
+                <p className="mt-5 text-slate-300 text-lg sm:text-xl font-medium leading-relaxed">
+                  {cta.sub}
+                </p>
+                <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center lg:justify-start">
+                  {/* Primary — always opens demo modal */}
+                  <button
+                    onClick={() => setDemoOpen(true)}
+                    className="group relative overflow-hidden inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-8 py-4 text-base font-semibold text-white shadow-lg shadow-[#22C55E]/20 hover:shadow-xl hover:shadow-[#22C55E]/30 transition-all hover:-translate-y-0.5"
+                  >
+                    <span className="relative z-10 flex items-center gap-2">
+                      {cta.primaryLabel}
+                      <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    </span>
+                    <span className="shimmer-btn" aria-hidden />
+                  </button>
+
+                  {/* Secondary — links to Salesforce package */}
+                  <a
+                    href={cta.secondaryHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative overflow-hidden inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-base font-semibold text-white hover:bg-white/10 transition-all hover:-translate-y-0.5"
+                  >
+                    <span className="relative z-10">{cta.secondaryLabel}</span>
+                    <span className="shimmer-btn" aria-hidden />
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -188,6 +281,10 @@ export function CTAFooter() {
                   <li key={item.label}>
                     <a
                       href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleNavClick(item.href, item.page);
+                      }}
                       aria-label={item.label}
                       className="text-sm text-slate-400 hover:text-white transition-colors"
                     >

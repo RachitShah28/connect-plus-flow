@@ -97,12 +97,15 @@ export function Evolution() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto mb-14"
+          className="text-center max-w-5xl mx-auto mb-14"
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">The Evolution</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900" aria-label="WBConnect+ compared to Standard WhatsApp and third-party middlemen">
             WBConnect+ versus Standard WhatsApp and Third-Party Middlemen
           </h2>
+          <p className="mt-4 text-slate-600">
+            Not all WhatsApp platforms are built for business growth. Unlike standard apps or reseller-based integrations, WBConnect Plus gives your team complete control, deeper automation, and enterprise-grade scalability.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -117,10 +120,10 @@ export function Evolution() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 className={`rounded-3xl p-7 border ${isBrand
-                    ? "bg-gradient-to-br from-[#2BB5D4]/10 via-white to-[#22C55E]/10 border-[#22C55E]/30 shadow-2xl shadow-[#2BB5D4]/20 ring-1 ring-[#2BB5D4]/20"
-                    : isWarn
-                      ? "bg-amber-50/40 border-amber-200"
-                      : "bg-slate-50 border-slate-200"
+                  ? "bg-gradient-to-br from-[#2BB5D4]/10 via-white to-[#22C55E]/10 border-[#22C55E]/30 shadow-2xl shadow-[#2BB5D4]/20 ring-1 ring-[#2BB5D4]/20"
+                  : isWarn
+                    ? "bg-amber-50/40 border-amber-200"
+                    : "bg-slate-50 border-slate-200"
                   }`}
               >
                 <Vector tone={c.tone} />

@@ -27,7 +27,7 @@ export function Hero() {
           <div className="hero-content text-center md:text-left">
             <div className="hero-badge inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-3 py-1 text-xs font-medium text-slate-700 mb-5 border border-[#2BB5D4]/30">
               <Sparkles className="h-3.5 w-3.5 text-[#2BB5D4]" aria-hidden />
-              Salesforce Native Managed Package on Meta Cloud API
+              Offical Meta Tech Provider
             </div>
             {/* LCP element — visible immediately, no opacity:0 */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]">
@@ -35,34 +35,45 @@ export function Hero() {
               <span className="text-gradient-brand">Powerful WhatsApp Automation Tool</span>
             </h1>
             <p className="mt-5 text-base md:text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
-              WBConnect+ is a CRM-native WhatsApp Business integration by MV Clouds: Track messages, assign leads, and store conversations instantly via Meta Cloud API.
+              WBConnect+ is a WhatsApp automation tool that helps businesses streamline communication, automate follow-ups, and manage campaigns from one centralized platform. Designed for sales, support, and marketing teams, it improves response speed, boosts engagement, and helps convert more leads.
             </p>
             <div className="mt-7 flex flex-wrap items-center justify-center md:justify-start gap-3">
+              <button
+                onClick={() => setDemoOpen(true)}
+                aria-label="Book a WBConnect+ demo"
+                className="group relative overflow-hidden inline-flex items-center gap-2 rounded-xl bg-[#2BB5D4] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  Book Demo
+                </span>
+                <span className="shimmer-btn" aria-hidden />
+              </button>
               <a
                 href={PACKAGE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Get started with WBConnect+ free trial"
-                className="group relative overflow-hidden inline-flex items-center gap-2 rounded-xl bg-[#2BB5D4] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors"
+                aria-label="Start WBConnect+ free trial"
+                className="relative overflow-hidden inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors group"
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  Get Started
+                  Start Free Trial
                   <ArrowRight className="h-4 w-4 hero-arrow" />
                 </span>
                 <span className="shimmer-btn" aria-hidden />
               </a>
-              <button
-                onClick={() => setDemoOpen(true)}
-                aria-label="Request a custom WBConnect+ WhatsApp Salesforce demo"
-                className="relative overflow-hidden inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors group"
-              >
-                <span className="relative z-10">Request a Demo</span>
-                <span className="shimmer-btn" aria-hidden />
-              </button>
             </div>
-            <div className="mt-8 flex items-center justify-center md:justify-start gap-6 text-xs text-slate-500">
-              <div>★★★★★ 4.9 enterprise rating</div>
-              <div className="hidden sm:block">500+ Salesforce orgs powered by 11 years of MV Clouds expertise</div>
+            <div className="mt-8 flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 text-sm text-slate-600">
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-900 font-bold">1M+</span> Messages Sent
+              </div>
+              <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-slate-300" />
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-900 font-bold">50+</span> Businesses
+              </div>
+              <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-slate-300" />
+              <div className="flex items-center gap-1.5">
+                <span className="text-slate-900 font-bold">99.9%</span> Delivery Rate
+              </div>
             </div>
           </div>
 

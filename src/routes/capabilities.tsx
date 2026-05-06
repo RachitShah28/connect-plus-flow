@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { lazy, memo, Suspense, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, HardDrive } from "lucide-react";
+import { ArrowRight, CheckCircle2, HardDrive, Webhook, LayoutDashboard, Cloud, Zap } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import {
   GlobalChatVisual,
@@ -255,12 +255,15 @@ function CapabilitiesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center max-w-2xl mx-auto py-10"
+            className="text-center max-w-5xl mx-auto py-10"
           >
             <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Capabilities</div>
             <h1 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
               Everything your team needs to run WhatsApp Business inside Salesforce.
             </h1>
+            <p className="mt-4 text-lg text-slate-600">
+              From one-to-one conversations to enterprise campaigns, WBConnect Plus gives your team everything needed to automate customer communication and scale faster.
+            </p>
           </motion.div>
         </div>
       </section>
@@ -360,6 +363,78 @@ function CapabilitiesPage() {
 
         </div>
       </section>
+
+      {/* ── Built for Developers and Enterprises ── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-5xl mx-auto mb-14"
+          >
+            <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Developer &amp; Enterprise</div>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+              Built for Developers and Enterprises
+            </h2>
+            <p className="mt-4 text-slate-500 text-base">
+              Advanced features for complete customisation and control.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: <Webhook className="h-6 w-6" />,
+                title: "Webhook Configuration",
+                desc: "Connect with CRM, ERP, or internal systems.",
+                accent: "from-[#2BB5D4]/10 to-blue-50",
+                iconBg: "bg-[#2BB5D4]/10 text-[#2BB5D4]",
+              },
+              {
+                icon: <LayoutDashboard className="h-6 w-6" />,
+                title: "Chat Window Configuration",
+                desc: "Customise agent workspace and branding.",
+                accent: "from-violet-50 to-purple-50",
+                iconBg: "bg-violet-100 text-violet-600",
+              },
+              {
+                icon: <Cloud className="h-6 w-6" />,
+                title: "AWS Configuration",
+                desc: "Connect your own S3 storage.",
+                accent: "from-orange-50 to-amber-50",
+                iconBg: "bg-orange-100 text-orange-500",
+              },
+              {
+                icon: <Zap className="h-6 w-6" />,
+                title: "Automation Configuration",
+                desc: "Automate template selection based on reply button clicks.",
+                accent: "from-emerald-50 to-green-50",
+                iconBg: "bg-emerald-100 text-emerald-600",
+              },
+            ].map((card, i) => (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className={`relative rounded-2xl bg-gradient-to-br ${card.accent} border border-slate-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-300 group`}
+              >
+                {/* top accent bar */}
+                <div className="absolute top-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r from-transparent via-[#2BB5D4]/30 to-transparent" />
+                <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-5`}>
+                  {card.icon}
+                </div>
+                <h3 className="text-base font-bold text-slate-900 leading-snug">{card.title}</h3>
+                <p className="mt-2 text-sm text-slate-500 leading-relaxed">{card.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
       <Suspense fallback={<SectionSkeleton />}>
         <CTAFooter />

@@ -46,7 +46,7 @@ export function SalesforceMock() {
               </div>
               <div>
                 <div className="text-xs text-slate-500">Contact</div>
-                <div className="font-semibold text-slate-900">Sara Kapoor</div>
+                <div className="font-semibold text-slate-900">Payal Shah</div>
               </div>
               <div className="ml-auto text-xs px-2 py-1 rounded-md bg-emerald-50 text-emerald-700 font-medium">
                 Qualified Lead
@@ -81,7 +81,7 @@ export function SalesforceMock() {
         <div className="bg-[#075E54] text-white px-3 py-2 flex items-center gap-2">
           <div className="h-7 w-7 rounded-full bg-white/20 grid place-items-center text-xs font-semibold">SK</div>
           <div className="text-xs">
-            <div className="font-semibold leading-none">Sara Kapoor</div>
+            <div className="font-semibold leading-none">Payal Shah</div>
             <div className="text-[10px] opacity-80 mt-0.5">online, synced to CRM</div>
           </div>
         </div>
