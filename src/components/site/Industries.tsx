@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import {
   Building2,
   HeartPulse,
@@ -210,19 +209,49 @@ const industries: Industry[] = [
 
 export function Industries() {
   const [active, setActive] = useState(0);
+  const [visible, setVisible] = useState(true);
   const [open, setOpen] = useState(false);
+  const pendingActive = useRef(0);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [headerVisible, setHeaderVisible] = useState(false);
+
+  // Fade header in with IntersectionObserver (no Framer Motion)
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setHeaderVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   const Item = industries[active];
   const Icon = Item.icon;
+
+  const handleTabChange = (i: number) => {
+    if (i === active) return;
+    pendingActive.current = i;
+    setVisible(false);
+    // After fade-out (200ms), swap content and fade back in
+    setTimeout(() => {
+      setActive(pendingActive.current);
+      setVisible(true);
+    }, 200);
+  };
 
   return (
     <section id="industries" className="py-16 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+        <div
+          ref={headerRef}
           className="text-center max-w-5xl mx-auto"
+          style={{
+            opacity: headerVisible ? 1 : 0,
+            transform: headerVisible ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 0.5s ease, transform 0.5s ease',
+          }}
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Industries</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
@@ -231,13 +260,13 @@ export function Industries() {
           <p className="mt-4 text-slate-600">
             From real estate to financial services, teams across industries run their WhatsApp Business playbooks inside Salesforce with WBConnect+. Designed for teams that depend on fast customer communication and consistent follow-ups.
           </p>
-        </motion.div>
+        </div>
 
         <div className="mt-10 flex flex-wrap justify-center gap-2">
           {industries.map((ind, i) => (
             <button
               key={ind.name}
-              onClick={() => setActive(i)}
+              onClick={() => handleTabChange(i)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${i === active
                 ? "bg-[#2BB5D4] text-white shadow-md shadow-[#2BB5D4]/30"
                 : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300"
@@ -250,61 +279,55 @@ export function Industries() {
         </div>
 
         <div className="mt-10 grid md:grid-cols-2 gap-8 items-stretch">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`text-${active}`}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.35 }}
-              className="rounded-3xl bg-white p-8 shadow-xl shadow-slate-200/50 border border-slate-100"
+          {/* Text panel — CSS fade/slide transition */}
+          <div
+            className="rounded-3xl bg-white p-8 shadow-xl shadow-slate-200/50 border border-slate-100"
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'opacity 0.25s ease, transform 0.25s ease',
+              willChange: 'opacity, transform',
+            }}
+          >
+            <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#2BB5D4] to-[#22C55E] grid place-items-center text-white">
+              <Icon className="h-6 w-6" />
+            </div>
+            <h3 className="mt-5 text-2xl font-bold text-slate-900">{Item.headline}</h3>
+            <p className="mt-3 text-slate-600">{Item.body}</p>
+            <button
+              onClick={() => setOpen(true)}
+              className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[#2BB5D4] hover:gap-2 transition-all"
             >
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-[#2BB5D4] to-[#22C55E] grid place-items-center text-white">
-                <Icon className="h-6 w-6" />
-              </div>
-              <h3 className="mt-5 text-2xl font-bold text-slate-900">{Item.headline}</h3>
-              <p className="mt-3 text-slate-600">{Item.body}</p>
-              <button
-                onClick={() => setOpen(true)}
-                className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[#2BB5D4] hover:gap-2 transition-all"
-              >
-                See full use case <ArrowRight className="h-4 w-4" />
-              </button>
-            </motion.div>
-          </AnimatePresence>
+              See full use case <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`flow-${active}`}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.35, delay: 0.05 }}
-              className="rounded-3xl glass p-8 shadow-xl shadow-slate-200/40 flex flex-col items-center justify-center"
-            >
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 text-center w-full">
-                Example WhatsApp Flow / Automation
-              </div>
-              <ol className="mt-5 space-y-4 w-full">
-                {Item.flow.map((step, idx) => (
-                  <motion.li
-                    key={step}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <div className="h-7 w-7 rounded-full bg-[#22C55E] text-white text-xs font-bold grid place-items-center flex-shrink-0">
-                      {idx + 1}
-                    </div>
-                    <div className="rounded-xl bg-white px-4 py-3 text-sm text-slate-800 shadow-sm border border-slate-100 flex-1 text-center">
-                      {step}
-                    </div>
-                  </motion.li>
-                ))}
-              </ol>
-            </motion.div>
-          </AnimatePresence>
+          {/* Flow panel — CSS fade/slide transition */}
+          <div
+            className="rounded-3xl glass p-8 shadow-xl shadow-slate-200/40 flex flex-col items-center justify-center"
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'opacity 0.25s ease 0.04s, transform 0.25s ease 0.04s',
+              willChange: 'opacity, transform',
+            }}
+          >
+            <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 text-center w-full">
+              Example WhatsApp Flow / Automation
+            </div>
+            <ol className="mt-5 space-y-4 w-full">
+              {Item.flow.map((step, idx) => (
+                <li key={step} className="flex items-center gap-3">
+                  <div className="h-7 w-7 rounded-full bg-[#22C55E] text-white text-xs font-bold grid place-items-center flex-shrink-0">
+                    {idx + 1}
+                  </div>
+                  <div className="rounded-xl bg-white px-4 py-3 text-sm text-slate-800 shadow-sm border border-slate-100 flex-1 text-center">
+                    {step}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
 

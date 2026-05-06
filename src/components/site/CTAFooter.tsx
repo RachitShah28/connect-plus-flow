@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import { Linkedin, Facebook, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 import { DemoModal } from "./DemoModal";
 import { WBCLogo } from "./WBCLogo";
@@ -74,6 +73,19 @@ export function CTAFooter() {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
+
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const [bannerVisible, setBannerVisible] = useState(false);
+  useEffect(() => {
+    const el = bannerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setBannerVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const handleNavClick = (href: string, isPage = false) => {
     if (isPage) {
@@ -153,12 +165,14 @@ export function CTAFooter() {
 
         {/* CTA Banner */}
         <section id="cta" className="relative z-10 px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <div
+            ref={bannerRef}
             className="max-w-6xl mx-auto rounded-[2rem] bg-[#162032] border border-white/10 text-white relative overflow-hidden shadow-2xl"
+            style={{
+              opacity: bannerVisible ? 1 : 0,
+              transform: bannerVisible ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 0.6s ease, transform 0.6s ease',
+            }}
           >
             {/* Ambient glows inside the card */}
             <div className="absolute -top-32 -right-32 h-[30rem] w-[30rem] rounded-full bg-[#2BB5D4]/10 blur-[80px] pointer-events-none" />
@@ -167,15 +181,13 @@ export function CTAFooter() {
             <div className="relative flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
               {/* Left Side: Image */}
               <div className="hidden lg:flex w-full lg:w-1/2 justify-center items-center lg:py-12 px-6 sm:px-10 lg:pl-12 lg:pr-0">
-                <motion.img
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
+                <img
                   src="/cta-desktop-image.png"
                   alt="WBConnect+ Platform Preview"
                   className="w-full max-w-md xl:max-w-lg h-auto object-contain drop-shadow-2xl"
                   loading="lazy"
+                  width="500"
+                  height="400"
                 />
               </div>
 
@@ -213,7 +225,7 @@ export function CTAFooter() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         {/* Footer */}

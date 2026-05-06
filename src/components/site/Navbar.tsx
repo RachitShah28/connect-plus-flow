@@ -1,10 +1,9 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { WBCLogo } from "./WBCLogo";
 import { useLocation, useNavigate } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 
-// Lazy-load DemoModal — it's never visible on initial paint, so keep it out of the critical bundle
 const DemoModal = lazy(() =>
   import("./DemoModal").then((m) => ({ default: m.DemoModal }))
 );
@@ -183,63 +182,62 @@ export function Navbar() {
           </nav>
         </div>
 
-        {/* Mobile Dropdown Menu */}
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.98 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="md:hidden mx-4 mt-2"
-            >
-              <div className="backdrop-blur-xl bg-white/95 border border-white/60 rounded-2xl shadow-2xl shadow-slate-300/40 overflow-hidden">
-                <nav className="flex flex-col py-2">
-                  {links.map((l) => (
-                    <button
-                      key={l.href}
-                      onClick={() => handleNavClick(l.href, l.page)}
-                      className="w-full text-left px-5 py-3.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
-                    >
-                      {l.label}
-                    </button>
-                  ))}
-                </nav>
-                <div className="px-4 py-4 pt-2 flex flex-col gap-2.5 border-t border-slate-100">
-                  <a
-                    href={PACKAGE_URL}
-                    target="_blank"
-                    rel="noopener"
-                    onClick={() => setMenuOpen(false)}
-                    className="w-full text-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors"
-                  >
-                    Start Free Trial
-                  </a>
-                  <button
-                    onClick={() => { setMenuOpen(false); setDemoOpen(true); }}
-                    className="w-full rounded-xl bg-[#2BB5D4] px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors"
-                  >
-                    Request Custom Demo
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Mobile Dropdown Menu — CSS transition, no Framer Motion */}
+        <div
+          className="md:hidden mx-4 mt-2 overflow-hidden"
+          style={{
+            maxHeight: menuOpen ? '600px' : '0px',
+            opacity: menuOpen ? 1 : 0,
+            transform: menuOpen ? 'translateY(0) scale(1)' : 'translateY(-8px) scale(0.98)',
+            transition: menuOpen
+              ? 'max-height 0.3s ease, opacity 0.2s ease, transform 0.2s ease'
+              : 'max-height 0.25s ease, opacity 0.15s ease, transform 0.15s ease',
+            pointerEvents: menuOpen ? 'auto' : 'none',
+          }}
+        >
+          <div className="backdrop-blur-xl bg-white/95 border border-white/60 rounded-2xl shadow-2xl shadow-slate-300/40 overflow-hidden">
+            <nav className="flex flex-col py-2">
+              {links.map((l) => (
+                <button
+                  key={l.href}
+                  onClick={() => handleNavClick(l.href, l.page)}
+                  className="w-full text-left px-5 py-3.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
+                >
+                  {l.label}
+                </button>
+              ))}
+            </nav>
+            <div className="px-4 py-4 pt-2 flex flex-col gap-2.5 border-t border-slate-100">
+              <a
+                href={PACKAGE_URL}
+                target="_blank"
+                rel="noopener"
+                onClick={() => setMenuOpen(false)}
+                className="w-full text-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors"
+              >
+                Start Free Trial
+              </a>
+              <button
+                onClick={() => { setMenuOpen(false); setDemoOpen(true); }}
+                className="w-full rounded-xl bg-[#2BB5D4] px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors"
+              >
+                Request Custom Demo
+              </button>
+            </div>
+          </div>
+        </div>
       </header>
 
-      {/* Backdrop for mobile menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setMenuOpen(false)}
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
-          />
-        )}
-      </AnimatePresence>
+      {/* Backdrop for mobile menu — CSS transition */}
+      <div
+        onClick={() => setMenuOpen(false)}
+        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+        style={{
+          opacity: menuOpen ? 1 : 0,
+          pointerEvents: menuOpen ? 'auto' : 'none',
+          transition: 'opacity 0.2s ease',
+        }}
+      />
 
       <Suspense fallback={null}>
         <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />

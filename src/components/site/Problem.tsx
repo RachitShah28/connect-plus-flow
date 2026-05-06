@@ -1,5 +1,26 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Smartphone, Database, Clock, AlertTriangle } from "lucide-react";
+
+function useFadeIn(delay = 0) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  const style: React.CSSProperties = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0)" : "translateY(20px)",
+    transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`,
+  };
+  return { ref, style };
+}
 
 const problems = [
   {
@@ -31,13 +52,7 @@ export function Problem() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50/50 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-6xl mx-auto mb-16 lg:mb-20"
-        >
+        <div {...useFadeIn()} className="text-center max-w-6xl mx-auto mb-16 lg:mb-20">
           <div className="inline-flex items-center rounded-full bg-[#2BB5D4]/10 px-3 py-1 text-xs font-semibold tracking-wider uppercase text-[#2BB5D4] mb-5">
             The Challenge
           </div>
@@ -47,18 +62,11 @@ export function Problem() {
           <p className="mt-6 text-base sm:text-lg md:text-[19px] text-slate-600 max-w-6xl mx-auto leading-relaxed">
             When your team handles WhatsApp conversations manually, important follow-ups often get delayed, customer queries go unanswered, and sales opportunities slip away. As conversations increase, managing chats without a WhatsApp automation tool creates bottlenecks in sales, support, and marketing, making it harder to scale efficiently.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 lg:gap-y-20 max-w-6xl mx-auto">
           {problems.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start"
-            >
+            <div key={p.title} {...useFadeIn(i * 0.1)} className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
               <div className="shrink-0 mt-1">
                 <div className="h-14 w-14 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#2BB5D4]/15 to-[#22C55E]/15" />
@@ -69,7 +77,7 @@ export function Problem() {
                 <h3 className="text-xl font-bold text-slate-900 mb-3">{p.title}</h3>
                 <p className="text-slate-600 text-base sm:text-[17px] leading-relaxed">{p.desc}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

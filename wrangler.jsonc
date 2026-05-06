@@ -4,4 +4,43 @@
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  "rules": [
+    {
+      "type": "Text",
+      "globs": ["**/*.html"],
+      "fallthrough": true
+    }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "single-page-application",
+    "headers": [
+      {
+        "pattern": "/assets/*",
+        "set": {
+          "Cache-Control": "public, max-age=31536000, immutable"
+        }
+      },
+      {
+        "pattern": "/*.{js,css,woff2,woff,ttf,svg,ico,png,jpg,webp}",
+        "set": {
+          "Cache-Control": "public, max-age=31536000, immutable"
+        }
+      },
+      {
+        "pattern": "/*.html",
+        "set": {
+          "Cache-Control": "public, max-age=0, must-revalidate"
+        }
+      },
+      {
+        "pattern": "/sitemap.xml",
+        "set": {
+          "Cache-Control": "public, max-age=86400"
+        }
+      }
+    ]
+  }
 }

@@ -1,7 +1,27 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import { Check, Building2, Sparkles, Rocket } from "lucide-react";
 import { DemoModal } from "./DemoModal";
+
+function useFadeIn(delay = 0) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  const style: React.CSSProperties = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0)" : "translateY(20px)",
+    transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`,
+  };
+  return { ref, style };
+}
 
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
 
@@ -62,7 +82,7 @@ const tiers = [
 
 export function Pricing() {
   const [demoOpen, setDemoOpen] = useState(false);
-
+  const header = useFadeIn();
   return (
     <>
       <section id="pricing" className="py-16 md:py-20 bg-[#0F172A] relative overflow-hidden">
@@ -73,13 +93,7 @@ export function Pricing() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-[#2BB5D4]/8 blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-5xl mx-auto mb-14"
-          >
+          <div {...header} className="text-center max-w-5xl mx-auto mb-14">
             <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Pricing</div>
             <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-white">
               Affordable Pricing Built for Growing Businesses
@@ -89,16 +103,15 @@ export function Pricing() {
               <br className="hidden sm:block" />
               Simple plans. Transparent pricing. No hidden platform markups.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 max-w-6xl mx-auto items-stretch">
-            {tiers.map((t, i) => (
-              <motion.div
+            {tiers.map((t, i) => {
+              const fade = useFadeIn(i * 0.1);
+              return (
+              <div
                 key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                {...fade}
                 className={`rounded-3xl p-8 flex flex-col relative border transition-all duration-300 ${t.popular
                     ? "bg-white/8 border-[#2BB5D4]/60 shadow-2xl shadow-[#2BB5D4]/20 ring-1 ring-[#2BB5D4]/30"
                     : "bg-white/5 border-white/10 shadow-xl shadow-black/30 hover:border-white/20"
@@ -160,8 +173,9 @@ export function Pricing() {
                     <span className="shimmer-btn" aria-hidden />
                   </button>
                 )}
-              </motion.div>
-            ))}
+              </div>
+              );
+            })}
           </div>
 
           <p className="text-center text-sm text-slate-500 mt-10 relative z-10">

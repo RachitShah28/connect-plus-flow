@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { memo } from "react";
-import { motion } from "framer-motion";
+import { memo, useEffect, useRef, useState } from "react";
 import {
   Cloud,
   Database,
@@ -13,6 +12,23 @@ import {
   Image as ImageIcon,
   MousePointer2,
 } from "lucide-react";
+
+/** One-shot fade-up triggered by IntersectionObserver — zero JS on scroll */
+function useFadeIn() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, visible };
+}
 
 const Row = memo(function Row({
   reverse,
@@ -29,16 +45,16 @@ const Row = memo(function Row({
   bullets: string[];
   visual: React.ReactNode;
 }) {
+  const text = useFadeIn();
+  const vis = useFadeIn();
+  const fadeStyle = (v: boolean, delay = 0): React.CSSProperties => ({
+    opacity: v ? 1 : 0,
+    transform: v ? 'translateY(0)' : 'translateY(20px)',
+    transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s`,
+  });
   return (
     <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-10 items-center">
-      {/* Text always first on mobile; reverse only applies on md+ */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, x: 0, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className={`w-full ${reverse ? "md:order-2" : ""}`}
-      >
+      <div ref={text.ref} style={fadeStyle(text.visible)} className={`w-full ${reverse ? "md:order-2" : ""}`}>
         <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">{badge}</div>
         <h3 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">{title}</h3>
         <p className="mt-4 text-slate-600 text-sm sm:text-base">{desc}</p>
@@ -50,16 +66,10 @@ const Row = memo(function Row({
             </li>
           ))}
         </ul>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className={`w-full ${reverse ? "md:order-1" : ""}`}
-      >
+      </div>
+      <div ref={vis.ref} style={fadeStyle(vis.visible, 0.1)} className={`w-full ${reverse ? "md:order-1" : ""}`}>
         {visual}
-      </motion.div>
+      </div>
     </div>
   );
 });
@@ -81,13 +91,7 @@ function S3Visual() {
       </div>
 
       <div className="mt-6 relative">
-        <motion.div
-          initial={{ width: "0%" }}
-          whileInView={{ width: "100%" }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.6, ease: "easeOut" }}
-          className="h-2 rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E]"
-        />
+        <div className="h-2 rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] s3-progress-bar" />
         <div className="flex justify-between text-[10px] text-slate-400 mt-2">
           <span>WhatsApp Cloud API</span>
           <span>Offloaded to S3</span>
@@ -98,15 +102,9 @@ function S3Visual() {
       <div className="mt-6 grid grid-cols-2 gap-3">
         <div className="rounded-xl bg-slate-700/50 p-4 border border-slate-700">
           <div className="text-[10px] uppercase tracking-wider text-slate-400">CRM Storage Cost</div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 1.2 }}
-            className="text-2xl font-bold text-emerald-400 mt-1"
-          >
+          <div className="text-2xl font-bold text-emerald-400 mt-1">
             $0.00
-          </motion.div>
+          </div>
           <div className="text-[10px] text-slate-500">52.4 MB diverted</div>
         </div>
         <div className="rounded-xl bg-emerald-500/10 p-4 border border-emerald-500/30">
@@ -141,28 +139,12 @@ export const GlobalChatVisual = memo(function GlobalChatVisual() {
       {/* Chat messages */}
       <div className="bg-[#ECE5DD] px-2.5 py-2 space-y-1.5">
         {messages.map((m, i) => (
-          animated ? (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 6 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.18 }}
-              className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}
-            >
-              <div className={`rounded-lg px-2.5 py-1.5 text-[10px] shadow-sm max-w-[85%] leading-snug ${m.from === "me" ? "bg-[#DCF8C6] text-slate-800" : "bg-white text-slate-800"
-                }`}>
-                {m.text}
-              </div>
-            </motion.div>
-          ) : (
-            <div key={i} className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}>
-              <div className={`rounded-lg px-2.5 py-1.5 text-[10px] shadow-sm max-w-[85%] leading-snug ${m.from === "me" ? "bg-[#DCF8C6] text-slate-800" : "bg-white text-slate-800"
-                }`}>
-                {m.text}
-              </div>
+          <div key={i} className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}>
+            <div className={`rounded-lg px-2.5 py-1.5 text-[10px] shadow-sm max-w-[85%] leading-snug ${m.from === "me" ? "bg-[#DCF8C6] text-slate-800" : "bg-white text-slate-800"
+              }`}>
+              {m.text}
             </div>
-          )
+          </div>
         ))}
         {/* Quick reply buttons */}
         <div className="pt-1 flex gap-1.5 flex-wrap">
@@ -271,18 +253,14 @@ export const FlowBuilderVisual = memo(function FlowBuilderVisual() {
         <div className="hidden md:block">
           <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Components</div>
           <div className="space-y-1.5">
-            {palette.map((p, i) => (
-              <motion.div
+            {palette.map((p) => (
+              <div
                 key={p.label}
-                initial={{ opacity: 0, x: -8 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
                 className="flex items-center gap-2 rounded-md bg-white border border-slate-200 px-2 py-1.5 text-[11px] shadow-sm cursor-grab"
               >
                 <span className={`h-2 w-2 rounded-full ${p.color}`} />
                 {p.label}
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -296,27 +274,17 @@ export const FlowBuilderVisual = memo(function FlowBuilderVisual() {
               { label: "Text Input: Full name", color: "border-[#22C55E]" },
               { label: "Dropdown: Property type", color: "border-amber-500" },
               { label: "Date Picker: Preferred date", color: "border-violet-500" },
-            ].map((b, i) => (
-              <motion.div
+            ].map((b) => (
+              <div
                 key={b.label}
-                initial={{ opacity: 0, y: 6 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 + i * 0.12 }}
                 className={`rounded-md bg-slate-50 border-l-4 ${b.color} px-3 py-2 text-[11px] text-slate-700`}
               >
                 {b.label}
-              </motion.div>
+              </div>
             ))}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 1.0 }}
-              className="rounded-md bg-slate-900 text-white text-[11px] text-center py-2 font-semibold"
-            >
+            <div className="rounded-md bg-slate-900 text-white text-[11px] text-center py-2 font-semibold">
               Submit
-            </motion.div>
+            </div>
           </div>
           <div
             className="absolute top-0 left-0 text-slate-700 flow-cursor-drift"
@@ -371,19 +339,14 @@ export const TemplateBuilderVisual = memo(function TemplateBuilderVisual() {
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Preview (Personalised)</div>
           <div className="rounded-2xl bg-[#ECE5DD] p-2 min-h-[200px]">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-lg p-2 shadow-sm text-[11px] space-y-1.5"
-            >
+            <div className="bg-white rounded-lg p-2 shadow-sm text-[11px] space-y-1.5">
               <div className="h-16 rounded bg-gradient-to-br from-[#2BB5D4] to-[#22C55E]" />
               <div className="text-slate-800">Hi <b>Sara</b>, your quote for <b>Acme Realty – Tower B</b> is ready.</div>
               <div className="grid grid-cols-2 gap-1 pt-1 border-t border-slate-100">
                 <div className="text-center text-[#2BB5D4] font-semibold">Yes</div>
                 <div className="text-center text-[#2BB5D4] font-semibold">No</div>
               </div>
-            </motion.div>
+            </div>
             <div className="text-[9px] text-slate-500 mt-1.5 text-center">Meta-approved and merge-field powered</div>
           </div>
         </div>
@@ -479,20 +442,17 @@ const AnalyticsVisual = memo(function AnalyticsVisual() {
       <div className="mt-6 grid grid-cols-[1fr_100px] sm:grid-cols-[1fr_120px] gap-4 sm:gap-6 items-end">
         <div className="flex items-end gap-2 h-36">
           {bars.map((h, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ height: 0 }}
-              whileInView={{ height: `${h}%` }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.08 }}
               className="flex-1 rounded-t-md bg-gradient-to-t from-[#2BB5D4] to-[#22C55E]"
+              style={{ height: `${h}%` }}
             />
           ))}
         </div>
         <div className="relative h-28 w-28 mx-auto">
           <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
             <circle cx="50" cy="50" r="42" stroke="#e2e8f0" strokeWidth="10" fill="none" />
-            <motion.circle
+            <circle
               cx="50"
               cy="50"
               r="42"
@@ -501,10 +461,7 @@ const AnalyticsVisual = memo(function AnalyticsVisual() {
               fill="none"
               strokeLinecap="round"
               strokeDasharray="264"
-              initial={{ strokeDashoffset: 264 }}
-              whileInView={{ strokeDashoffset: 264 - (264 * 0.98) }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.6, ease: "easeOut" }}
+              strokeDashoffset={264 - 264 * 0.98}
             />
             <defs>
               <linearGradient id="ringGrad" x1="0" x2="1">
@@ -530,13 +487,7 @@ export function FeatureShowcase() {
     <section className="pt-16 md:pt-24 pb-10 md:pb-16 bg-slate-50 relative overflow-x-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50 via-transparent to-transparent pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-5xl mx-auto"
-        >
+        <div className="text-center max-w-5xl mx-auto" style={{ opacity: 1 }}>
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Capabilities</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Everything your team needs to run WhatsApp Business inside Salesforce.
@@ -544,7 +495,7 @@ export function FeatureShowcase() {
           <p className="mt-4 text-slate-600">
             From one-to-one conversations to enterprise campaigns, WBConnect Plus gives your team everything needed to automate customer communication and scale faster.
           </p>
-        </motion.div>
+        </div>
 
         <Row
           reverse
@@ -590,13 +541,7 @@ export function FeatureShowcase() {
         />
 
         {/* View More — navigates to /capabilities, changing the URL */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col items-center gap-3 pt-2"
-        >
+        <div className="flex flex-col items-center gap-3 pt-2">
           <p className="text-sm text-slate-500">Explore more of what WBConnect+ can do</p>
           <Link
             to="/capabilities"
@@ -607,7 +552,7 @@ export function FeatureShowcase() {
             View More Features
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,26 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Smartphone, Database, AlertTriangle, DollarSign, Network, Sparkles, Cloud } from "lucide-react";
+
+function useFadeIn(delay = 0) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  const style: React.CSSProperties = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0)" : "translateY(20px)",
+    transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`,
+  };
+  return { ref, style };
+}
 
 const cols = [
   {
@@ -69,9 +90,7 @@ function Vector({ tone }: { tone: string }) {
   }
   return (
     <div className="relative h-32 grid place-items-center">
-      <div
-        className="absolute h-28 w-28 rounded-full border-2 border-dashed border-[#2BB5D4]/40 hero-blob-blue"
-      />
+      <div className="absolute h-28 w-28 rounded-full border-2 border-dashed border-[#2BB5D4]/40 hero-blob-blue" />
       <div className="relative flex items-center gap-3">
         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#22C55E] to-emerald-400 grid place-items-center text-white shadow-lg">
           <Cloud className="h-5 w-5" />
@@ -89,16 +108,11 @@ function Vector({ tone }: { tone: string }) {
 }
 
 export function Evolution() {
+  const header = useFadeIn();
   return (
     <section className="py-16 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-5xl mx-auto mb-14"
-        >
+        <div {...header} className="text-center max-w-5xl mx-auto mb-14">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">The Evolution</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900" aria-label="WBConnect+ compared to Standard WhatsApp and third-party middlemen">
             WBConnect+ versus Standard WhatsApp and Third-Party Middlemen
@@ -106,19 +120,17 @@ export function Evolution() {
           <p className="mt-4 text-slate-600">
             Not all WhatsApp platforms are built for business growth. Unlike standard apps or reseller-based integrations, WBConnect Plus gives your team complete control, deeper automation, and enterprise-grade scalability.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           {cols.map((c, i) => {
             const isBrand = c.tone === "brand";
             const isWarn = c.tone === "warn";
+            const fade = useFadeIn(i * 0.08);
             return (
-              <motion.div
+              <div
                 key={c.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
+                {...fade}
                 className={`rounded-3xl p-7 border ${isBrand
                   ? "bg-gradient-to-br from-[#2BB5D4]/10 via-white to-[#22C55E]/10 border-[#22C55E]/30 shadow-2xl shadow-[#2BB5D4]/20 ring-1 ring-[#2BB5D4]/20"
                   : isWarn
@@ -156,7 +168,7 @@ export function Evolution() {
                     ))}
                   </ul>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

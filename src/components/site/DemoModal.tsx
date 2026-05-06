@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, CheckCircle2, Loader2 } from "lucide-react";
 import { sendDemoRequest } from "../../lib/emailService";
 
@@ -106,19 +105,13 @@ function ModalInner({
       {submitted ? (
         /* ── Success state (no scroll needed) ── */
         <div className="px-5 sm:px-8 py-5 sm:py-6">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="py-8 text-center"
-          >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200, damping: 14 }}
+          <div className="py-8 text-center">
+            <div
               className="h-16 w-16 rounded-full bg-emerald-50 grid place-items-center mx-auto mb-4"
+              style={{ animation: 'modal-pop 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both' }}
             >
               <CheckCircle2 className="h-8 w-8 text-[#22C55E]" />
-            </motion.div>
+            </div>
             <h3 className="text-lg font-bold text-slate-900">
               Request Submitted!
             </h3>
@@ -133,7 +126,7 @@ function ModalInner({
             >
               Close
             </button>
-          </motion.div>
+          </div>
         </div>
       ) : (
         /* ── Salesforce Web-to-Lead form ── */
@@ -520,45 +513,35 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
 
   return (
     <>
-      <AnimatePresence>
-        {open && (
-          <>
-            {/* ── Single backdrop ── */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-[199] bg-slate-900/50 backdrop-blur-sm"
-              onClick={handleClose}
-            />
+      {/* Backdrop — always in DOM, CSS transition */}
+      <div
+        className="fixed inset-0 z-[199] bg-slate-900/50 backdrop-blur-sm"
+        onClick={handleClose}
+        style={{
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? 'auto' : 'none',
+          transition: 'opacity 0.2s ease',
+        }}
+      />
 
-            {/* ── Single modal: centered on mobile, bottom-right on desktop ──
-                Using ONE ModalInner so recaptchaRef is never duplicated.
-                CSS handles the positioning difference. */}
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 30, scale: 0.97 }}
-              transition={{ duration: 0.28, ease: "easeOut" }}
-              className={[
-                "fixed z-[200] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden",
-                // Mobile: centered
-                "inset-x-4 top-1/2 -translate-y-1/2 w-auto",
-                // Desktop: bottom-right floating
-                "md:inset-x-auto md:top-auto md:translate-y-0 md:bottom-6 md:right-6 md:w-full md:max-w-xl",
-              ].join(" ")}
-              style={{
-                boxShadow:
-                  "0 32px 80px -8px rgba(43,181,212,0.25), 0 8px 32px rgba(0,0,0,0.15)",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ModalInner {...innerProps} />
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      {/* Modal panel — always in DOM, CSS transition */}
+      <div
+        className={[
+          "fixed z-[200] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden",
+          "inset-x-4 top-1/2 w-auto",
+          "md:inset-x-auto md:top-auto md:bottom-6 md:right-6 md:w-full md:max-w-xl",
+        ].join(" ")}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          opacity: open ? 1 : 0,
+          transform: open ? 'translateY(-50%) scale(1)' : 'translateY(calc(-50% + 30px)) scale(0.97)',
+          pointerEvents: open ? 'auto' : 'none',
+          transition: open ? 'opacity 0.28s ease, transform 0.28s ease' : 'opacity 0.2s ease, transform 0.2s ease',
+          // Desktop overrides via media query are handled by the md: classes above
+        }}
+      >
+        <ModalInner {...innerProps} />
+      </div>
     </>
   );
 }

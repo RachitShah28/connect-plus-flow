@@ -5,6 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Preload the critical stylesheet to reduce render-blocking duration -->
+  <link rel="preload" href="/src/styles.css" as="style" />
+
+
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -39,14 +43,13 @@
     href="https://fonts.gstatic.com/s/plusjakartasans/v8/LDIoapqROInb0mFXiBd-nh_exAnGX5qWGn7A_mQMiuUPcmXiTpX4Gv1W47jw.woff2"
     crossorigin="anonymous" />
 
-  <!-- Preload main JS entry so it's fetched in parallel with HTML parsing -->
-  <link rel="modulepreload" href="/src/main.tsx" />
 
   <!-- Resource hints: preconnect to external origins to avoid redirect overhead -->
   <link rel="preconnect" href="https://www.google.com" />
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -174,13 +177,12 @@
 
   <meta name="google-site-verification" content="ltVdxffMDRER_VrKZIbGz9ZwA0XfBvgYYQDTKINa4V0" />
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZDQZCTZ9BR"></script>
+  <!-- Google tag (gtag.js) — deferred so it never blocks FCP/LCP -->
+  <script defer src="https://www.googletagmanager.com/gtag/js?id=G-ZDQZCTZ9BR"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-ZDQZCTZ9BR');
   </script>
 </head>

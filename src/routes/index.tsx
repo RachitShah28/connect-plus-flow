@@ -85,50 +85,49 @@ function Index() {
         Salesforce ISV Partner with 11 years of CRM expertise.
       </address>
 
-      {/* Below-the-fold: lazy-loaded to reduce initial JS */}
+      {/* Below-the-fold: lazy-loaded + content-visibility:auto for paint skip */}
       {/* 1. Problem */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Problem />
-      </Suspense>
+      </Suspense></div>
       {/* 2. Evolution */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Evolution />
-      </Suspense>
-      {/* 3. Capabilities — id="features" on the wrapper ensures the fragment
-           target exists in the DOM immediately, even before lazy-load */}
-      <div id="features" style={{ scrollMarginTop: '88px' }}>
+      </Suspense></div>
+      {/* 3. Capabilities */}
+      <div id="features" style={{ scrollMarginTop: '88px' }} className="cv-auto">
         <Suspense fallback={<SectionSkeleton />}>
           <FeatureShowcase />
         </Suspense>
       </div>
       {/* 4. Industry */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Industries />
-      </Suspense>
+      </Suspense></div>
       {/* 5. Why Choose Us */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Compare />
-      </Suspense>
+      </Suspense></div>
       {/* 6. ROI */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Benefits />
-      </Suspense>
+      </Suspense></div>
       {/* 7. Pricing */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Pricing />
-      </Suspense>
+      </Suspense></div>
       {/* 8. Testimonials */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Testimonials />
-      </Suspense>
+      </Suspense></div>
       {/* 9. Implementation */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <Steps />
-      </Suspense>
+      </Suspense></div>
       {/* 10. CTA + Footer */}
-      <Suspense fallback={<SectionSkeleton />}>
+      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
         <CTAFooter />
-      </Suspense>
+      </Suspense></div>
     </main>
   );
 }
