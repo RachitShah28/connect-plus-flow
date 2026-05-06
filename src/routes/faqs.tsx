@@ -3,18 +3,10 @@ import { lazy, memo, Suspense, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Plus, Minus } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
+import { useSEO } from "@/hooks/useSEO";
 
 // ── SEO title ─────────────────────────────────────────────────────────────────
-
-function usePageTitle(title: string) {
-  useEffect(() => {
-    const prev = document.title;
-    document.title = title;
-    return () => {
-      document.title = prev;
-    };
-  }, [title]);
-}
+// Using global useSEO hook instead
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -331,9 +323,31 @@ const SectionSkeleton = () => (
 // ── Page ───────────────────────────────────────────────────────────────────────
 
 function FAQsPage() {
-  usePageTitle(
-    "WBConnect+ FAQs | WhatsApp Business API for Salesforce — Setup, Templates, Billing & Support"
-  );
+  // Generate dynamic FAQ schema directly from the rendered content
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqCategories.flatMap(cat => cat.items).map(item => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a
+      }
+    }))
+  };
+
+  useSEO({
+    title: "WhatsApp Automation FAQs | Setup, Broadcast & Workflows | WBConnect+",
+    description: "Get answers about WhatsApp automation, message templates, broadcasts, workflow setup, scheduling messages, and Salesforce integration with WBConnect+.",
+    keywords: "WhatsApp automation tool, schedule a WhatsApp message, automate WhatsApp messages, WhatsApp API FAQ, WhatsApp business automation",
+    canonical: "https://www.wbconnectplus.com/faq",
+    ogTitle: "WhatsApp Automation Tool for Business & Salesforce | WBConnect+",
+    ogDescription: "Automate customer conversations, campaigns, and follow-ups with WBConnect Plus, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
+    ogUrl: "https://www.wbconnectplus.com/faq",
+    ogImage: "Logo/image Source url",
+    schemaData: faqSchema,
+  });
 
   const [activeId, setActiveId] = useState("general");
   const activeCategory =

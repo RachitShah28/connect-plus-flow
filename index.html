@@ -100,19 +100,18 @@
 
   <!-- WebSite Schema -->
   <script type="application/ld+json">
-      {
-        "@context": "https://schema.org/",
-        "@type": "WebSite",
-        "name": "WBConnect+",
-        "alternateName": "WBConnectPlus",
-        "url": "https://wbconnectplus.com/",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://wbconnectplus.com/?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
+    {
+      "@context": "https://schema.org/",
+      "@type": "WebSite",
+      "name": "WBConnect+",
+      "url": "https://www.wbconnectplus.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "feature{search_term_string}https://www.wbconnectplus.com/capabilities",
+        "query-input": "required name=search_term_string"
       }
-    </script>
+    }
+  </script>
 
   <!-- Organisation Schema -->
   <script type="application/ld+json">
@@ -157,85 +156,33 @@
 
   <!-- Software Application Schema -->
   <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "WBConnect+",
-        "alternateName": "WBConnect Plus",
-        "applicationCategory": "BusinessApplication",
-        "operatingSystem": "Salesforce",
-        "description": "WBConnect+ is a Salesforce-native managed package that brings WhatsApp Business into your CRM. Send messages, build flows, manage templates and store media — built on Meta Cloud API.",
-        "url": "https://wbconnectplus.com/",
-        "offers": {
-          "@type": "Offer",
-          "price": "189",
-          "priceCurrency": "USD",
-          "priceSpecification": {
-            "@type": "UnitPriceSpecification",
-            "price": "189",
-            "priceCurrency": "USD",
-            "unitText": "MONTH"
-          }
-        },
-        "creator": {
-          "@type": "Organization",
-          "name": "MV Clouds Pvt Ltd",
-          "url": "https://mvclouds.com/"
-        }
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "WBConnect+",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Cloud",
+      "description": "WhatsApp automation tool for businesses to automate customer conversations, campaigns, workflows, and CRM communication.",
+      "url": "https://www.wbconnectplus.com",
+      "offers": {
+        "@type": "Offer",
+        "price": "free trial for 7 days",
+        "priceCurrency": "USD"
       }
-    </script>
-
-  <!-- FAQ Schema -->
-  <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is WBConnect+?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "WBConnect+ is a Salesforce managed package by MV Clouds that puts WhatsApp Business inside your CRM. Send messages, run broadcasts, build flows and store media — all without leaving Salesforce."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much does WBConnect+ cost?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "WBConnect+ Standard costs $189 per month for unlimited Salesforce users. It includes broadcast messaging, a no-code flow builder, template builder, automation and full conversation timelines. Enterprise pricing is custom."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Is there a per-message fee with WBConnect+?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "No. WBConnect+ charges no per-message fees. You only pay Meta's standard WhatsApp Business API rates directly with no middleman markup."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Does WBConnect+ work with WhatsApp Flow Builder?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Yes. WBConnect+ has a no-code WhatsApp Flow Builder. Build forms, menus and date pickers inside WhatsApp. Responses are saved back to the Salesforce record automatically."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Which industries does WBConnect+ support?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "WBConnect+ supports 10+ industries: Real Estate, Healthcare, E-commerce, Education, Travel, Banking, Automotive, Food Delivery, Fitness and Professional Services."
-            }
-          }
-        ]
-      }
-    </script>
+    }
+  </script>
 
   <meta name="google-site-verification" content="ltVdxffMDRER_VrKZIbGz9ZwA0XfBvgYYQDTKINa4V0" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZDQZCTZ9BR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZDQZCTZ9BR');
+  </script>
 </head>
 
 <body>

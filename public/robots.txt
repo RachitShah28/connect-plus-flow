@@ -1,61 +1,52 @@
-# robots.txt — WBConnectPlus.com
-# Generated: April 2026
-
-# ──────────────────────────────────────────────
-# Allow all legitimate search-engine bots
-# ──────────────────────────────────────────────
 User-agent: *
 Allow: /
 
-# ──────────────────────────────────────────────
-# Block sensitive / private paths
-# ──────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
 
-# API endpoints & backend routes
-Disallow: /api/
-Disallow: /api/*
+User-agent: Googlebot-Image
+Allow: /
 
-# Authentication & admin
-Disallow: /admin/
-Disallow: /admin/*
-Disallow: /login
-Disallow: /logout
-Disallow: /auth/
-Disallow: /auth/*
+User-agent: Googlebot-News
+Allow: /
 
-# Internal / developer assets
-Disallow: /src/
-Disallow: /.env
-Disallow: /.env.*
-Disallow: /config/
-Disallow: /config/*
+User-agent: Bingbot
+Allow: /
 
-# User-generated or private data
-Disallow: /private/
-Disallow: /private/*
-Disallow: /internal/
-Disallow: /internal/*
-Disallow: /dashboard/
-Disallow: /dashboard/*
+User-agent: DuckDuckBot
+Allow: /
 
-# Salesforce / integration callback paths
-Disallow: /oauth/
-Disallow: /oauth/*
-Disallow: /webhook/
-Disallow: /webhook/*
-Disallow: /callback/
-Disallow: /callback/*
+User-agent: Baiduspider
+Allow: /
 
-# Temporary / build artefacts
-Disallow: /dist/
-Disallow: /.wrangler/
+User-agent: YandexBot
+Allow: /
 
-# ──────────────────────────────────────────────
-# Crawl-rate hint (optional, respected by Google)
-# ──────────────────────────────────────────────
-Crawl-delay: 10
+User-agent: GPTBot
+Disallow: /
 
-# ──────────────────────────────────────────────
-# Sitemap
-# ──────────────────────────────────────────────
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
 Sitemap: https://wbconnectplus.com/sitemap.xml

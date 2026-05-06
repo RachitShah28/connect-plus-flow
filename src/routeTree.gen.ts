@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CapabilitiesRouteImport } from './routes/capabilities'
 import { Route as FaqsRouteImport } from './routes/faqs'
+import { Route as LoginRouteImport } from './routes/login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -31,34 +32,44 @@ const FaqsRoute = FaqsRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/capabilities': typeof CapabilitiesRoute
   '/faqs': typeof FaqsRoute
+  '/login': typeof LoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/capabilities': typeof CapabilitiesRoute
   '/faqs': typeof FaqsRoute
+  '/login': typeof LoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/capabilities': typeof CapabilitiesRoute
   '/faqs': typeof FaqsRoute
+  '/login': typeof LoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/capabilities' | '/faqs'
+  fullPaths: '/' | '/capabilities' | '/faqs' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/capabilities' | '/faqs'
-  id: '__root__' | '/' | '/capabilities' | '/faqs'
+  to: '/' | '/capabilities' | '/faqs' | '/login'
+  id: '__root__' | '/' | '/capabilities' | '/faqs' | '/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CapabilitiesRoute: typeof CapabilitiesRoute
   FaqsRoute: typeof FaqsRoute
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -84,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -91,6 +109,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CapabilitiesRoute: CapabilitiesRoute,
   FaqsRoute: FaqsRoute,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

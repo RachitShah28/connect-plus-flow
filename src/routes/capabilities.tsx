@@ -8,6 +8,7 @@ import {
   FlowBuilderVisual,
   TemplateBuilderVisual,
 } from "@/components/site/FeatureShowcase";
+import { useSEO } from "@/hooks/useSEO";
 
 // ── Scroll to hash on mount (e.g. /capabilities#feature-4) ──────────────────
 
@@ -41,16 +42,7 @@ function useScrollToHash() {
 }
 
 // ── SEO title ─────────────────────────────────────────────────────────────────
-
-function usePageTitle(title: string) {
-  useEffect(() => {
-    const prev = document.title;
-    document.title = title;
-    return () => {
-      document.title = prev;
-    };
-  }, [title]);
-}
+// Using global useSEO hook instead
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
@@ -240,7 +232,16 @@ const SectionSkeleton = () => (
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 function CapabilitiesPage() {
-  usePageTitle("WBConnectPlus Features | WhatsApp Automation, S3 Storage & Broadcast Analytics for Salesforce");
+  useSEO({
+    title: "WhatsApp Automation FAQs | Setup, Broadcast & Workflows | WBConnect+",
+    description: "Get answers about WhatsApp automation, message templates, broadcasts, workflow setup, scheduling messages, and Salesforce integration with WBConnect+.",
+    keywords: "WhatsApp automation tool, schedule a WhatsApp message, automate WhatsApp messages, WhatsApp API FAQ, WhatsApp business automation",
+    canonical: "https://www.wbconnectplus.com/feature",
+    ogTitle: "WhatsApp Automation Tool for Business & Salesforce | WBConnect+",
+    ogDescription: "Automate customer conversations, campaigns, and follow-ups with WBConnect Plus, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
+    ogUrl: "https://www.wbconnectplus.com/feature",
+    ogImage: "Logo/image Source url",
+  });
   useScrollToHash();
 
   return (

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
+import { useSEO } from "@/hooks/useSEO";
 
 // Lazy-load below-the-fold sections to reduce initial JS payload
 const Problem = lazy(() =>
@@ -57,6 +58,17 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  useSEO({
+    title: "WhatsApp Automation Tool for Business | WBConnect+",
+    description: "Automate customer conversations, campaigns, and follow-ups with WBConnect+, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
+    keywords: "WhatsApp automation tool, automate WhatsApp messages, WhatsApp bulk message software, WhatsApp business automation, Salesforce WhatsApp integration",
+    canonical: "https://www.wbconnectplus.com/",
+    ogTitle: "WhatsApp Automation Tool for Business & Salesforce | WBConnect+",
+    ogDescription: "Automate customer conversations, campaigns, and follow-ups with WBConnect Plus, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
+    ogUrl: "https://www.wbconnectplus.com/",
+    ogImage: "Logo/image Source url",
+  });
+
   return (
     <main
       className="min-h-screen bg-white text-slate-900"
