@@ -242,7 +242,7 @@ export function Industries() {
   };
 
   return (
-    <section id="industries" className="py-16 md:py-20 bg-white">
+    <section id="industries" className="py-10 sm:py-14 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           ref={headerRef}
@@ -255,33 +255,40 @@ export function Industries() {
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Industries</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Built for the way <span className="text-gradient-brand">your team</span> sells and supports.
+            Built for the way <span className="text-gradient-brand">Your Team</span> sells and supports.
           </h2>
           <p className="mt-4 text-slate-600">
             From real estate to financial services, teams across industries run their WhatsApp Business playbooks inside Salesforce with WBConnect+. Designed for teams that depend on fast customer communication and consistent follow-ups.
           </p>
         </div>
 
-        <div className="mt-10 flex flex-wrap justify-center gap-2">
-          {industries.map((ind, i) => (
-            <button
-              key={ind.name}
-              onClick={() => handleTabChange(i)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${i === active
-                ? "bg-[#2BB5D4] text-white shadow-md shadow-[#2BB5D4]/30"
-                : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300"
-                }`}
-            >
-              <ind.icon className="h-3.5 w-3.5" />
-              {ind.name}
-            </button>
+        <div className="mt-6 sm:mt-8 md:mt-10 space-y-2">
+          {[industries.slice(0, 5), industries.slice(5)].map((row, rowIdx) => (
+            <div key={rowIdx} className="flex flex-wrap justify-center gap-2">
+              {row.map((ind, relIdx) => {
+                const i = rowIdx * 5 + relIdx;
+                return (
+                  <button
+                    key={ind.name}
+                    onClick={() => handleTabChange(i)}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5 ${i === active
+                      ? "bg-[#2BB5D4] text-white shadow-md shadow-[#2BB5D4]/30"
+                      : "bg-white text-slate-700 border border-slate-200 hover:border-slate-300"
+                      }`}
+                  >
+                    <ind.icon className="h-3.5 w-3.5" />
+                    {ind.name}
+                  </button>
+                );
+              })}
+            </div>
           ))}
         </div>
 
-        <div className="mt-10 grid md:grid-cols-2 gap-8 items-stretch">
+        <div className="mt-6 sm:mt-8 md:mt-10 grid md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 items-stretch">
           {/* Text panel — CSS fade/slide transition */}
           <div
-            className="rounded-3xl bg-white p-8 shadow-xl shadow-slate-200/50 border border-slate-100"
+            className="rounded-3xl bg-white p-5 sm:p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100"
             style={{
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0)' : 'translateY(10px)',
@@ -304,7 +311,7 @@ export function Industries() {
 
           {/* Flow panel — CSS fade/slide transition */}
           <div
-            className="rounded-3xl glass p-8 shadow-xl shadow-slate-200/40 flex flex-col items-center justify-center"
+            className="rounded-3xl glass p-5 sm:p-6 md:p-8 shadow-xl shadow-slate-200/40 flex flex-col items-center justify-center"
             style={{
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0)' : 'translateY(10px)',

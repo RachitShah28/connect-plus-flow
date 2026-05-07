@@ -39,11 +39,11 @@ const testimonials = [
 export function Testimonials() {
   const header = useFadeIn();
   return (
-    <section className="py-16 md:py-20 bg-white relative overflow-hidden">
+    <section className="py-10 sm:py-14 md:py-20 bg-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50/50 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...header} className="text-center max-w-5xl mx-auto mb-16 md:mb-24">
+        <div {...header} className="text-center max-w-5xl mx-auto mb-8 sm:mb-12 md:mb-16">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Customer Stories</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Testimonials
@@ -61,7 +61,7 @@ export function Testimonials() {
               <div
                 key={t.author}
                 {...fade}
-                className={`rounded-3xl bg-white p-8 md:p-10 border border-slate-200 shadow-xl shadow-slate-200/50 relative flex flex-col h-full ${isMiddle ? "md:-translate-y-8" : ""}`}
+                className={`rounded-3xl bg-white p-5 sm:p-6 md:p-8 lg:p-10 border border-slate-200 shadow-xl shadow-slate-200/50 relative flex flex-col h-full ${isMiddle ? "md:-translate-y-8" : ""}`}
               >
                 <div className="mb-6">
                   <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">

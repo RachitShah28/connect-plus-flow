@@ -39,10 +39,10 @@ export function ProblemSolution() {
   }, []);
 
   return (
-    <section className="py-16 md:py-20 bg-white" ref={sectionRef}>
+    <section className="py-10 sm:py-14 md:py-20 bg-white" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
-          className="reveal-item text-center max-w-2xl mx-auto mb-14"
+          className="reveal-item text-center max-w-2xl mx-auto mb-8 sm:mb-10 md:mb-14"
           style={{ opacity: 0, transform: "translateY(20px)", transition: "opacity 0.5s ease, transform 0.5s ease" }}
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">
@@ -56,7 +56,7 @@ export function ProblemSolution() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div
-            className="reveal-item rounded-3xl bg-slate-100 p-8 grayscale-[20%]"
+            className="reveal-item rounded-3xl bg-slate-100 p-5 sm:p-6 md:p-8 grayscale-[20%]"
             style={{ opacity: 0, transform: "translateY(20px)", transition: "opacity 0.5s ease, transform 0.5s ease" }}
           >
             <div className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -76,7 +76,7 @@ export function ProblemSolution() {
           </div>
 
           <div
-            className="reveal-item rounded-3xl glass p-8 shadow-xl shadow-emerald-100/40 border border-white/60"
+            className="reveal-item rounded-3xl glass p-5 sm:p-6 md:p-8 shadow-xl shadow-emerald-100/40 border border-white/60"
             style={{ opacity: 0, transform: "translateY(20px)", transition: "opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s" }}
           >
             <div className="text-xs font-semibold uppercase tracking-wider text-[#22C55E]">

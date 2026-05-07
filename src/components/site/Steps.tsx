@@ -45,12 +45,50 @@ const steps = [
   },
 ];
 
+/** Approximate path length for the SVG curve (viewBox 100×800) */
+const PATH_LENGTH = 900;
+
+/** Hook: returns a 0–1 progress value driven by how far the section has scrolled into view */
+function useScrollProgress(sectionRef: React.RefObject<HTMLElement | null>) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const onScroll = () => {
+      const rect = section.getBoundingClientRect();
+      const windowH = window.innerHeight;
+
+      // Start filling when the top of the section reaches the bottom of the viewport
+      // Finish filling when the bottom of the section reaches the top of the viewport
+      const start = windowH;          // rect.top == windowH  → progress 0
+      const end   = -rect.height;    // rect.top == -height  → progress 1
+
+      const raw = (start - rect.top) / (start - end);
+      setProgress(Math.min(1, Math.max(0, raw)));
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // seed on mount
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [sectionRef]);
+
+  return progress;
+}
+
 export function Steps() {
   const header = useFadeIn();
+  const sectionRef = useRef<HTMLElement>(null);
+  const progress = useScrollProgress(sectionRef as React.RefObject<HTMLElement | null>);
+
+  // strokeDashoffset goes from PATH_LENGTH (hidden) → 0 (fully drawn)
+  const offset = PATH_LENGTH - progress * PATH_LENGTH;
+
   return (
-    <section id="implementation" className="py-16 md:py-20 bg-slate-50">
+    <section ref={sectionRef} id="implementation" className="py-10 sm:py-14 md:py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...header} className="text-center max-w-5xl mx-auto mb-16">
+        <div {...header} className="text-center max-w-5xl mx-auto mb-8 sm:mb-12 md:mb-16">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Implementation</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Get Started Without Complex Setup
@@ -61,28 +99,42 @@ export function Steps() {
         </div>
 
         <div className="relative max-w-3xl mx-auto">
-          {/* Static gradient line — no scroll-driven animation */}
+          {/* Scroll-driven connector line */}
           <svg
-            className="absolute left-1/2 -translate-x-1/2 top-0 h-full w-32 hidden sm:block"
+            className="absolute left-1/2 -translate-x-1/2 top-0 h-full w-32 hidden sm:block pointer-events-none"
             viewBox="0 0 100 800"
             preserveAspectRatio="none"
           >
-            <path
-              d="M 50 20 C 90 120, 10 220, 50 340 C 90 460, 10 560, 50 780"
-              stroke="url(#stepsGrad)"
-              strokeWidth="3"
-              fill="none"
-              strokeLinecap="round"
-            />
             <defs>
               <linearGradient id="stepsGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stopColor="#2BB5D4" />
                 <stop offset="1" stopColor="#22C55E" />
               </linearGradient>
             </defs>
+
+            {/* Faint ghost track */}
+            <path
+              d="M 50 20 C 90 120, 10 220, 50 340 C 90 460, 10 560, 50 780"
+              stroke="#e2e8f0"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+            />
+
+            {/* Animated fill path */}
+            <path
+              d="M 50 20 C 90 120, 10 220, 50 340 C 90 460, 10 560, 50 780"
+              stroke="url(#stepsGrad)"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+              strokeDasharray={PATH_LENGTH}
+              strokeDashoffset={offset}
+              style={{ transition: "stroke-dashoffset 0.05s linear" }}
+            />
           </svg>
 
-          <div className="space-y-8 relative">
+          <div className="space-y-5 sm:space-y-7 md:space-y-8 relative">
             {steps.map((s, i) => {
               const fade = useFadeIn(i * 0.08);
               return (
@@ -91,7 +143,7 @@ export function Steps() {
                   {...fade}
                   className={`flex sm:w-1/2 ${i % 2 ? "sm:ml-auto sm:pl-10" : "sm:pr-10"}`}
                 >
-                  <div className="rounded-2xl bg-white p-6 border border-slate-200 shadow-xl shadow-slate-200/50 w-full">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 md:p-6 border border-slate-200 shadow-xl shadow-slate-200/50 w-full">
                     <div className="flex items-center gap-3">
                       <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#2BB5D4] to-[#22C55E] grid place-items-center text-white shadow-md">
                         <s.icon className="h-5 w-5" />

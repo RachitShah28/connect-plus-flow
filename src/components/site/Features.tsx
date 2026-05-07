@@ -57,7 +57,7 @@ export function Features() {
   }, []);
 
   return (
-    <section id="features" className="py-16 md:py-20 bg-slate-50" ref={sectionRef}>
+    <section id="features" className="py-10 sm:py-14 md:py-20 bg-slate-50" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className="reveal-item text-center max-w-2xl mx-auto mb-14"

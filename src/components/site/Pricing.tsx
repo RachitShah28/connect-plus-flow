@@ -85,7 +85,7 @@ export function Pricing() {
   const header = useFadeIn();
   return (
     <>
-      <section id="pricing" className="py-16 md:py-20 bg-[#0F172A] relative overflow-hidden">
+      <section id="pricing" className="py-10 sm:py-14 md:py-20 bg-[#0F172A] relative overflow-hidden">
 
         {/* Background glow orbs — same palette as CTA */}
         <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#2BB5D4]/15 blur-3xl pointer-events-none" />

@@ -75,6 +75,23 @@ const Row = memo(function Row({
 });
 
 function S3Visual() {
+  const barRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("in-view");
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <div className="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-2xl shadow-slate-900/30 border border-slate-700">
       <div className="flex items-center justify-between text-white">
@@ -91,7 +108,7 @@ function S3Visual() {
       </div>
 
       <div className="mt-6 relative">
-        <div className="h-2 rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] s3-progress-bar" />
+        <div ref={barRef} className="h-2 rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] s3-progress-bar" />
         <div className="flex justify-between text-[10px] text-slate-400 mt-2">
           <span>WhatsApp Cloud API</span>
           <span>Offloaded to S3</span>
@@ -490,7 +507,7 @@ export function FeatureShowcase() {
         <div className="text-center max-w-5xl mx-auto" style={{ opacity: 1 }}>
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Features</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Everything your team needs to run WhatsApp Business inside Salesforce.
+            Everything your team needs to run<br />WhatsApp Business inside Salesforce.
           </h2>
           <p className="mt-4 text-slate-600">
             From one-to-one conversations to enterprise campaigns, WBConnect Plus gives your team everything needed to automate customer communication and scale faster.
@@ -545,9 +562,8 @@ export function FeatureShowcase() {
           <p className="text-sm text-slate-500">Explore more of what WBConnect+ can do</p>
           <Link
             to="/features"
-            hash="feature-4"
             id="features-view-more"
-            className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-cyan-200/60 hover:shadow-xl hover:shadow-cyan-200/80 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+            className="group inline-flex items-center gap-2.5 rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-cyan-200/60 hover:shadow-xl hover:shadow-cyan-200/80 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
           >
             View More Features
             <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />

@@ -112,16 +112,14 @@ export function CTAFooter() {
       const el = document.getElementById(hashId);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
+      // Flag: all InView sections will mount eagerly on the next page render
+      try { sessionStorage.setItem("wbc_force_mount", "1"); } catch {}
       navigate({ to: "/" }).then(() => {
-        let attempts = 0;
-        const checkExist = setInterval(() => {
+        setTimeout(() => {
+          try { sessionStorage.removeItem("wbc_force_mount"); } catch {}
           const el = document.getElementById(hashId);
-          if (el) {
-            clearInterval(checkExist);
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-          if (++attempts > 20) clearInterval(checkExist);
-        }, 100);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 400);
       });
     }
   };
@@ -351,12 +349,20 @@ export function CTAFooter() {
               </ul>
               <div className="mt-8">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-5">Official Partners</h3>
-                <img
-                  src="/meta-tech-partner.webp"
-                  alt="Official Partners - Salesforce and Meta"
-                  className="h-12 sm:h-14 w-auto object-contain"
-                  loading="lazy"
-                />
+                <div className="flex flex-wrap items-center gap-4">
+                  <img
+                    src="/meta-tech-partner.webp"
+                    alt="Meta Tech Partner"
+                    className="h-12 sm:h-14 w-auto object-contain"
+                    loading="lazy"
+                  />
+                  <img
+                    src="/Salesforce-Partner-Logo.webp"
+                    alt="Salesforce Partner"
+                    className="h-12 sm:h-14 w-auto object-contain"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </div>
           </div>

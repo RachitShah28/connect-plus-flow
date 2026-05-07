@@ -47,26 +47,26 @@ const problems = [
 
 export function Problem() {
   return (
-    <section className="py-16 md:py-20 lg:py-32 bg-slate-50 relative overflow-hidden border-b border-slate-100">
+    <section className="py-10 sm:py-14 md:py-20 lg:py-28 bg-slate-50 relative overflow-hidden border-b border-slate-100">
       {/* Background ambient glow matching the brand's light theme */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50/50 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...useFadeIn()} className="text-center max-w-6xl mx-auto mb-16 lg:mb-20">
+        <div {...useFadeIn()} className="text-center max-w-6xl mx-auto mb-8 sm:mb-12 md:mb-16 lg:mb-20">
           <div className="inline-flex items-center rounded-full bg-[#2BB5D4]/10 px-3 py-1 text-xs font-semibold tracking-wider uppercase text-[#2BB5D4] mb-5">
             The Challenge
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-900 tracking-tight leading-tight">
-            Your Customers Are on WhatsApp. <br className="hidden sm:block" /> <span className="text-slate-400">Your CRM isn't.</span>
+            Your Customers Are on WhatsApp. <br className="hidden sm:block" /> <span className="text-gradient-brand">Your CRM isn't.</span>
           </h2>
           <p className="mt-6 text-base sm:text-lg md:text-[19px] text-slate-600 max-w-6xl mx-auto leading-relaxed">
             When your team handles WhatsApp conversations manually, important follow-ups often get delayed, customer queries go unanswered, and sales opportunities slip away. As conversations increase, managing chats without a WhatsApp automation tool creates bottlenecks in sales, support, and marketing, making it harder to scale efficiently.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 lg:gap-y-20 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 sm:gap-y-10 md:gap-y-14 lg:gap-y-16 max-w-6xl mx-auto">
           {problems.map((p, i) => (
-            <div key={p.title} {...useFadeIn(i * 0.1)} className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+            <div key={p.title} {...useFadeIn(i * 0.1)} className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
               <div className="shrink-0 mt-1">
                 <div className="h-14 w-14 rounded-2xl bg-white shadow-sm border border-slate-200 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#2BB5D4]/15 to-[#22C55E]/15" />

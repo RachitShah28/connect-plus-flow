@@ -67,36 +67,56 @@ export function Navbar() {
 
   const navigate = useNavigate();
 
+  const SCROLL_RESTORE_KEY = "wbc_scroll_restore";
+
   const handleNavClick = (anchor: string, isPage = false) => {
     setMenuOpen(false);
     if (isPage) {
       if (location.pathname === anchor) {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
+        // Save current scroll Y so we can restore it if the user presses Back
+        try { sessionStorage.setItem(SCROLL_RESTORE_KEY, String(window.scrollY)); } catch {}
         navigate({ to: anchor as any }).then(() => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       }
       return;
     }
+
+    // Scroll to top of page
+    if (anchor === "#top") {
+      if (isHome) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        try { sessionStorage.removeItem(SCROLL_RESTORE_KEY); } catch {}
+      } else {
+        try { sessionStorage.removeItem(SCROLL_RESTORE_KEY); } catch {}
+        navigate({ to: "/" }).then(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+      return;
+    }
+
     if (isHome) {
-      const el = document.querySelector(anchor);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      // Force-mount all lazy InView sections first so they have real heights,
+      // then scroll — otherwise skeletons cause the wrong offset.
+      window.dispatchEvent(new Event("wbc-force-mount"));
+      setTimeout(() => {
+        const el = document.querySelector(anchor);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 400);
     } else {
-      // Client-side navigation to home — no full page reload.
-      // We navigate without the hash to prevent the router from jumping instantly,
-      // and then smoothly scroll to the section.
       const hashId = anchor.replace("#", "");
+      // Flag: all InView sections will mount eagerly on the next page render
+      try { sessionStorage.setItem("wbc_force_mount", "1"); } catch {}
       navigate({ to: "/" }).then(() => {
-        let attempts = 0;
-        const checkExist = setInterval(() => {
+        // Wait for React to mount + render all lazy Suspense sections
+        setTimeout(() => {
+          try { sessionStorage.removeItem("wbc_force_mount"); } catch {}
           const el = document.getElementById(hashId) ?? document.querySelector(anchor);
-          if (el) {
-            clearInterval(checkExist);
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-          if (++attempts > 20) clearInterval(checkExist);
-        }, 100);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 400);
       });
     }
   };
@@ -153,7 +173,7 @@ export function Navbar() {
               <button
                 onClick={() => setDemoOpen(true)}
                 aria-label="Request a custom WBConnect+ WhatsApp Salesforce demo"
-                className="relative overflow-hidden inline-flex items-center rounded-xl bg-[#2BB5D4] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors group"
+              className="relative overflow-hidden inline-flex items-center rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg hover:shadow-[#22C55E]/30 transition-all group"
               >
                 <span className="relative z-10">Request Custom Demo</span>
                 <span className="shimmer-btn" aria-hidden />
@@ -165,7 +185,7 @@ export function Navbar() {
               <button
                 onClick={() => setDemoOpen(true)}
                 aria-label="Request a demo"
-                className="relative overflow-hidden inline-flex items-center rounded-xl bg-[#2BB5D4] px-3 py-2 text-xs font-semibold text-white shadow-md shadow-[#2BB5D4]/30"
+                className="relative overflow-hidden inline-flex items-center rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-3 py-2 text-xs font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg transition-all"
               >
                 <span className="relative z-10">Get Demo</span>
                 <span className="shimmer-btn" aria-hidden />
@@ -219,7 +239,7 @@ export function Navbar() {
               </a>
               <button
                 onClick={() => { setMenuOpen(false); setDemoOpen(true); }}
-                className="w-full rounded-xl bg-[#2BB5D4] px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors"
+                className="w-full rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg transition-all"
               >
                 Request Custom Demo
               </button>

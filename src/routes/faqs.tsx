@@ -412,7 +412,7 @@ function FAQsPage() {
                 WBConnect
                 <span
                   style={{
-                    background: "linear-gradient(135deg, #2BB5D4 0%, #5dd6ef 55%, #1fa8c9 100%)",
+                    background: "linear-gradient(135deg, #2BB5D4 0%, #22C55E 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",

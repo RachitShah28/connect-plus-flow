@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { lazy, memo, Suspense, useEffect, useRef } from "react";
 import { ArrowRight, CheckCircle2, HardDrive, Webhook, LayoutDashboard, Cloud, Zap } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
@@ -8,37 +8,6 @@ const FlowBuilderVisual = lazy(() => import("@/components/site/FeatureShowcase")
 const TemplateBuilderVisual = lazy(() => import("@/components/site/FeatureShowcase").then(m => ({ default: m.TemplateBuilderVisual })));
 
 import { useSEO } from "@/hooks/useSEO";
-
-// ── Scroll to hash on mount (e.g. /features#feature-4) ──────────────────
-
-function useScrollToHash() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (!hash) return;
-    const id = hash.replace("#", "");
-    const tryScroll = (attempts = 0) => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-        // Remove hash from URL once scroll fires — tell TanStack to keep scroll position
-        setTimeout(() => {
-          navigate({
-            to: window.location.pathname,
-            search: (prev: any) => prev,
-            hash: '',
-            replace: true,
-            resetScroll: false,
-          });
-        }, 800);
-      } else if (attempts < 15) {
-        setTimeout(() => tryScroll(attempts + 1), 100);
-      }
-    };
-    // Wait for page paint then scroll
-    setTimeout(() => tryScroll(), 400);
-  }, [navigate]);
-}
 
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -357,7 +326,6 @@ function FeaturesPage() {
     ogUrl: "https://www.wbconnectplus.com/feature",
     ogImage: "Logo/image Source url",
   });
-  useScrollToHash();
 
   return (
     <main className="min-h-screen bg-white text-slate-900" aria-label="WBConnect+ All Features">
@@ -370,7 +338,7 @@ function FeaturesPage() {
           <div className="text-center max-w-5xl mx-auto py-10 cap-hero-reveal" style={{ animation: "hero-fade-up 0.5s ease both" }}>
             <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Features</div>
             <h1 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-              Everything your team needs to run WhatsApp Business inside Salesforce.
+              Everything your team needs to run<br />WhatsApp Business inside Salesforce.
             </h1>
             <p className="mt-4 text-lg text-slate-600">
               From one-to-one conversations to enterprise campaigns, WBConnect Plus gives your team everything needed to automate customer communication and scale faster.

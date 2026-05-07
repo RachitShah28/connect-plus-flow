@@ -16,7 +16,7 @@ export function Hero() {
     <>
       <section
         id="top"
-        className="relative flex items-center pt-24 pb-12 md:pt-32 md:pb-16 md:min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-green-50 to-white"
+        className="relative flex items-center pt-20 pb-8 sm:pt-24 sm:pb-12 md:pt-32 md:pb-16 md:min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-green-50 to-white"
       >
         {/* Background blobs — using highly performant radial gradients instead of expensive CSS blur filters */}
         <div className="hero-blob-blue absolute -top-40 -left-40 h-[300px] w-[300px] md:h-[500px] md:w-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle at center, rgba(43, 181, 212, 0.25) 0%, transparent 60%)' }} />
@@ -32,7 +32,8 @@ export function Hero() {
             {/* LCP element — visible immediately, no opacity:0 */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 leading-[1.1]">
               Close Deals Faster with a{" "}
-              <span className="text-gradient-brand">Powerful WhatsApp Automation Tool</span>
+              <span className="text-slate-900">Powerful</span>{" "}
+              <span className="text-gradient-brand">WhatsApp Automation Tool</span>
             </h1>
             <p className="mt-5 text-base md:text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
               WBConnect+ is a WhatsApp automation tool that helps businesses streamline communication, automate follow-ups, and manage campaigns from one centralized platform. Designed for sales, support, and marketing teams, it improves response speed, boosts engagement, and helps convert more leads.
@@ -41,7 +42,7 @@ export function Hero() {
               <button
                 onClick={() => setDemoOpen(true)}
                 aria-label="Book a WBConnect+ demo"
-                className="group relative overflow-hidden inline-flex items-center gap-2 rounded-xl bg-[#2BB5D4] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2BB5D4]/30 hover:bg-[#2BB5D4]/90 transition-colors"
+                className="group relative overflow-hidden inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2BB5D4]/30 hover:shadow-xl hover:shadow-[#22C55E]/30 transition-all hover:-translate-y-0.5"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   Book Demo

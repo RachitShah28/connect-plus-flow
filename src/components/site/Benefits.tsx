@@ -89,9 +89,9 @@ function Counter({ to, suffix }: { to: number; suffix: string }) {
 export function Benefits() {
   const header = useFadeIn();
   return (
-    <section className="py-12 md:py-16 bg-slate-50/50 border-t border-slate-100">
+    <section className="py-8 sm:py-10 md:py-16 bg-slate-50/50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...header} className="text-center max-w-5xl mx-auto mb-14">
+        <div {...header} className="text-center max-w-5xl mx-auto mb-8 sm:mb-10 md:mb-14">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Measurable ROI</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Real Business Results That Drive Growth
@@ -108,7 +108,7 @@ export function Benefits() {
               <div
                 key={s.label}
                 {...fade}
-                className="group rounded-2xl bg-white p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-[#2BB5D4]/50 transition-all duration-300 relative overflow-hidden"
+                className="group rounded-2xl bg-white p-4 sm:p-5 md:p-6 border border-slate-200 shadow-sm hover:shadow-md hover:border-[#2BB5D4]/50 transition-all duration-300 relative overflow-hidden"
               >
                 <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#2BB5D4]/10 blur-3xl group-hover:bg-[#2BB5D4]/20 transition-colors duration-500" />
                 <div className="relative">

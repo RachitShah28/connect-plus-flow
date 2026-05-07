@@ -330,6 +330,9 @@
 .s3-progress-bar {
   width: 100%;
   transform-origin: left center;
+  transform: scaleX(0); /* start hidden */
+}
+.s3-progress-bar.in-view {
   animation: s3-progress 1.6s ease-out forwards;
 }
 

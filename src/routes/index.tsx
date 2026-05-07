@@ -53,26 +53,49 @@ function SectionSkeleton() {
   );
 }
 
-// InView wrapper strictly defers React component mounting until scrolled near
+// InView wrapper — defers mounting until scrolled near, unless force-mount is set.
+// Set sessionStorage key "wbc_force_mount=1" before navigating to pre-mount all sections.
+export const FORCE_MOUNT_KEY = "wbc_force_mount";
+export const SCROLL_RESTORE_KEY = "wbc_scroll_restore";
+
+// ── Module-level: detect Back navigation before any component renders ──
+// If the user is returning via browser Back (scroll position was saved),
+// pre-set FORCE_MOUNT_KEY so every InView reads it in their useState initializer.
+try {
+  if (sessionStorage.getItem(SCROLL_RESTORE_KEY) !== null) {
+    sessionStorage.setItem(FORCE_MOUNT_KEY, "1");
+  }
+} catch {}
+
+const FORCE_MOUNT_EVENT = "wbc-force-mount";
+
 function InView({ children, id, style, rootMargin = "600px" }: { children: React.ReactNode, id?: string, style?: React.CSSProperties, rootMargin?: string }) {
-  const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(() => {
+    try { return sessionStorage.getItem(FORCE_MOUNT_KEY) === "1"; } catch { return false; }
+  });
   const ref = useRef<HTMLDivElement>(null);
 
+  // Listen for the imperative force-mount event (fired when user clicks a nav anchor)
   useEffect(() => {
+    if (inView) return;
+    const handler = () => setInView(true);
+    window.addEventListener(FORCE_MOUNT_EVENT, handler);
+    return () => window.removeEventListener(FORCE_MOUNT_EVENT, handler);
+  }, [inView]);
+
+  useEffect(() => {
+    if (inView) return;
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          obs.disconnect();
-        }
+        if (entry.isIntersecting) { setInView(true); obs.disconnect(); }
       },
       { rootMargin }
     );
     obs.observe(el);
     return () => obs.disconnect();
-  }, [rootMargin]);
+  }, [rootMargin, inView]);
 
   return (
     <div id={id} style={style} ref={ref}>
@@ -96,6 +119,33 @@ function Index() {
     ogUrl: "https://www.wbconnectplus.com/",
     ogImage: "Logo/image Source url",
   });
+
+  // Restore scroll position after coming back via browser Back (or cross-page anchor nav)
+  useEffect(() => {
+    let savedY: number | null = null;
+    try {
+      const raw = sessionStorage.getItem(SCROLL_RESTORE_KEY);
+      if (raw !== null) {
+        savedY = parseFloat(raw);
+        sessionStorage.removeItem(SCROLL_RESTORE_KEY);
+      }
+    } catch {}
+
+    if (savedY !== null) {
+      const y = savedY;
+      // Dispatch the force-mount event so every InView section switches from
+      // skeleton → real content immediately (module-level code only runs once,
+      // so we cannot rely on FORCE_MOUNT_KEY for SPA back-navigation).
+      window.dispatchEvent(new Event(FORCE_MOUNT_EVENT));
+      // Wait for React + Suspense to paint all sections at full height, then scroll.
+      const t = setTimeout(() => {
+        try { sessionStorage.removeItem(FORCE_MOUNT_KEY); } catch {}
+        window.scrollTo({ top: y, behavior: "instant" as ScrollBehavior });
+      }, 450);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
 
   return (
     <main
@@ -127,11 +177,11 @@ function Index() {
         <FeatureShowcase />
       </InView>
       {/* 4. Industry */}
-      <InView>
+      <InView id="industries" style={{ scrollMarginTop: '88px' }}>
         <Industries />
       </InView>
       {/* 5. Why Choose Us */}
-      <InView>
+      <InView id="why-choose-us" style={{ scrollMarginTop: '88px' }}>
         <Compare />
       </InView>
       {/* 6. ROI */}
@@ -139,7 +189,7 @@ function Index() {
         <Benefits />
       </InView>
       {/* 7. Pricing */}
-      <InView>
+      <InView id="pricing" style={{ scrollMarginTop: '88px' }}>
         <Pricing />
       </InView>
       {/* 8. Testimonials */}
@@ -147,7 +197,7 @@ function Index() {
         <Testimonials />
       </InView>
       {/* 9. Implementation */}
-      <InView>
+      <InView id="implementation" style={{ scrollMarginTop: '88px' }}>
         <Steps />
       </InView>
       {/* 10. CTA + Footer */}

@@ -56,12 +56,12 @@ const cards = [
 export function Compare() {
   const header = useFadeIn();
   return (
-    <section id="why-choose-us" className="py-16 md:py-20 bg-slate-50">
+    <section id="why-choose-us" className="py-10 sm:py-14 md:py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...header} className="text-center max-w-5xl mx-auto mb-14">
+        <div {...header} className="text-center max-w-5xl mx-auto mb-8 sm:mb-10 md:mb-14">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Why Choose Us</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
-            Why Global Brands Choose WBConnect+ Over Other WhatsApp Solutions
+            Why Global Brands Choose WBConnect+<br />Over Other WhatsApp Solutions
           </h2>
           <p className="mt-4 text-slate-600">
             Businesses choose WBConnect+ because they need more than messaging — they need automation, reliability, security, and scale.
@@ -75,10 +75,10 @@ export function Compare() {
               <div
                 key={card.title}
                 {...fade}
-                className={`relative rounded-2xl bg-gradient-to-br ${card.accent} border border-slate-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-300 group`}
+                className={`relative rounded-2xl bg-gradient-to-br ${card.accent} border border-slate-100 p-4 sm:p-5 md:p-6 shadow-sm hover:shadow-md transition-shadow duration-300 group`}
               >
                 <div className="absolute top-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r from-transparent via-[#2BB5D4]/30 to-transparent" />
-                <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-5`}>
+                <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-3 sm:mb-4 md:mb-5`}>
                   <card.icon className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 leading-snug">{card.title}</h3>
