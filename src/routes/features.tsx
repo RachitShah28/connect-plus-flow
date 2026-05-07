@@ -1,16 +1,15 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { lazy, memo, Suspense, useEffect } from "react";
-import { motion } from "framer-motion";
+import { lazy, memo, Suspense, useEffect, useRef } from "react";
 import { ArrowRight, CheckCircle2, HardDrive, Webhook, LayoutDashboard, Cloud, Zap } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
-import {
-  GlobalChatVisual,
-  FlowBuilderVisual,
-  TemplateBuilderVisual,
-} from "@/components/site/FeatureShowcase";
+
+const GlobalChatVisual = lazy(() => import("@/components/site/FeatureShowcase").then(m => ({ default: m.GlobalChatVisual })));
+const FlowBuilderVisual = lazy(() => import("@/components/site/FeatureShowcase").then(m => ({ default: m.FlowBuilderVisual })));
+const TemplateBuilderVisual = lazy(() => import("@/components/site/FeatureShowcase").then(m => ({ default: m.TemplateBuilderVisual })));
+
 import { useSEO } from "@/hooks/useSEO";
 
-// ── Scroll to hash on mount (e.g. /capabilities#feature-4) ──────────────────
+// ── Scroll to hash on mount (e.g. /features#feature-4) ──────────────────
 
 function useScrollToHash() {
   const navigate = useNavigate();
@@ -41,13 +40,37 @@ function useScrollToHash() {
   }, [navigate]);
 }
 
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const targets = el.querySelectorAll<HTMLElement>(".reveal-item");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).style.opacity = "1";
+            (entry.target as HTMLElement).style.transform = "translateY(0)";
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    targets.forEach((t) => observer.observe(t));
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
 // ── SEO title ─────────────────────────────────────────────────────────────────
 // Using global useSEO hook instead
 
 // ── Route ─────────────────────────────────────────────────────────────────────
 
-export const Route = createFileRoute("/capabilities")({
-  component: CapabilitiesPage,
+export const Route = createFileRoute("/features")({
+  component: FeaturesPage,
 });
 
 // ── Row ───────────────────────────────────────────────────────────────────────
@@ -67,14 +90,12 @@ const Row = memo(function Row({
   bullets: string[];
   visual: React.ReactNode;
 }) {
+  const ref = useReveal();
   return (
-    <div className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-10 items-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className={`w-full ${reverse ? "md:order-2" : ""}`}
+    <div ref={ref} className="flex flex-col md:grid md:grid-cols-2 gap-8 md:gap-10 items-center">
+      <div
+        className={`reveal-item w-full ${reverse ? "md:order-2" : ""}`}
+        style={{ opacity: 0, transform: "translateY(20px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
       >
         <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">{badge}</div>
         <h3 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">{title}</h3>
@@ -87,16 +108,15 @@ const Row = memo(function Row({
             </li>
           ))}
         </ul>
-      </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className={`w-full ${reverse ? "md:order-1" : ""}`}
+      </div>
+      <div
+        className={`reveal-item w-full ${reverse ? "md:order-1" : ""}`}
+        style={{ opacity: 0, transform: "translateY(20px)", transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s" }}
       >
-        {visual}
-      </motion.div>
+        <Suspense fallback={<div className="h-64 w-full animate-pulse bg-slate-100 rounded-2xl" />}>
+          {visual}
+        </Suspense>
+      </div>
     </div>
   );
 });
@@ -185,18 +205,23 @@ const AnalyticsVisual = memo(function AnalyticsVisual() {
       <div className="mt-6 grid grid-cols-[1fr_100px] sm:grid-cols-[1fr_120px] gap-4 sm:gap-6 items-end">
         <div className="flex items-end gap-2 h-36">
           {bars.map((h, i) => (
-            <motion.div key={i} initial={{ height: 0 }} whileInView={{ height: `${h}%` }}
-              viewport={{ once: true }} transition={{ duration: 0.8, delay: i * 0.08 }}
-              className="flex-1 rounded-t-md bg-gradient-to-t from-[#2BB5D4] to-[#22C55E]" />
+            <div
+              key={i}
+              className="flex-1 rounded-t-md bg-gradient-to-t from-[#2BB5D4] to-[#22C55E]"
+              style={{ height: `${h}%`, transition: "height 0.8s ease", transitionDelay: `${i * 0.08}s` }}
+            />
           ))}
         </div>
         <div className="relative h-28 w-28 mx-auto">
           <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
             <circle cx="50" cy="50" r="42" stroke="#e2e8f0" strokeWidth="10" fill="none" />
-            <motion.circle cx="50" cy="50" r="42" stroke="url(#ringGradCap4)" strokeWidth="10" fill="none"
+            <circle
+              cx="50" cy="50" r="42"
+              stroke="url(#ringGradCap4)" strokeWidth="10" fill="none"
               strokeLinecap="round" strokeDasharray="264"
-              initial={{ strokeDashoffset: 264 }} whileInView={{ strokeDashoffset: 264 - 264 * 0.98 }}
-              viewport={{ once: true }} transition={{ duration: 1.6, ease: "easeOut" }} />
+              strokeDashoffset={264 - 264 * 0.98}
+              style={{ transition: "stroke-dashoffset 1.6s ease-out" }}
+            />
             <defs>
               <linearGradient id="ringGradCap4" x1="0" x2="1">
                 <stop offset="0" stopColor="#2BB5D4" /><stop offset="1" stopColor="#22C55E" />
@@ -229,9 +254,99 @@ const SectionSkeleton = () => (
   </div>
 );
 
+// ── Dev & Enterprise section (no framer-motion) ────────────────────────────────
+
+const devCards = [
+  {
+    icon: <Webhook className="h-6 w-6" />,
+    title: "Webhook Configuration",
+    desc: "Connect with CRM, ERP, or internal systems.",
+    accent: "from-[#2BB5D4]/10 to-blue-50",
+    iconBg: "bg-[#2BB5D4]/10 text-[#2BB5D4]",
+  },
+  {
+    icon: <LayoutDashboard className="h-6 w-6" />,
+    title: "Chat Window Configuration",
+    desc: "Customise agent workspace and branding.",
+    accent: "from-violet-50 to-purple-50",
+    iconBg: "bg-violet-100 text-violet-600",
+  },
+  {
+    icon: <Cloud className="h-6 w-6" />,
+    title: "AWS Configuration",
+    desc: "Connect your own S3 storage.",
+    accent: "from-orange-50 to-amber-50",
+    iconBg: "bg-orange-100 text-orange-500",
+  },
+  {
+    icon: <Zap className="h-6 w-6" />,
+    title: "Automation Configuration",
+    desc: "Automate template selection based on reply button clicks.",
+    accent: "from-emerald-50 to-green-50",
+    iconBg: "bg-emerald-100 text-emerald-600",
+  },
+];
+
+function DevEnterpriseSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const targets = el.querySelectorAll<HTMLElement>(".reveal-item");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).style.opacity = "1";
+            (entry.target as HTMLElement).style.transform = "translateY(0)";
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    targets.forEach((t) => observer.observe(t));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref}>
+      <div
+        className="reveal-item text-center max-w-5xl mx-auto mb-14"
+        style={{ opacity: 0, transform: "translateY(20px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
+      >
+        <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Developer &amp; Enterprise</div>
+        <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+          Built for Developers and Enterprises
+        </h2>
+        <p className="mt-4 text-slate-500 text-base">
+          Advanced features for complete customisation and control.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {devCards.map((card, i) => (
+          <div
+            key={card.title}
+            className={`reveal-item relative rounded-2xl bg-gradient-to-br ${card.accent} border border-slate-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-300 group`}
+            style={{ opacity: 0, transform: "translateY(24px)", transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s` }}
+          >
+            <div className="absolute top-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r from-transparent via-[#2BB5D4]/30 to-transparent" />
+            <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-5`}>
+              {card.icon}
+            </div>
+            <h3 className="text-base font-bold text-slate-900 leading-snug">{card.title}</h3>
+            <p className="mt-2 text-sm text-slate-500 leading-relaxed">{card.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-function CapabilitiesPage() {
+function FeaturesPage() {
   useSEO({
     title: "WhatsApp Automation FAQs | Setup, Broadcast & Workflows | WBConnect+",
     description: "Get answers about WhatsApp automation, message templates, broadcasts, workflow setup, scheduling messages, and Salesforce integration with WBConnect+.",
@@ -245,27 +360,22 @@ function CapabilitiesPage() {
   useScrollToHash();
 
   return (
-    <main className="min-h-screen bg-white text-slate-900" aria-label="WBConnect+ All Capabilities">
+    <main className="min-h-screen bg-white text-slate-900" aria-label="WBConnect+ All Features">
       <Navbar />
 
       {/* Section header — matches homepage style exactly */}
       <section className="pt-32 pb-0 bg-slate-50 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50 via-transparent to-transparent pointer-events-none" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-5xl mx-auto py-10"
-          >
-            <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Capabilities</div>
+          <div className="text-center max-w-5xl mx-auto py-10 cap-hero-reveal" style={{ animation: "hero-fade-up 0.5s ease both" }}>
+            <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Features</div>
             <h1 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
               Everything your team needs to run WhatsApp Business inside Salesforce.
             </h1>
             <p className="mt-4 text-lg text-slate-600">
               From one-to-one conversations to enterprise campaigns, WBConnect Plus gives your team everything needed to automate customer communication and scale faster.
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -368,71 +478,7 @@ function CapabilitiesPage() {
       {/* ── Built for Developers and Enterprises ── */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center max-w-5xl mx-auto mb-14"
-          >
-            <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Developer &amp; Enterprise</div>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
-              Built for Developers and Enterprises
-            </h2>
-            <p className="mt-4 text-slate-500 text-base">
-              Advanced features for complete customisation and control.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: <Webhook className="h-6 w-6" />,
-                title: "Webhook Configuration",
-                desc: "Connect with CRM, ERP, or internal systems.",
-                accent: "from-[#2BB5D4]/10 to-blue-50",
-                iconBg: "bg-[#2BB5D4]/10 text-[#2BB5D4]",
-              },
-              {
-                icon: <LayoutDashboard className="h-6 w-6" />,
-                title: "Chat Window Configuration",
-                desc: "Customise agent workspace and branding.",
-                accent: "from-violet-50 to-purple-50",
-                iconBg: "bg-violet-100 text-violet-600",
-              },
-              {
-                icon: <Cloud className="h-6 w-6" />,
-                title: "AWS Configuration",
-                desc: "Connect your own S3 storage.",
-                accent: "from-orange-50 to-amber-50",
-                iconBg: "bg-orange-100 text-orange-500",
-              },
-              {
-                icon: <Zap className="h-6 w-6" />,
-                title: "Automation Configuration",
-                desc: "Automate template selection based on reply button clicks.",
-                accent: "from-emerald-50 to-green-50",
-                iconBg: "bg-emerald-100 text-emerald-600",
-              },
-            ].map((card, i) => (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`relative rounded-2xl bg-gradient-to-br ${card.accent} border border-slate-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-300 group`}
-              >
-                {/* top accent bar */}
-                <div className="absolute top-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r from-transparent via-[#2BB5D4]/30 to-transparent" />
-                <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-5`}>
-                  {card.icon}
-                </div>
-                <h3 className="text-base font-bold text-slate-900 leading-snug">{card.title}</h3>
-                <p className="mt-2 text-sm text-slate-500 leading-relaxed">{card.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+          <DevEnterpriseSection />
         </div>
       </section>
 

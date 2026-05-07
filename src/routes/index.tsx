@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect, useRef } from "react";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 import { useSEO } from "@/hooks/useSEO";
@@ -53,6 +53,34 @@ function SectionSkeleton() {
   );
 }
 
+// InView wrapper strictly defers React component mounting until scrolled near
+function InView({ children, id, style, rootMargin = "600px" }: { children: React.ReactNode, id?: string, style?: React.CSSProperties, rootMargin?: string }) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [rootMargin]);
+
+  return (
+    <div id={id} style={style} ref={ref}>
+      {inView ? <Suspense fallback={<SectionSkeleton />}>{children}</Suspense> : <SectionSkeleton />}
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/")({
   component: Index,
 });
@@ -85,49 +113,47 @@ function Index() {
         Salesforce ISV Partner with 11 years of CRM expertise.
       </address>
 
-      {/* Below-the-fold: lazy-loaded + content-visibility:auto for paint skip */}
+      {/* Below-the-fold: strictly lazy-rendered on scroll */}
       {/* 1. Problem */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Problem />
-      </Suspense></div>
+      </InView>
       {/* 2. Evolution */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Evolution />
-      </Suspense></div>
-      {/* 3. Capabilities */}
-      <div id="features" style={{ scrollMarginTop: '88px' }} className="cv-auto">
-        <Suspense fallback={<SectionSkeleton />}>
-          <FeatureShowcase />
-        </Suspense>
-      </div>
+      </InView>
+      {/* 3. Features */}
+      <InView id="features" style={{ scrollMarginTop: '88px' }}>
+        <FeatureShowcase />
+      </InView>
       {/* 4. Industry */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Industries />
-      </Suspense></div>
+      </InView>
       {/* 5. Why Choose Us */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Compare />
-      </Suspense></div>
+      </InView>
       {/* 6. ROI */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Benefits />
-      </Suspense></div>
+      </InView>
       {/* 7. Pricing */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Pricing />
-      </Suspense></div>
+      </InView>
       {/* 8. Testimonials */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Testimonials />
-      </Suspense></div>
+      </InView>
       {/* 9. Implementation */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <Steps />
-      </Suspense></div>
+      </InView>
       {/* 10. CTA + Footer */}
-      <div className="cv-auto"><Suspense fallback={<SectionSkeleton />}>
+      <InView>
         <CTAFooter />
-      </Suspense></div>
+      </InView>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { MessageSquare, Database, Workflow, BarChart, LayoutTemplate } from "lucide-react";
 
 const features = [
@@ -34,31 +34,51 @@ const features = [
 ];
 
 export function Features() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const targets = el.querySelectorAll<HTMLElement>(".reveal-item");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).style.opacity = "1";
+            (entry.target as HTMLElement).style.transform = "translateY(0)";
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    targets.forEach((t) => observer.observe(t));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="features" className="py-16 md:py-20 bg-slate-50">
+    <section id="features" className="py-16 md:py-20 bg-slate-50" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-2xl mx-auto mb-14"
+        <div
+          className="reveal-item text-center max-w-2xl mx-auto mb-14"
+          style={{ opacity: 0, transform: "translateY(20px)", transition: "opacity 0.5s ease, transform 0.5s ease" }}
         >
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Features</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Everything you need to send WhatsApp messages at scale from Salesforce.
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {features.map((f, i) => (
-            <motion.div
+            <div
               key={f.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              className={`group relative rounded-3xl bg-white p-7 shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl hover:shadow-slate-300/50 hover:scale-[1.02] transition-transform overflow-hidden ${f.span ?? ""}`}
+              className={`reveal-item group relative rounded-3xl bg-white p-7 shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-2xl hover:shadow-slate-300/50 hover:scale-[1.02] transition-transform overflow-hidden ${f.span ?? ""}`}
+              style={{
+                opacity: 0,
+                transform: "translateY(20px)",
+                transition: `opacity 0.5s ease ${i * 0.06}s, transform 0.5s ease ${i * 0.06}s`,
+              }}
             >
               {f.accent && (
                 <div
@@ -72,7 +92,7 @@ export function Features() {
                 <h3 className="mt-5 text-lg font-bold text-slate-900">{f.title}</h3>
                 <p className="mt-2 text-sm text-slate-600 leading-relaxed">{f.desc}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

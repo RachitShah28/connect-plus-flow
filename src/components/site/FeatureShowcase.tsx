@@ -488,7 +488,7 @@ export function FeatureShowcase() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50 via-transparent to-transparent pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
         <div className="text-center max-w-5xl mx-auto" style={{ opacity: 1 }}>
-          <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Capabilities</div>
+          <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Features</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Everything your team needs to run WhatsApp Business inside Salesforce.
           </h2>
@@ -540,13 +540,13 @@ export function FeatureShowcase() {
           visual={<TemplateBuilderVisual />}
         />
 
-        {/* View More — navigates to /capabilities, changing the URL */}
+        {/* View More — navigates to /features, changing the URL */}
         <div className="flex flex-col items-center gap-3 pt-2">
           <p className="text-sm text-slate-500">Explore more of what WBConnect+ can do</p>
           <Link
-            to="/capabilities"
+            to="/features"
             hash="feature-4"
-            id="capabilities-view-more"
+            id="features-view-more"
             className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-cyan-200/60 hover:shadow-xl hover:shadow-cyan-200/80 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
           >
             View More Features

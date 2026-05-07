@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CapabilitiesRouteImport } from './routes/capabilities'
+import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as FaqsRouteImport } from './routes/faqs'
 import { Route as LoginRouteImport } from './routes/login'
 
@@ -20,9 +20,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 
-const CapabilitiesRoute = CapabilitiesRouteImport.update({
-  id: '/capabilities',
-  path: '/capabilities',
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -40,34 +40,34 @@ const LoginRoute = LoginRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/capabilities': typeof CapabilitiesRoute
+  '/features': typeof FeaturesRoute
   '/faqs': typeof FaqsRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/capabilities': typeof CapabilitiesRoute
+  '/features': typeof FeaturesRoute
   '/faqs': typeof FaqsRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/capabilities': typeof CapabilitiesRoute
+  '/features': typeof FeaturesRoute
   '/faqs': typeof FaqsRoute
   '/login': typeof LoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/capabilities' | '/faqs' | '/login'
+  fullPaths: '/' | '/features' | '/faqs' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/capabilities' | '/faqs' | '/login'
-  id: '__root__' | '/' | '/capabilities' | '/faqs' | '/login'
+  to: '/' | '/features' | '/faqs' | '/login'
+  id: '__root__' | '/' | '/features' | '/faqs' | '/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CapabilitiesRoute: typeof CapabilitiesRoute
+  FeaturesRoute: typeof FeaturesRoute
   FaqsRoute: typeof FaqsRoute
   LoginRoute: typeof LoginRoute
 }
@@ -81,11 +81,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/capabilities': {
-      id: '/capabilities'
-      path: '/capabilities'
-      fullPath: '/capabilities'
-      preLoaderRoute: typeof CapabilitiesRouteImport
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faqs': {
@@ -107,7 +107,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CapabilitiesRoute: CapabilitiesRoute,
+  FeaturesRoute: FeaturesRoute,
   FaqsRoute: FaqsRoute,
   LoginRoute: LoginRoute,
 }

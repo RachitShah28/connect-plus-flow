@@ -323,12 +323,13 @@
   pointer-events: none;
 }
 
-/* S3 progress bar (replaces framer-motion width animation) */
 @keyframes s3-progress {
-  from { width: 0%; }
-  to   { width: 100%; }
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 .s3-progress-bar {
+  width: 100%;
+  transform-origin: left center;
   animation: s3-progress 1.6s ease-out forwards;
 }
 
@@ -339,14 +340,7 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* ── content-visibility: skip rendering of off-screen sections ─────────────
-   This is one of the highest-impact mobile perf tricks. The browser skips
-   layout and paint for sections not yet visible, cutting LCP and TBT.
-   intrinsic-size reserves estimated space to avoid layout shift. */
-.cv-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 600px;
-}
+
 
 /* ── Reduce motion for users who prefer it ─────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

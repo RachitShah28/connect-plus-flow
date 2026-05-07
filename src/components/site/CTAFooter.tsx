@@ -17,7 +17,6 @@ const quickLinks = [
   { label: "Why WBConnect+", href: "/#why-choose-us", page: false },
   { label: "Industries", href: "/#industries", page: false },
   { label: "Pricing", href: "/#pricing", page: false },
-  { label: "Capabilities", href: "/capabilities", page: true },
   { label: "FAQs", href: "/faqs", page: true },
 ];
 
@@ -128,7 +127,7 @@ export function CTAFooter() {
   };
 
   // ── Page-aware CTA content ─────────────────────────────────────────────────
-  const isCapabilities = location.pathname === "/capabilities";
+  const isCapabilities = location.pathname === "/features";
 
   const cta = isCapabilities
     ? {
@@ -234,7 +233,7 @@ export function CTAFooter() {
 
             {/* Brand */}
             <div className="lg:col-span-4 pr-0 lg:pr-8">
-              <WBCLogo height={36} white />
+              <WBCLogo className="w-auto h-20" white />
               <p className="mt-6 text-sm text-slate-400 leading-relaxed max-w-sm">
                 The ultimate native WhatsApp Business integration for Salesforce. Automate messaging, engage customers, and scale your operations effortlessly.
               </p>
@@ -246,22 +245,29 @@ export function CTAFooter() {
                   className="h-6 w-auto opacity-70 hover:opacity-100 transition-opacity"
                   style={{ filter: "brightness(0) invert(1)" }}
                   loading="lazy"
+                  width="120"
+                  height="35"
                 />
               </div>
-              <div className="mt-8 flex items-center gap-3">
-                {socials.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Follow MV Clouds on ${s.label}`}
-                    title={`MV Clouds on ${s.label}`}
-                    className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-[#22C55E]/10 hover:text-[#22C55E] hover:border-[#22C55E]/30 transition-all"
-                  >
-                    {s.icon}
-                  </a>
-                ))}
+
+
+              <div className="mt-8">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-5">Follow Us</h3>
+                <div className="flex items-center gap-3">
+                  {socials.map((s) => (
+                    <a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Follow MV Clouds on ${s.label}`}
+                      title={`MV Clouds on ${s.label}`}
+                      className="h-8 w-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-[#22C55E]/10 hover:text-[#22C55E] hover:border-[#22C55E]/30 transition-all"
+                    >
+                      {s.icon}
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -343,6 +349,15 @@ export function CTAFooter() {
                   </div>
                 </li>
               </ul>
+              <div className="mt-8">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-5">Official Partners</h3>
+                <img
+                  src="/meta-tech-partner.webp"
+                  alt="Official Partners - Salesforce and Meta"
+                  className="h-12 sm:h-14 w-auto object-contain"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </div>
 

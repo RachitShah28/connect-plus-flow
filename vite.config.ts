@@ -39,10 +39,10 @@ export default defineConfig({
             return "vendor-radix";
           }
 
-          // Animation library — heavy, lazy-loaded by feature sections
-          if (id.includes("node_modules/framer-motion/")) {
-            return "vendor-framer-motion";
-          }
+          // Animation library — removed (replaced by native CSS animations)
+          // if (id.includes("node_modules/framer-motion/")) {
+          //   return "vendor-framer-motion";
+          // }
 
           // Icon library — large SVG set, split out to avoid blocking paint
           if (id.includes("node_modules/lucide-react/")) {

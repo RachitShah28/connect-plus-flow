@@ -62,7 +62,7 @@ export function Navbar() {
   // Build the correct href for nav links:
   // On the homepage, keep bare anchors (#features). On any other page,
   // prefix with / so clicking "Features" navigates to /#features instead
-  // of /capabilities#features.
+  // of /features#features.
   const resolveHref = (anchor: string) => (isHome ? anchor : `/${anchor.replace(/^\//, "")}`);
 
   const navigate = useNavigate();

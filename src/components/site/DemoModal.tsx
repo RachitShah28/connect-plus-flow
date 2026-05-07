@@ -512,36 +512,28 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
   };
 
   return (
-    <>
-      {/* Backdrop — always in DOM, CSS transition */}
+    <div
+      className="fixed inset-0 z-[199] flex items-center justify-center px-4 md:items-end md:justify-end md:p-6"
+      style={{
+        pointerEvents: open ? 'auto' : 'none',
+      }}
+    >
+      {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[199] bg-slate-900/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300"
+        style={{ opacity: open ? 1 : 0 }}
         onClick={handleClose}
-        style={{
-          opacity: open ? 1 : 0,
-          pointerEvents: open ? 'auto' : 'none',
-          transition: 'opacity 0.2s ease',
-        }}
       />
 
-      {/* Modal panel — always in DOM, CSS transition */}
+      {/* Modal panel */}
       <div
-        className={[
-          "fixed z-[200] bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden",
-          "inset-x-4 top-1/2 w-auto",
-          "md:inset-x-auto md:top-auto md:bottom-6 md:right-6 md:w-full md:max-w-xl",
-        ].join(" ")}
+        className={`relative z-10 w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden transition-all duration-300 ease-out ${
+          open ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-8"
+        }`}
         onClick={(e) => e.stopPropagation()}
-        style={{
-          opacity: open ? 1 : 0,
-          transform: open ? 'translateY(-50%) scale(1)' : 'translateY(calc(-50% + 30px)) scale(0.97)',
-          pointerEvents: open ? 'auto' : 'none',
-          transition: open ? 'opacity 0.28s ease, transform 0.28s ease' : 'opacity 0.2s ease, transform 0.2s ease',
-          // Desktop overrides via media query are handled by the md: classes above
-        }}
       >
         <ModalInner {...innerProps} />
       </div>
-    </>
+    </div>
   );
 }

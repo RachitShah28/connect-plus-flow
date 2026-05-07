@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, memo, Suspense, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
 import { ChevronRight, Plus, Minus } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { useSEO } from "@/hooks/useSEO";
@@ -237,22 +236,18 @@ const AccordionItem = memo(function AccordionItem({
           <Plus className="h-5 w-5" strokeWidth={2.5} />
         </span>
       </button>
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            key="body"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="pb-6 pr-12 pt-1 text-[15px] sm:text-base text-slate-500 leading-relaxed">
-              {item.a}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        style={{
+          overflow: "hidden",
+          maxHeight: isOpen ? "600px" : "0",
+          opacity: isOpen ? 1 : 0,
+          transition: "max-height 0.32s ease, opacity 0.25s ease",
+        }}
+      >
+        <div className="pb-6 pr-12 pt-1 text-[15px] sm:text-base text-slate-500 leading-relaxed">
+          {item.a}
+        </div>
+      </div>
     </div>
   );
 });
@@ -280,29 +275,24 @@ const FAQList = memo(function FAQList({
   };
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={category.id}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      >
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-8 tracking-tight lg:mt-[6px]">
-          {category.label}
-        </h2>
-        <div className="border-t-2 border-slate-100">
-          {category.items.map((item, i) => (
-            <AccordionItem
-              key={i}
-              item={item}
-              isOpen={openIndices.includes(i)}
-              onToggle={() => handleToggle(i)}
-            />
-          ))}
-        </div>
-      </motion.div>
-    </AnimatePresence>
+    <div
+      key={category.id}
+      style={{ animation: "hero-fade-up 0.3s ease both" }}
+    >
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-8 tracking-tight lg:mt-[6px]">
+        {category.label}
+      </h2>
+      <div className="border-t-2 border-slate-100">
+        {category.items.map((item, i) => (
+          <AccordionItem
+            key={i}
+            item={item}
+            isOpen={openIndices.includes(i)}
+            onToggle={() => handleToggle(i)}
+          />
+        ))}
+      </div>
+    </div>
   );
 });
 
@@ -403,24 +393,18 @@ function FAQsPage() {
 
         {/* Centered content */}
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div style={{ animation: "hero-fade-up 0.6s ease both" }}>
             {/* Eyebrow badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.88 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.08 }}
+            <div
               className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#2BB5D4]/30 bg-[#2BB5D4]/8 mb-7"
+              style={{ animation: "hero-fade-up 0.4s ease 0.08s both" }}
             >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2BB5D4] opacity-60" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2BB5D4]" />
               </span>
               <span className="text-[#2BB5D4] text-xs font-bold tracking-[0.14em] uppercase">Help Center</span>
-            </motion.div>
+            </div>
 
             {/* Main H1 */}
             <h1 className="font-extrabold tracking-tight leading-[1.08] mb-5">
@@ -450,7 +434,7 @@ function FAQsPage() {
             </p>
 
 
-          </motion.div>
+          </div>
         </div>
 
         {/* Bottom fade */}
@@ -502,11 +486,7 @@ function FAQsPage() {
 
             {/* ── Left Sidebar (desktop only) ───────────────────────── */}
             <div className="hidden lg:block w-72 flex-shrink-0">
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 }}
-              >
+              <div style={{ animation: "hero-fade-up 0.5s ease 0.15s both" }}>
                 <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-3 px-1">Categories</p>
                 <nav className="flex flex-col space-y-1" aria-label="FAQ categories desktop">
                   {faqCategories.map((cat) => {
@@ -524,11 +504,7 @@ function FAQsPage() {
                       >
                         <span className="text-[14.5px]">{cat.label}</span>
                         {isActive && (
-                          <motion.div
-                            layoutId="active-indicator"
-                            className="h-2 w-2 rounded-full bg-[#2BB5D4]"
-                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                          />
+                          <span className="h-2 w-2 rounded-full bg-[#2BB5D4]" />
                         )}
                       </button>
                     );
@@ -548,18 +524,14 @@ function FAQsPage() {
                     Contact support →
                   </a>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* ── Right Content Area ────────────────────────────────── */}
             <div className="flex-1 w-full min-h-[400px]">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
+              <div style={{ animation: "hero-fade-up 0.5s ease 0.2s both" }}>
                 <FAQList category={activeCategory} />
-              </motion.div>
+              </div>
             </div>
 
           </div>

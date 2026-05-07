@@ -44,12 +44,8 @@
     crossorigin="anonymous" />
 
 
-  <!-- Resource hints: preconnect to external origins to avoid redirect overhead -->
-  <link rel="preconnect" href="https://www.google.com" />
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <!-- Resource hints: preconnect only to origins actually requested on load -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-  <link rel="preconnect" href="https://www.googletagmanager.com" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -110,7 +106,7 @@
       "url": "https://www.wbconnectplus.com/",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "feature{search_term_string}https://www.wbconnectplus.com/capabilities",
+        "target": "feature{search_term_string}https://www.wbconnectplus.com/features",
         "query-input": "required name=search_term_string"
       }
     }
@@ -177,13 +173,29 @@
 
   <meta name="google-site-verification" content="ltVdxffMDRER_VrKZIbGz9ZwA0XfBvgYYQDTKINa4V0" />
 
-  <!-- Google tag (gtag.js) — deferred so it never blocks FCP/LCP -->
-  <script defer src="https://www.googletagmanager.com/gtag/js?id=G-ZDQZCTZ9BR"></script>
+  <!-- Google tag (gtag.js) — deferred until user interaction to maximise performance -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-ZDQZCTZ9BR');
+    gtag('config', 'G-ZDQZCTZ9BR', { send_page_view: false });
+
+    var gtmLoaded = false;
+    function loadGTM() {
+      if (gtmLoaded) return;
+      gtmLoaded = true;
+      var s = document.createElement('script');
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZDQZCTZ9BR';
+      s.async = true;
+      s.onload = function() { gtag('event', 'page_view'); };
+      document.head.appendChild(s);
+      
+      var events = ['scroll', 'mousemove', 'touchstart', 'keydown'];
+      events.forEach(function(e) { window.removeEventListener(e, loadGTM); });
+    }
+
+    var events = ['scroll', 'mousemove', 'touchstart', 'keydown'];
+    events.forEach(function(e) { window.addEventListener(e, loadGTM, { passive: true }); });
   </script>
 </head>
 
