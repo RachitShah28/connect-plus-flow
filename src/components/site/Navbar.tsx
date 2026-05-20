@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { WBCLogo } from "./WBCLogo";
 import { useLocation, useNavigate } from "@tanstack/react-router";
@@ -19,11 +19,46 @@ const links = [
 ];
 
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
+const FORCE_MOUNT_EVENT = "wbc-force-mount";
+
+// ── Slim top progress bar ────────────────────────────────────────────────────
+// Shows during cross-page anchor navigation to give instant visual feedback.
+function NavProgressBar({ active }: { active: boolean }) {
+  return (
+    <div
+      aria-hidden
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "3px",
+        zIndex: 9999,
+        pointerEvents: "none",
+        opacity: active ? 1 : 0,
+        transition: active ? "opacity 0.1s ease" : "opacity 0.4s ease 0.2s",
+      }}
+    >
+      <div
+        style={{
+          height: "100%",
+          background: "linear-gradient(90deg, #2BB5D4, #22C55E)",
+          transformOrigin: "left center",
+          animation: active ? "nav-progress 0.9s cubic-bezier(0.4,0,0.2,1) forwards" : "none",
+          borderRadius: "0 2px 2px 0",
+        }}
+      />
+    </div>
+  );
+}
 
 export function Navbar() {
   const [demoOpen, setDemoOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [navigating, setNavigating] = useState(false);
+  // Track if hover has already pre-warmed sections
+  const preWarmed = useRef(false);
 
   // Track scroll position to switch navbar to opaque background
   useEffect(() => {
@@ -59,15 +94,21 @@ export function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === "/";
 
-  // Build the correct href for nav links:
-  // On the homepage, keep bare anchors (#features). On any other page,
-  // prefix with / so clicking "Features" navigates to /#features instead
-  // of /features#features.
   const resolveHref = (anchor: string) => (isHome ? anchor : `/${anchor.replace(/^\//, "")}`);
 
   const navigate = useNavigate();
 
   const SCROLL_RESTORE_KEY = "wbc_scroll_restore";
+
+  // ── Pre-warm lazy sections on hover (home page only) ───────────────────────
+  // Users hover ~150-300ms before clicking — dispatching force-mount here means
+  // by the time the click fires, lazy sections are already loading/rendered.
+  const handleNavHover = useCallback((isPage: boolean) => {
+    if (isHome && !isPage && !preWarmed.current) {
+      preWarmed.current = true;
+      window.dispatchEvent(new Event(FORCE_MOUNT_EVENT));
+    }
+  }, [isHome]);
 
   const handleNavClick = (anchor: string, isPage = false) => {
     setMenuOpen(false);
@@ -75,7 +116,6 @@ export function Navbar() {
       if (location.pathname === anchor) {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        // Save current scroll Y so we can restore it if the user presses Back
         try { sessionStorage.setItem(SCROLL_RESTORE_KEY, String(window.scrollY)); } catch {}
         navigate({ to: anchor as any }).then(() => {
           window.scrollTo({ top: 0, behavior: "smooth" });
@@ -98,31 +138,44 @@ export function Navbar() {
       return;
     }
 
+    const hashId = anchor.replace("#", "");
+
     if (isHome) {
-      // Force-mount all lazy InView sections first so they have real heights,
-      // then scroll — otherwise skeletons cause the wrong offset.
-      window.dispatchEvent(new Event("wbc-force-mount"));
+      // Sections were likely pre-warmed on hover. Dispatch force-mount again
+      // in case hover didn't fire (e.g. mobile tap). Use a shorter 300ms wait
+      // since sections are already loading/loaded from the hover pre-warm.
+      window.dispatchEvent(new Event(FORCE_MOUNT_EVENT));
       setTimeout(() => {
-        const el = document.querySelector(anchor);
+        const el = document.getElementById(hashId) ?? document.querySelector(anchor);
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 400);
+      }, 300);
     } else {
-      const hashId = anchor.replace("#", "");
-      // Flag: all InView sections will mount eagerly on the next page render
+      // Cross-page navigation (e.g. FAQs → #implementation):
+      // Show progress bar immediately for instant visual feedback, then navigate.
+      setNavigating(true);
       try { sessionStorage.setItem("wbc_force_mount", "1"); } catch {}
       navigate({ to: "/" }).then(() => {
-        // Wait for React to mount + render all lazy Suspense sections
+        // Fire force-mount immediately so InView sections start rendering
+        window.dispatchEvent(new Event(FORCE_MOUNT_EVENT));
+        // Wait for all lazy Suspense sections to render at full height.
+        // The wrapper div (with the anchor id) is always in the DOM immediately,
+        // so we MUST wait for its content to load before scrollIntoView fires —
+        // otherwise layout is based on skeleton heights and we land in the wrong place.
         setTimeout(() => {
           try { sessionStorage.removeItem("wbc_force_mount"); } catch {}
           const el = document.getElementById(hashId) ?? document.querySelector(anchor);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 400);
+          setNavigating(false);
+        }, 800);
       });
     }
   };
 
   return (
     <>
+      {/* Slim progress bar — visible during cross-page anchor navigation */}
+      <NavProgressBar active={navigating} />
+
       <header
         className="fixed top-0 inset-x-0 z-50 navbar-drop-in"
       >
@@ -150,6 +203,7 @@ export function Navbar() {
                   key={l.href}
                   href={l.page ? l.href : resolveHref(l.href)}
                   aria-label={l.aria}
+                  onMouseEnter={() => handleNavHover(l.page)}
                   onClick={(e) => { e.preventDefault(); handleNavClick(l.href, l.page); }}
                   className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
                 >
@@ -165,7 +219,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener"
                 aria-label="Start free trial of WBConnect+ WhatsApp Salesforce managed package"
-                className="relative overflow-hidden inline-flex items-center rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors group"
+                className="relative overflow-hidden inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors group"
               >
                 <span className="relative z-10">Start Free Trial</span>
                 <span className="shimmer-btn" aria-hidden />
@@ -173,7 +227,7 @@ export function Navbar() {
               <button
                 onClick={() => setDemoOpen(true)}
                 aria-label="Request a custom WBConnect+ WhatsApp Salesforce demo"
-              className="relative overflow-hidden inline-flex items-center rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg hover:shadow-[#22C55E]/30 transition-all group"
+              className="relative overflow-hidden inline-flex items-center rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg hover:shadow-[#22C55E]/30 transition-all group"
               >
                 <span className="relative z-10">Request Custom Demo</span>
                 <span className="shimmer-btn" aria-hidden />
@@ -185,7 +239,7 @@ export function Navbar() {
               <button
                 onClick={() => setDemoOpen(true)}
                 aria-label="Request a demo"
-                className="relative overflow-hidden inline-flex items-center rounded-xl bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-3 py-2 text-xs font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg transition-all"
+                className="relative overflow-hidden inline-flex items-center rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-3.5 py-2 text-xs font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg transition-all"
               >
                 <span className="relative z-10">Get Demo</span>
                 <span className="shimmer-btn" aria-hidden />
@@ -194,7 +248,7 @@ export function Navbar() {
                 onClick={() => setMenuOpen((prev) => !prev)}
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={menuOpen}
-                className="h-9 w-9 rounded-xl border border-slate-200 bg-white grid place-items-center text-slate-700 hover:bg-slate-50 transition-colors"
+                className="h-9 w-9 rounded-full border border-slate-200 bg-white grid place-items-center text-slate-700 hover:bg-slate-50 transition-colors"
               >
                 {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>

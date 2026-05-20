@@ -109,17 +109,31 @@ export function CTAFooter() {
     const hashId = href.replace("/#", "");
 
     if (isHome) {
-      const el = document.getElementById(hashId);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Force-mount all lazy InView sections first so they have real heights.
+      // The InView wrapper div (with the id) is ALWAYS in the DOM immediately,
+      // so we must wait for its lazy content to render at full height before
+      // scrolling — otherwise we land in the wrong section (skeletons are short).
+      window.dispatchEvent(new Event("wbc-force-mount"));
+      setTimeout(() => {
+        const el = document.getElementById(hashId);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 800);
     } else {
-      // Flag: all InView sections will mount eagerly on the next page render
+      // Cross-page navigation (e.g. FAQs → any section):
+      // Flag all InView sections to mount eagerly on next render.
       try { sessionStorage.setItem("wbc_force_mount", "1"); } catch {}
       navigate({ to: "/" }).then(() => {
+        // Fire force-mount immediately so InView sections start rendering
+        window.dispatchEvent(new Event("wbc-force-mount"));
+        // Wait for all lazy Suspense sections to render at full height.
+        // The wrapper div (with the anchor id) is always in the DOM immediately,
+        // so we MUST wait for its content to load before scrollIntoView fires —
+        // otherwise layout is based on skeleton heights and we land in the wrong place.
         setTimeout(() => {
           try { sessionStorage.removeItem("wbc_force_mount"); } catch {}
           const el = document.getElementById(hashId);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 400);
+        }, 800);
       });
     }
   };
@@ -382,15 +396,6 @@ export function CTAFooter() {
                   className="hover:text-white transition-colors"
                 >
                   Privacy Policy
-                </a>
-                <span className="hidden sm:inline text-white/20">|</span>
-                <a
-                  href="https://mvclouds.com/about-mv-clouds"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  About Us
                 </a>
               </div>
             </div>

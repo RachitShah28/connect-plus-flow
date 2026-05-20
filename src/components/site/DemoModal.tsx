@@ -362,7 +362,9 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
       "https://www.google.com/recaptcha/api.js?render=explicit&hl=en";
 
     const injectAndRender = () => {
-      // Wait for the modal animation to settle before rendering
+      // Wait for the modal CSS transition to fully complete before rendering.
+      // reCAPTCHA must render into a visible, non-zero-dimension container —
+      // at 150ms the modal is still mid-animation (scale/opacity) and renders blank.
       const delay = setTimeout(() => {
         if (window.grecaptcha) {
           tryRender();
@@ -375,7 +377,7 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
           }, 200);
           return () => clearInterval(poll);
         }
-      }, 150);
+      }, 350);
       return delay;
     };
 
@@ -486,11 +488,12 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
   }
 
   function handleClose() {
-    // Reset reCAPTCHA widget
+    // Reset reCAPTCHA widget and clear the ref so the next open re-renders it fresh
     if (recaptchaWidgetId.current !== null) {
       window.grecaptcha?.reset(recaptchaWidgetId.current);
-      recaptchaWidgetId.current = null;
     }
+    // Always null the ref — ensures re-open triggers a fresh grecaptcha.render()
+    recaptchaWidgetId.current = null;
     setSubmitted(false);
     setLoading(false);
     setRecaptchaToken("");

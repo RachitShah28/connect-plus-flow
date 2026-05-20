@@ -336,6 +336,14 @@
   animation: s3-progress 1.6s ease-out forwards;
 }
 
+/* ── Nav progress bar — cross-page anchor navigation ───────────────────── */
+@keyframes nav-progress {
+  0%   { transform: scaleX(0); }
+  40%  { transform: scaleX(0.5); }
+  70%  { transform: scaleX(0.78); }
+  100% { transform: scaleX(1); }
+}
+
 /* Modal success icon pop (replaces framer-motion spring) */
 @keyframes modal-pop {
   0%   { transform: scale(0); opacity: 0; }
