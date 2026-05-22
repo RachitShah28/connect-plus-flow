@@ -242,7 +242,7 @@ export function Industries() {
   };
 
   return (
-    <section id="industries" className="py-10 sm:py-14 md:py-20 bg-white">
+    <section id="industries" className="py-10 sm:py-12 md:py-14 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           ref={headerRef}

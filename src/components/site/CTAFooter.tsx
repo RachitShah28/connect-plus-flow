@@ -121,7 +121,7 @@ export function CTAFooter() {
     } else {
       // Cross-page navigation (e.g. FAQs → any section):
       // Flag all InView sections to mount eagerly on next render.
-      try { sessionStorage.setItem("wbc_force_mount", "1"); } catch {}
+      try { sessionStorage.setItem("wbc_force_mount", "1"); } catch { }
       navigate({ to: "/" }).then(() => {
         // Fire force-mount immediately so InView sections start rendering
         window.dispatchEvent(new Event("wbc-force-mount"));
@@ -130,7 +130,7 @@ export function CTAFooter() {
         // so we MUST wait for its content to load before scrollIntoView fires —
         // otherwise layout is based on skeleton heights and we land in the wrong place.
         setTimeout(() => {
-          try { sessionStorage.removeItem("wbc_force_mount"); } catch {}
+          try { sessionStorage.removeItem("wbc_force_mount"); } catch { }
           const el = document.getElementById(hashId);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 800);
@@ -143,29 +143,29 @@ export function CTAFooter() {
 
   const cta = isCapabilities
     ? {
-        headline: (
-          <>
-            Ready to Turn WhatsApp Into Your{" "}
-            <span className="text-gradient-brand">Highest-Converting Channel?</span>
-          </>
-        ),
-        sub: "Launch your first automated workflow in minutes.",
-        primaryLabel: "Schedule Demo",
-        secondaryLabel: "Start Free Trial",
-        secondaryHref: PACKAGE_URL,
-      }
+      headline: (
+        <>
+          Ready to Turn WhatsApp Into Your{" "}
+          <span className="text-gradient-brand">Highest-Converting Channel?</span>
+        </>
+      ),
+      sub: "Launch your first automated workflow in minutes.",
+      primaryLabel: "Schedule Demo",
+      secondaryLabel: "Start Free Trial",
+      secondaryHref: PACKAGE_URL,
+    }
     : {
-        headline: (
-          <>
-            Ready to Automate{" "}
-            <span className="text-gradient-brand">WhatsApp Conversations?</span>
-          </>
-        ),
-        sub: "Book a personalised demo and see how WBConnect+ can help your team close deals faster, automate conversations, and scale customer engagement.",
-        primaryLabel: "Book Free Demo",
-        secondaryLabel: "Start Free Trial",
-        secondaryHref: PACKAGE_URL,
-      };
+      headline: (
+        <>
+          Ready to Automate{" "}
+          <span className="text-gradient-brand">WhatsApp Conversations?</span>
+        </>
+      ),
+      sub: "Book a personalised demo and see how WBConnect+ can help your team close deals faster, automate conversations, and scale customer engagement.",
+      primaryLabel: "Book Free Demo",
+      secondaryLabel: "Start Free Trial",
+      secondaryHref: PACKAGE_URL,
+    };
 
   return (
     <>

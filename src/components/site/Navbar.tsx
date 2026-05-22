@@ -16,6 +16,7 @@ const links = [
   { href: "#pricing", label: "Pricing", aria: "WBConnect+ WhatsApp Salesforce pricing", page: false },
   { href: "#implementation", label: "Implementation", aria: "WBConnect+ implementation steps", page: false },
   { href: "/faqs", label: "FAQs", aria: "WBConnect+ frequently asked questions", page: true },
+  { href: "/blog", label: "Blog", aria: "WBConnect+ blog articles and insights", page: true },
 ];
 
 const PACKAGE_URL = "https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX";
@@ -79,7 +80,7 @@ export function Navbar() {
   // Close menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) setMenuOpen(false);
+      if (window.innerWidth >= 1024) setMenuOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -116,7 +117,7 @@ export function Navbar() {
       if (location.pathname === anchor) {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        try { sessionStorage.setItem(SCROLL_RESTORE_KEY, String(window.scrollY)); } catch {}
+        try { sessionStorage.setItem(SCROLL_RESTORE_KEY, String(window.scrollY)); } catch { }
         navigate({ to: anchor as any }).then(() => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
@@ -128,9 +129,9 @@ export function Navbar() {
     if (anchor === "#top") {
       if (isHome) {
         window.scrollTo({ top: 0, behavior: "smooth" });
-        try { sessionStorage.removeItem(SCROLL_RESTORE_KEY); } catch {}
+        try { sessionStorage.removeItem(SCROLL_RESTORE_KEY); } catch { }
       } else {
-        try { sessionStorage.removeItem(SCROLL_RESTORE_KEY); } catch {}
+        try { sessionStorage.removeItem(SCROLL_RESTORE_KEY); } catch { }
         navigate({ to: "/" }).then(() => {
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
@@ -153,7 +154,7 @@ export function Navbar() {
       // Cross-page navigation (e.g. FAQs → #implementation):
       // Show progress bar immediately for instant visual feedback, then navigate.
       setNavigating(true);
-      try { sessionStorage.setItem("wbc_force_mount", "1"); } catch {}
+      try { sessionStorage.setItem("wbc_force_mount", "1"); } catch { }
       navigate({ to: "/" }).then(() => {
         // Fire force-mount immediately so InView sections start rendering
         window.dispatchEvent(new Event(FORCE_MOUNT_EVENT));
@@ -162,7 +163,7 @@ export function Navbar() {
         // so we MUST wait for its content to load before scrollIntoView fires —
         // otherwise layout is based on skeleton heights and we land in the wrong place.
         setTimeout(() => {
-          try { sessionStorage.removeItem("wbc_force_mount"); } catch {}
+          try { sessionStorage.removeItem("wbc_force_mount"); } catch { }
           const el = document.getElementById(hashId) ?? document.querySelector(anchor);
           if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           setNavigating(false);
@@ -192,12 +193,12 @@ export function Navbar() {
           >
             {/* Logo */}
             <a href={isHome ? "#top" : "/"} aria-label="WBConnect+ home — WhatsApp Salesforce integration" className="flex items-center">
-              <WBCLogo height={36} />
+              <WBCLogo height={50} />
               <span className="sr-only">WBConnect+ Home</span>
             </a>
 
             {/* Desktop nav links — always intercept to use client-side navigation */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden lg:flex items-center lg:gap-3 xl:gap-6">
               {links.map((l) => (
                 <a
                   key={l.href}
@@ -205,7 +206,7 @@ export function Navbar() {
                   aria-label={l.aria}
                   onMouseEnter={() => handleNavHover(l.page)}
                   onClick={(e) => { e.preventDefault(); handleNavClick(l.href, l.page); }}
-                  className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                  className="text-xs xl:text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors whitespace-nowrap"
                 >
                   {l.label}
                 </a>
@@ -213,13 +214,13 @@ export function Navbar() {
             </div>
 
             {/* Desktop CTA buttons */}
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2">
               <a
                 href={PACKAGE_URL}
                 target="_blank"
                 rel="noopener"
                 aria-label="Start free trial of WBConnect+ WhatsApp Salesforce managed package"
-                className="relative overflow-hidden inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors group"
+                className="relative overflow-hidden inline-flex items-center rounded-full border border-slate-300 bg-white lg:px-3 lg:py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-semibold text-slate-800 hover:bg-slate-50 transition-colors group whitespace-nowrap"
               >
                 <span className="relative z-10">Start Free Trial</span>
                 <span className="shimmer-btn" aria-hidden />
@@ -227,7 +228,7 @@ export function Navbar() {
               <button
                 onClick={() => setDemoOpen(true)}
                 aria-label="Request a custom WBConnect+ WhatsApp Salesforce demo"
-              className="relative overflow-hidden inline-flex items-center rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg hover:shadow-[#22C55E]/30 transition-all group"
+                className="relative overflow-hidden inline-flex items-center rounded-full bg-gradient-to-r from-[#2BB5D4] to-[#22C55E] lg:px-3 lg:py-1.5 xl:px-4 xl:py-2 text-xs xl:text-sm font-semibold text-white shadow-md shadow-[#2BB5D4]/30 hover:shadow-lg hover:shadow-[#22C55E]/30 transition-all group whitespace-nowrap"
               >
                 <span className="relative z-10">Request Custom Demo</span>
                 <span className="shimmer-btn" aria-hidden />
@@ -235,7 +236,7 @@ export function Navbar() {
             </div>
 
             {/* Mobile: Demo button + Hamburger */}
-            <div className="flex md:hidden items-center gap-2">
+            <div className="flex lg:hidden items-center gap-2">
               <button
                 onClick={() => setDemoOpen(true)}
                 aria-label="Request a demo"
@@ -258,7 +259,7 @@ export function Navbar() {
 
         {/* Mobile Dropdown Menu — CSS transition, no Framer Motion */}
         <div
-          className="md:hidden mx-4 mt-2 overflow-hidden"
+          className="lg:hidden mx-4 mt-2 overflow-hidden"
           style={{
             maxHeight: menuOpen ? '600px' : '0px',
             opacity: menuOpen ? 1 : 0,
@@ -305,7 +306,7 @@ export function Navbar() {
       {/* Backdrop for mobile menu — CSS transition */}
       <div
         onClick={() => setMenuOpen(false)}
-        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+        className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
         style={{
           opacity: menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? 'auto' : 'none',

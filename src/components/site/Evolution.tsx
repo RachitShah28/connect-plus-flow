@@ -110,9 +110,9 @@ function Vector({ tone }: { tone: string }) {
 export function Evolution() {
   const header = useFadeIn();
   return (
-    <section className="py-10 sm:py-14 md:py-20 bg-white">
+    <section className="py-10 sm:py-12 md:py-14 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...header} className="text-center max-w-5xl mx-auto mb-8 sm:mb-10 md:mb-14">
+        <div {...header} className="text-center max-w-5xl mx-auto mb-8">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">The Evolution</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900" aria-label="WBConnect+ compared to Standard WhatsApp and third-party middlemen">
             WBConnect+ versus Standard WhatsApp and Third-Party Middlemen

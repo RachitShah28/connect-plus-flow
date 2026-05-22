@@ -317,14 +317,14 @@ function DevEnterpriseSection() {
 
 function FeaturesPage() {
   useSEO({
-    title: "WhatsApp Automation FAQs | Setup, Broadcast & Workflows | WBConnect+",
-    description: "Get answers about WhatsApp automation, message templates, broadcasts, workflow setup, scheduling messages, and Salesforce integration with WBConnect+.",
-    keywords: "WhatsApp automation tool, schedule a WhatsApp message, automate WhatsApp messages, WhatsApp API FAQ, WhatsApp business automation",
+    title: "WhatsApp Business Features for Salesforce | WBConnect+",
+    description: "Explore all WBConnect+ features — global chat window, flow builder, template builder, automation, broadcasts, analytics, and AWS S3 media storage, all inside Salesforce.",
+    keywords: "WhatsApp Salesforce integration, WhatsApp automation features, WhatsApp flow builder, WhatsApp template builder, WhatsApp broadcast Salesforce, WBConnect+",
     canonical: "https://www.wbconnectplus.com/feature",
     ogTitle: "WhatsApp Automation Tool for Business & Salesforce | WBConnect+",
     ogDescription: "Automate customer conversations, campaigns, and follow-ups with WBConnect Plus, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
     ogUrl: "https://www.wbconnectplus.com/feature",
-    ogImage: "Logo/image Source url",
+    ogImage: "https://wbconnectplus.com/assets/logo.png",
   });
 
   return (

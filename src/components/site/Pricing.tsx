@@ -85,7 +85,7 @@ export function Pricing() {
   const header = useFadeIn();
   return (
     <>
-      <section id="pricing" className="py-10 sm:py-14 md:py-20 bg-[#0F172A] relative overflow-hidden">
+      <section id="pricing" className="py-10 sm:py-12 md:py-14 bg-[#0F172A] relative overflow-hidden">
 
         {/* Background glow orbs — same palette as CTA */}
         <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#2BB5D4]/15 blur-3xl pointer-events-none" />
@@ -93,7 +93,7 @@ export function Pricing() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full bg-[#2BB5D4]/8 blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div {...header} className="text-center max-w-5xl mx-auto mb-14">
+          <div {...header} className="text-center max-w-5xl mx-auto mb-8">
             <div className="text-xs font-semibold tracking-wider uppercase text-[#22C55E]">Pricing</div>
             <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-white">
               Affordable Pricing Built for Growing Businesses

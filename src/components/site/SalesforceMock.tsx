@@ -29,9 +29,8 @@ export function SalesforceMock() {
             ].map((it) => (
               <div
                 key={it.label}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-                  it.active ? "bg-white text-[#0b5cab] font-semibold shadow-sm" : "text-slate-600"
-                }`}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg ${it.active ? "bg-white text-[#0b5cab] font-semibold shadow-sm" : "text-slate-600"
+                  }`}
               >
                 <it.icon className="h-4 w-4" />
                 {it.label}

@@ -56,9 +56,9 @@ const cards = [
 export function Compare() {
   const header = useFadeIn();
   return (
-    <section id="why-choose-us" className="py-10 sm:py-14 md:py-20 bg-slate-50">
+    <section id="why-choose-us" className="py-10 sm:py-12 md:py-14 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...header} className="text-center max-w-5xl mx-auto mb-8 sm:mb-10 md:mb-14">
+        <div {...header} className="text-center max-w-5xl mx-auto mb-8">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Why Choose Us</div>
           <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-slate-900">
             Why Global Brands Choose WBConnect+<br />Over Other WhatsApp Solutions

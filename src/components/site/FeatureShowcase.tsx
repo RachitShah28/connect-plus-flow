@@ -501,7 +501,7 @@ const AnalyticsVisual = memo(function AnalyticsVisual() {
 
 export function FeatureShowcase() {
   return (
-    <section className="pt-16 md:pt-24 pb-10 md:pb-16 bg-slate-50 relative overflow-x-hidden">
+    <section className="pt-12 md:pt-16 pb-8 md:pb-12 bg-slate-50 relative overflow-x-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50 via-transparent to-transparent pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
         <div className="text-center max-w-5xl mx-auto" style={{ opacity: 1 }}>

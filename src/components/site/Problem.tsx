@@ -47,12 +47,12 @@ const problems = [
 
 export function Problem() {
   return (
-    <section className="py-10 sm:py-14 md:py-20 lg:py-28 bg-slate-50 relative overflow-hidden border-b border-slate-100">
+    <section className="py-10 sm:py-12 md:py-14 bg-slate-50 relative overflow-hidden border-b border-slate-100">
       {/* Background ambient glow matching the brand's light theme */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-50/50 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div {...useFadeIn()} className="text-center max-w-6xl mx-auto mb-8 sm:mb-12 md:mb-16 lg:mb-20">
+        <div {...useFadeIn()} className="text-center max-w-6xl mx-auto mb-8">
           <div className="inline-flex items-center rounded-full bg-[#2BB5D4]/10 px-3 py-1 text-xs font-semibold tracking-wider uppercase text-[#2BB5D4] mb-5">
             The Challenge
           </div>

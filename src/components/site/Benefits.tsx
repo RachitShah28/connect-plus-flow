@@ -89,7 +89,7 @@ function Counter({ to, suffix }: { to: number; suffix: string }) {
 export function Benefits() {
   const header = useFadeIn();
   return (
-    <section className="py-8 sm:py-10 md:py-16 bg-slate-50/50 border-t border-slate-100">
+    <section className="py-8 sm:py-10 md:py-12 bg-slate-50/50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div {...header} className="text-center max-w-5xl mx-auto mb-8 sm:mb-10 md:mb-14">
           <div className="text-xs font-semibold tracking-wider uppercase text-[#2BB5D4]">Measurable ROI</div>
