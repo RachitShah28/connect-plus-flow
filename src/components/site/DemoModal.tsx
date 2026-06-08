@@ -337,13 +337,16 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
     }, 500);
 
     const tryRender = () => {
-      if (
-        recaptchaRef.current &&
-        window.grecaptcha?.render &&
-        recaptchaWidgetId.current === null
-      ) {
-        // Clear stale content from a previous open
-        recaptchaRef.current.innerHTML = "";
+      if (!recaptchaRef.current || !window.grecaptcha?.render) return;
+
+      if (recaptchaWidgetId.current !== null) {
+        // Widget already exists — just reset it so it shows fresh on re-open.
+        // Never call render() twice on the same container; reCAPTCHA tracks it
+        // internally and silently ignores the second call even after innerHTML clear.
+        window.grecaptcha.reset(recaptchaWidgetId.current);
+        setRecaptchaToken("");
+      } else {
+        // First time: render the widget into the empty container
         recaptchaWidgetId.current = window.grecaptcha.render(
           recaptchaRef.current,
           {
@@ -488,12 +491,9 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
   }
 
   function handleClose() {
-    // Reset reCAPTCHA widget and clear the ref so the next open re-renders it fresh
-    if (recaptchaWidgetId.current !== null) {
-      window.grecaptcha?.reset(recaptchaWidgetId.current);
-    }
-    // Always null the ref — ensures re-open triggers a fresh grecaptcha.render()
-    recaptchaWidgetId.current = null;
+    // Do NOT reset or null the widget ID here — the widget stays rendered in the DOM.
+    // On next open, tryRender() will call grecaptcha.reset(widgetId) which cleanly
+    // resets the checkbox state without needing to re-render the widget.
     setSubmitted(false);
     setLoading(false);
     setRecaptchaToken("");
