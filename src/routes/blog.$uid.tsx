@@ -6,6 +6,49 @@ import { Navbar } from "@/components/site/Navbar";
 import { CTAFooter } from "@/components/site/CTAFooter";
 import type { PrismicDocument } from "@prismicio/client";
 
+// ── Table-aware rich text renderer ─────────────────────────────────────────
+// In Prismic: add a "Preformatted" block starting with <!-- TABLE_HTML -->
+// followed by your raw <table>...</table> HTML. This component will render
+// it as a real styled HTML table instead of plain text.
+
+const TABLE_MARKER = "<!-- TABLE_HTML -->";
+
+function RichTextWithTables({ field }: { field: any[] }) {
+  if (!field || field.length === 0) return null;
+
+  const elements: React.ReactNode[] = [];
+  let normalBuffer: any[] = [];
+
+  const flushNormal = (key: string) => {
+    if (normalBuffer.length === 0) return;
+    elements.push(
+      <PrismicRichText key={key} field={normalBuffer as any} />
+    );
+    normalBuffer = [];
+  };
+
+  field.forEach((block, idx) => {
+    if (block.type === "preformatted" && typeof block.text === "string" && block.text.trimStart().startsWith(TABLE_MARKER)) {
+      // Flush any accumulated normal blocks first
+      flushNormal(`normal-${idx}`);
+      // Strip the marker and render as HTML table
+      const html = block.text.replace(TABLE_MARKER, "").trim();
+      elements.push(
+        <div key={`table-${idx}`} className="post2-table-wrap">
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        </div>
+      );
+    } else {
+      normalBuffer.push(block);
+    }
+  });
+
+  // Flush any remaining normal blocks
+  flushNormal("normal-end");
+
+  return <>{elements}</>;
+}
+
 export const Route = createFileRoute("/blog/$uid")({
   component: BlogPostPage,
 });
@@ -504,7 +547,7 @@ function BlogPostPage() {
               {/* Rich text body */}
               <div className="post2-body">
                 {body.length > 0 ? (
-                  <PrismicRichText field={body as any} />
+                  <RichTextWithTables field={body} />
                 ) : (
                   <p className="post2-no-content">
                     This article's content is coming soon. Check back later.
