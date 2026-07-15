@@ -1,54 +1,177 @@
+import React from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { createClient } from "@/lib/prismic";
-import { PrismicRichText } from "@prismicio/react";
 import { Navbar } from "@/components/site/Navbar";
 import { CTAFooter } from "@/components/site/CTAFooter";
 import type { PrismicDocument } from "@prismicio/client";
+import { mapRichTextToBlocks, mapFaqs } from "@/lib/prismicMapper";
+import type { ContentBlock, PrismicSpan } from "@/lib/prismicMapper";
 
-// ── Table-aware rich text renderer ─────────────────────────────────────────
-// In Prismic: add a "Preformatted" block starting with <!-- TABLE_HTML -->
-// followed by your raw <table>...</table> HTML. This component will render
-// it as a real styled HTML table instead of plain text.
+// ─── Inline rich-text renderer ───────────────────────────────────────────────
+// Converts a Prismic text + spans array into React nodes with bold/italic/links.
+function renderRichText(text: string, spans?: PrismicSpan[]): React.ReactNode {
+  if (!spans || spans.length === 0) return text;
 
-const TABLE_MARKER = "<!-- TABLE_HTML -->";
-
-function RichTextWithTables({ field }: { field: any[] }) {
-  if (!field || field.length === 0) return null;
-
-  const elements: React.ReactNode[] = [];
-  let normalBuffer: any[] = [];
-
-  const flushNormal = (key: string) => {
-    if (normalBuffer.length === 0) return;
-    elements.push(
-      <PrismicRichText key={key} field={normalBuffer as any} />
-    );
-    normalBuffer = [];
-  };
-
-  field.forEach((block, idx) => {
-    if (block.type === "preformatted" && typeof block.text === "string" && block.text.trimStart().startsWith(TABLE_MARKER)) {
-      // Flush any accumulated normal blocks first
-      flushNormal(`normal-${idx}`);
-      // Strip the marker and render as HTML table
-      const html = block.text.replace(TABLE_MARKER, "").trim();
-      elements.push(
-        <div key={`table-${idx}`} className="post2-table-wrap">
-          <div dangerouslySetInnerHTML={{ __html: html }} />
-        </div>
-      );
-    } else {
-      normalBuffer.push(block);
-    }
+  type Seg = { start: number; end: number; types: string[]; url?: string; target?: string };
+  const boundaries = new Set<number>([0, text.length]);
+  spans.forEach((s) => {
+    boundaries.add(Math.max(0, s.start));
+    boundaries.add(Math.min(text.length, s.end));
   });
+  const pts = Array.from(boundaries).sort((a, b) => a - b);
+  const segments: Seg[] = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const start = pts[i], end = pts[i + 1];
+    if (start >= end) continue;
+    const active = spans.filter((s) => s.start <= start && s.end >= end);
+    const hyperlinkSpan = active.find((s) => s.type === "hyperlink");
+    segments.push({ start, end, types: active.map((s) => s.type), url: hyperlinkSpan?.data?.url, target: hyperlinkSpan?.data?.target });
+  }
 
-  // Flush any remaining normal blocks
-  flushNormal("normal-end");
+  return segments.map((seg, idx) => {
+    const slice      = text.slice(seg.start, seg.end);
+    const isBold     = seg.types.includes("strong");
+    const isItalic   = seg.types.includes("em");
+    const isLink     = seg.types.includes("hyperlink") && !!seg.url;
+    const isCode     = seg.types.includes("label");
 
-  return <>{elements}</>;
+    let node: React.ReactNode = slice;
+    if (isCode)   node = <code   key={`c-${idx}`} className="post2-inline-code">{node}</code>;
+    if (isBold)   node = <strong key={`b-${idx}`}>{node}</strong>;
+    if (isItalic) node = <em     key={`i-${idx}`}>{node}</em>;
+    if (isLink)   node = <a key={`a-${idx}`} href={seg.url} target={seg.target || "_blank"} rel="noopener noreferrer" className="post2-body-link">{node}</a>;
+    if (!isBold && !isItalic && !isLink && !isCode) return <span key={idx}>{slice}</span>;
+    return node;
+  });
 }
 
+// ─── Code block ──────────────────────────────────────────────────────────────
+function CodeBlock({ code, language }: { code: string; language?: string }) {
+  const [copied, setCopied] = useState(false);
+  const displayLang = language || "text";
+
+  const handleCopy = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+    } else {
+      const el = document.createElement("textarea");
+      el.value = code; document.body.appendChild(el); el.select();
+      document.execCommand("copy"); document.body.removeChild(el);
+      setCopied(true); setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <div className="post2-code-block">
+      <div className="post2-code-header">
+        <div className="post2-code-dots">
+          <span className="post2-code-dot post2-code-dot-red" />
+          <span className="post2-code-dot post2-code-dot-yellow" />
+          <span className="post2-code-dot post2-code-dot-green" />
+        </div>
+        <span className="post2-code-lang">{displayLang}</span>
+        <button className={`post2-code-copy${copied ? " post2-code-copy--copied" : ""}`} onClick={handleCopy} aria-label="Copy code">
+          {copied ? (
+            <><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Copied!</span></>
+          ) : (
+            <><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></>
+          )}
+        </button>
+      </div>
+      <pre className="post2-code-pre"><code className="post2-code-content">{code}</code></pre>
+    </div>
+  );
+}
+
+// ─── Raw HTML block ───────────────────────────────────────────────────────────
+// Uses ref.current.innerHTML directly (not dangerouslySetInnerHTML) so that
+// the browser natively processes <style> tags inside the injected HTML.
+function RawHtmlBlock({ html }: { html: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.innerHTML = html;
+    }
+  }, [html]);
+
+  return <div ref={ref} className="post2-html-block" />;
+}
+
+// ─── Block renderer (same pattern as reference BlogPost.tsx renderBlock) ──────
+function renderBlock(block: ContentBlock, i: number): React.ReactNode {
+  switch (block.type) {
+    case "heading":
+      return <h2 key={i} className="post2-block-h2">{renderRichText(block.text, block.spans)}</h2>;
+    case "subheading":
+      return <h3 key={i} className="post2-block-h3">{renderRichText(block.text, block.spans)}</h3>;
+    case "paragraph":
+      return <p key={i} className="post2-block-p">{renderRichText(block.text, block.spans)}</p>;
+    case "list":
+      return (
+        <ul key={i} className="post2-block-list">
+          {block.items.map((item, j) => (
+            <li key={j} className="post2-block-list-item">
+              <span className="post2-block-list-dot" />
+              {renderRichText(item, block.itemSpans?.[j])}
+            </li>
+          ))}
+        </ul>
+      );
+    case "image":
+      return (
+        <figure key={i} className="post2-block-figure">
+          <img src={block.url} alt={block.alt || ""} loading="lazy" className="post2-block-img" />
+          {block.alt && <figcaption className="post2-block-caption">{block.alt}</figcaption>}
+        </figure>
+      );
+    case "embed":
+      return (
+        <div key={i} className="post2-block-embed">
+          <div dangerouslySetInnerHTML={{ __html: block.html }} />
+        </div>
+      );
+    case "table":
+      if (!block.bodyRows?.length && !block.headRow?.length) return null;
+      return (
+        <div key={i} className="post2-table-wrap">
+          <table>
+            {block.headRow && block.headRow.length > 0 && (
+              <thead>
+                <tr>{block.headRow.map((cell, ci) => <th key={ci}>{cell}</th>)}</tr>
+              </thead>
+            )}
+            <tbody>
+              {block.bodyRows.map((row, ri) => (
+                <tr key={ri}>{row.map((cell, ci) => <td key={ci}>{cell}</td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    case "callout":
+      return (
+        <div key={i} className="post2-block-callout">
+          <span className="post2-block-callout-icon" aria-hidden>💡</span>
+          <p>{renderRichText(block.text, block.spans)}</p>
+        </div>
+      );
+    case "rawhtml":
+      return <RawHtmlBlock key={i} html={block.html} />;
+    case "codeblock":
+      return <CodeBlock key={i} code={block.code} language={block.language} />;
+    default:
+      return null;
+  }
+}
+
+// ─── Rich-text entry point ────────────────────────────────────────────────────
+function RichTextWithTables({ field }: { field: any[] }) {
+  const blocks = mapRichTextToBlocks(field);
+  if (blocks.length === 0) return null;
+  return <>{blocks.map((block, i) => renderBlock(block, i))}</>;
+}
 export const Route = createFileRoute("/blog/$uid")({
   component: BlogPostPage,
 });
@@ -116,6 +239,9 @@ function BlogPostPage() {
   const [notFound, setNotFound] = useState(false);
   const [redirectChecked, setRedirectChecked] = useState(false);
   const checkStarted = useRef(false);
+  const [prevPost, setPrevPost] = useState<PrismicDocument | null>(null);
+  const [nextPost, setNextPost] = useState<PrismicDocument | null>(null);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     // Reset all states when UID changes to prevent state leakage
@@ -124,6 +250,8 @@ function BlogPostPage() {
     setNotFound(false);
     setRedirectChecked(false);
     checkStarted.current = false;
+    setPrevPost(null);
+    setNextPost(null);
 
     let active = true;
 
@@ -164,6 +292,48 @@ function BlogPostPage() {
       active = false;
     };
   }, [uid]);
+
+  // ── Fetch adjacent posts for More Blogs section ─────────────────────────
+  useEffect(() => {
+    if (!doc) return;
+    let active = true;
+
+    const fetchAdjacent = async () => {
+      try {
+        const customType = (import.meta.env.VITE_PRISMIC_CUSTOM_TYPE || "blog_post").toLowerCase();
+        const client = createClient();
+        const orderings: { field: string; direction: "desc" }[] = [
+          { field: `my.${customType}.publish_date`, direction: "desc" },
+          { field: `my.${customType}.published_date`, direction: "desc" },
+          { field: "document.first_publication_date", direction: "desc" },
+        ];
+
+        let allDocs: PrismicDocument[] = [];
+        for (const ordering of orderings) {
+          try {
+            const result = await client.getAllByType(customType, { orderings: [ordering] });
+            if (result.length > 0) { allDocs = result; break; }
+          } catch { /* try next */ }
+        }
+        if (allDocs.length === 0) {
+          allDocs = await client.getAllByType(customType).catch(() => []);
+        }
+
+        if (!active) return;
+        const idx = allDocs.findIndex((d) => d.uid === doc.uid);
+        if (idx === -1) return;
+        // "Previous" = older post (higher index in desc-sorted list)
+        // "Next"     = newer post (lower index)
+        setPrevPost(idx < allDocs.length - 1 ? allDocs[idx + 1] : null);
+        setNextPost(idx > 0 ? allDocs[idx - 1] : null);
+      } catch {
+        // silently ignore
+      }
+    };
+
+    fetchAdjacent();
+    return () => { active = false; };
+  }, [doc]);
 
   // ── Redirect lookup (runs only after a 404) ─────────────────────────────
   useEffect(() => {
@@ -437,12 +607,32 @@ function BlogPostPage() {
       }
     }
 
+    // 8. Generate & Inject FAQPage Schema (JSON-LD) if FAQs exist
+    const faqsForSchema = mapFaqs(doc.data?.faqs);
+    if (faqsForSchema.length > 0) {
+      const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqsForSchema.map((faq) => ({
+          "@type": "Question",
+          "name": faq.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.answer,
+          },
+        })),
+      };
+      setSchemaScript("seo-faq-schema", faqSchema);
+    }
+
     // Cleanup scripts on unmount / route exit
     return () => {
       const artScript = document.getElementById("seo-article-schema");
       if (artScript) artScript.remove();
       const custScript = document.getElementById("seo-custom-schema");
       if (custScript) custScript.remove();
+      const faqScript = document.getElementById("seo-faq-schema");
+      if (faqScript) faqScript.remove();
     };
   }, [doc, title, excerpt, coverUrl, author, category, date]);
 
@@ -555,9 +745,150 @@ function BlogPostPage() {
                 )}
               </div>
 
+              {/* ── FAQ Accordion Section ────────────────────────────── */}
+              {(() => {
+                const faqs = mapFaqs(doc.data?.faqs);
+                if (!faqs.length) return null;
+                return (
+                  <section className="blog-faq-section" aria-label="Frequently Asked Questions">
+                    <div className="blog-faq-header">
+                      <h2 className="blog-faq-title">
+                        Frequently Asked <span className="blog-faq-title-accent">Questions</span>
+                      </h2>
+                      <div className="blog-faq-underline" />
+                    </div>
+                    <div className="blog-faq-list">
+                      {faqs.map((faq, idx) => (
+                        <div
+                          key={idx}
+                          className={`blog-faq-item${openFaq === idx ? " blog-faq-item--open" : ""}`}
+                        >
+                          <button
+                            className="blog-faq-question"
+                            aria-expanded={openFaq === idx}
+                            aria-controls={`faq-answer-${idx}`}
+                            id={`faq-question-${idx}`}
+                            onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                          >
+                            <span>{faq.question}</span>
+                            <span className="blog-faq-chevron" aria-hidden="true">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="6 9 12 15 18 9" />
+                              </svg>
+                            </span>
+                          </button>
+                          <div
+                            className="blog-faq-answer"
+                            id={`faq-answer-${idx}`}
+                            role="region"
+                            aria-labelledby={`faq-question-${idx}`}
+                          >
+                            <div className="blog-faq-answer-inner">
+                              {faq.answer}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                );
+              })()}
+
 
             </article>
 
+          </div>
+        )}
+
+        {/* ── More Blogs: Prev / Next navigation ───────────────────── */}
+        {!loading && !notFound && doc && (prevPost || nextPost) && (
+          <div className="more-blogs-section">
+            <div className="more-blogs-header">
+              <h2 className="more-blogs-title">
+                More <span className="more-blogs-title-accent">Blogs</span>
+              </h2>
+              <div className="more-blogs-underline" />
+            </div>
+
+            <div className={`more-blogs-grid ${!prevPost || !nextPost ? "more-blogs-grid--single" : ""}`}>
+
+              {/* Previous post card */}
+              {prevPost && (
+                <Link
+                  to="/blog/$uid"
+                  params={{ uid: prevPost.uid! }}
+                  className="more-blogs-card more-blogs-card--prev"
+                >
+                  {/* Background image */}
+                  {(prevPost.data?.cover_photo?.url || prevPost.data?.cover_image?.url) && (
+                    <div className="more-blogs-card-img-wrap">
+                      <img
+                        src={prevPost.data?.cover_photo?.url || prevPost.data?.cover_image?.url}
+                        alt={prevPost.data?.cover_photo?.alt || ""}
+                        className="more-blogs-card-img"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  {/* Badge – absolute top-left */}
+                  <span className="more-blogs-nav-badge more-blogs-nav-badge--prev">
+                    ← PREVIOUS BLOG
+                  </span>
+                  {/* Text overlay at bottom */}
+                  <div className="more-blogs-card-body">
+                    {(prevPost.data?.catagory || prevPost.data?.category) && (
+                      <span className="more-blogs-card-category">
+                        {prevPost.data?.catagory || prevPost.data?.category}
+                      </span>
+                    )}
+                    <p className="more-blogs-card-title">
+                      {Array.isArray(prevPost.data?.title)
+                        ? prevPost.data.title[0]?.text ?? ""
+                        : prevPost.data?.title ?? ""}
+                    </p>
+                  </div>
+                </Link>
+              )}
+
+              {/* Next post card */}
+              {nextPost && (
+                <Link
+                  to="/blog/$uid"
+                  params={{ uid: nextPost.uid! }}
+                  className="more-blogs-card more-blogs-card--next"
+                >
+                  {/* Background image */}
+                  {(nextPost.data?.cover_photo?.url || nextPost.data?.cover_image?.url) && (
+                    <div className="more-blogs-card-img-wrap">
+                      <img
+                        src={nextPost.data?.cover_photo?.url || nextPost.data?.cover_image?.url}
+                        alt={nextPost.data?.cover_photo?.alt || ""}
+                        className="more-blogs-card-img"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  {/* Badge – absolute top-left */}
+                  <span className="more-blogs-nav-badge more-blogs-nav-badge--next">
+                    NEXT BLOG →
+                  </span>
+                  {/* Text overlay at bottom */}
+                  <div className="more-blogs-card-body">
+                    {(nextPost.data?.catagory || nextPost.data?.category) && (
+                      <span className="more-blogs-card-category">
+                        {nextPost.data?.catagory || nextPost.data?.category}
+                      </span>
+                    )}
+                    <p className="more-blogs-card-title">
+                      {Array.isArray(nextPost.data?.title)
+                        ? nextPost.data.title[0]?.text ?? ""
+                        : nextPost.data?.title ?? ""}
+                    </p>
+                  </div>
+                </Link>
+              )}
+
+            </div>
           </div>
         )}
       </div>
