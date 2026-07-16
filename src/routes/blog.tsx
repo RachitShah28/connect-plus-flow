@@ -4,6 +4,7 @@ import { createClient } from "@/lib/prismic";
 import { Navbar } from "@/components/site/Navbar";
 import { CTAFooter } from "@/components/site/CTAFooter";
 import type { PrismicDocument } from "@prismicio/client";
+import { useSEO } from "@/hooks/useSEO";
 
 export const Route = createFileRoute("/blog")({
   component: BlogPage,
@@ -154,6 +155,13 @@ function BlogSkeleton() {
 // ── Page ───────────────────────────────────────────────────────────────────
 
 function BlogPage() {
+  useSEO({
+    title: "WBConnect+ Blog | WhatsApp Business Insights & Guides",
+    description: "Practical advice on WhatsApp automation, Salesforce integrations, and driving revenue through smarter customer conversations.",
+    keywords: "WBConnect, WBConnectPlus, WBConnect+, WhatsApp automation, Salesforce integration, blog, WhatsApp marketing",
+    canonical: "https://wbconnectplus.com/blog",
+  });
+
   const [posts, setPosts] = useState<PrismicDocument[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);

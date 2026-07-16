@@ -805,42 +805,40 @@ function BlogPostPage() {
           <div className="more-blogs-section">
             <div className="more-blogs-header">
               <h2 className="more-blogs-title">
-                More <span className="more-blogs-title-accent">Blogs</span>
+                Explore More <span className="more-blogs-title-accent">Insights</span>
               </h2>
               <div className="more-blogs-underline" />
             </div>
 
             <div className={`more-blogs-grid ${!prevPost || !nextPost ? "more-blogs-grid--single" : ""}`}>
 
-              {/* Previous post card */}
+              {/* Previous post card: [←] [img] [label + title] */}
               {prevPost && (
                 <Link
                   to="/blog/$uid"
                   params={{ uid: prevPost.uid! }}
                   className="more-blogs-card more-blogs-card--prev"
                 >
-                  {/* Background image */}
-                  {(prevPost.data?.cover_photo?.url || prevPost.data?.cover_image?.url) && (
-                    <div className="more-blogs-card-img-wrap">
-                      <img
-                        src={prevPost.data?.cover_photo?.url || prevPost.data?.cover_image?.url}
-                        alt={prevPost.data?.cover_photo?.alt || ""}
-                        className="more-blogs-card-img"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  {/* Badge – absolute top-left */}
-                  <span className="more-blogs-nav-badge more-blogs-nav-badge--prev">
-                    ← PREVIOUS BLOG
+                  {/* Arrow button – left edge */}
+                  <span className="more-blogs-card-arrow" aria-hidden>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M15 18l-6-6 6-6"/>
+                    </svg>
                   </span>
-                  {/* Text overlay at bottom */}
+                  {/* Thumbnail */}
+                  <div
+                    className="more-blogs-card-img-wrap"
+                    style={{
+                      backgroundImage: (prevPost.data?.cover_photo?.url || prevPost.data?.cover_image?.url)
+                        ? `url(${prevPost.data?.cover_photo?.url || prevPost.data?.cover_image?.url})`
+                        : "linear-gradient(135deg, #c8e8ef 0%, #a5d8e0 100%)",
+                    }}
+                    role="img"
+                    aria-label={prevPost.data?.cover_photo?.alt || "Previous blog cover"}
+                  />
+                  {/* Text */}
                   <div className="more-blogs-card-body">
-                    {(prevPost.data?.catagory || prevPost.data?.category) && (
-                      <span className="more-blogs-card-category">
-                        {prevPost.data?.catagory || prevPost.data?.category}
-                      </span>
-                    )}
+                    <span className="more-blogs-nav-badge more-blogs-nav-badge--prev">PREVIOUS BLOG</span>
                     <p className="more-blogs-card-title">
                       {Array.isArray(prevPost.data?.title)
                         ? prevPost.data.title[0]?.text ?? ""
@@ -850,35 +848,33 @@ function BlogPostPage() {
                 </Link>
               )}
 
-              {/* Next post card */}
+              {/* Next post card: [label + title] [img] [→] */}
               {nextPost && (
                 <Link
                   to="/blog/$uid"
                   params={{ uid: nextPost.uid! }}
                   className="more-blogs-card more-blogs-card--next"
                 >
-                  {/* Background image */}
-                  {(nextPost.data?.cover_photo?.url || nextPost.data?.cover_image?.url) && (
-                    <div className="more-blogs-card-img-wrap">
-                      <img
-                        src={nextPost.data?.cover_photo?.url || nextPost.data?.cover_image?.url}
-                        alt={nextPost.data?.cover_photo?.alt || ""}
-                        className="more-blogs-card-img"
-                        loading="lazy"
-                      />
-                    </div>
-                  )}
-                  {/* Badge – absolute top-left */}
-                  <span className="more-blogs-nav-badge more-blogs-nav-badge--next">
-                    NEXT BLOG →
+                  {/* Arrow button – right edge (visually last due to row-reverse) */}
+                  <span className="more-blogs-card-arrow" aria-hidden>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 18l6-6-6-6"/>
+                    </svg>
                   </span>
-                  {/* Text overlay at bottom */}
+                  {/* Thumbnail */}
+                  <div
+                    className="more-blogs-card-img-wrap"
+                    style={{
+                      backgroundImage: (nextPost.data?.cover_photo?.url || nextPost.data?.cover_image?.url)
+                        ? `url(${nextPost.data?.cover_photo?.url || nextPost.data?.cover_image?.url})`
+                        : "linear-gradient(135deg, #c8e8ef 0%, #a5d8e0 100%)",
+                    }}
+                    role="img"
+                    aria-label={nextPost.data?.cover_photo?.alt || "Next blog cover"}
+                  />
+                  {/* Text */}
                   <div className="more-blogs-card-body">
-                    {(nextPost.data?.catagory || nextPost.data?.category) && (
-                      <span className="more-blogs-card-category">
-                        {nextPost.data?.catagory || nextPost.data?.category}
-                      </span>
-                    )}
+                    <span className="more-blogs-nav-badge more-blogs-nav-badge--next">NEXT BLOG</span>
                     <p className="more-blogs-card-title">
                       {Array.isArray(nextPost.data?.title)
                         ? nextPost.data.title[0]?.text ?? ""

@@ -170,7 +170,7 @@ export function CTAFooter() {
   return (
     <>
       {/* CTA Banner & Footer Wrapper */}
-      <div className="relative mt-16 sm:mt-24">
+      <div className="relative mt-16 sm:mt-16">
         {/* Dark background connection block to eliminate white gap */}
         <div className="absolute inset-x-0 bottom-0 top-32 bg-[#0F172A]" aria-hidden="true" />
 
