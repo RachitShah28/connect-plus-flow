@@ -3,6 +3,7 @@ import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
 import { ChevronRight, Plus, Minus } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { useSEO } from "@/hooks/useSEO";
+import { useBreadcrumbSchema } from "@/hooks/useBreadcrumbSchema";
 
 // ── SEO title ─────────────────────────────────────────────────────────────────
 // Using global useSEO hook instead
@@ -331,13 +332,14 @@ function FAQsPage() {
     title: "WhatsApp Automation FAQs | Setup, Broadcast & Workflows | WBConnect+",
     description: "Get answers about WhatsApp automation, message templates, broadcasts, workflow setup, scheduling messages, and Salesforce integration with WBConnect+.",
     keywords: "WhatsApp automation tool, schedule a WhatsApp message, automate WhatsApp messages, WhatsApp API FAQ, WhatsApp business automation",
-    canonical: "https://www.wbconnectplus.com/faq",
-    ogTitle: "WhatsApp Automation Tool for Business & Salesforce | WBConnect+",
-    ogDescription: "Automate customer conversations, campaigns, and follow-ups with WBConnect Plus, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
-    ogUrl: "https://www.wbconnectplus.com/faq",
-    ogImage: "Logo/image Source url",
+    canonical: "https://www.wbconnectplus.com/faqs",
+    ogTitle: "WhatsApp Automation FAQs | Setup, Broadcast & Workflows | WBConnect+",
+    ogDescription: "Get answers about WhatsApp automation, message templates, broadcasts, workflow setup, scheduling messages, and Salesforce integration with WBConnect+.",
+    ogUrl: "https://www.wbconnectplus.com/faqs",
+    ogImage: "https://www.wbconnectplus.com/assets/logo.png",
     schemaData: faqSchema,
   });
+  useBreadcrumbSchema([{ name: "FAQs", path: "/faqs" }]);
 
   const [activeId, setActiveId] = useState("general");
   const activeCategory =

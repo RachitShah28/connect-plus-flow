@@ -444,7 +444,7 @@ export function DemoModal({ open, onClose }: DemoModalProps) {
       const data: Record<string, string> = {
         captcha_settings: captchaSettings,
         oid: SF_ORG_ID,
-        retURL: "https://wbconnectplus.com/",
+        retURL: "https://www.wbconnectplus.com/",
         first_name: form.first_name,
         last_name: form.last_name,
         email: form.email,

@@ -5,6 +5,7 @@ import { Navbar } from "@/components/site/Navbar";
 import { CTAFooter } from "@/components/site/CTAFooter";
 import type { PrismicDocument } from "@prismicio/client";
 import { useSEO } from "@/hooks/useSEO";
+import { useBreadcrumbSchema } from "@/hooks/useBreadcrumbSchema";
 
 export const Route = createFileRoute("/blog")({
   component: BlogPage,
@@ -159,8 +160,13 @@ function BlogPage() {
     title: "WBConnect+ Blog | WhatsApp Business Insights & Guides",
     description: "Practical advice on WhatsApp automation, Salesforce integrations, and driving revenue through smarter customer conversations.",
     keywords: "WBConnect, WBConnectPlus, WBConnect+, WhatsApp automation, Salesforce integration, blog, WhatsApp marketing",
-    canonical: "https://wbconnectplus.com/blog",
+    canonical: "https://www.wbconnectplus.com/blog",
+    ogTitle: "WBConnect+ Blog | WhatsApp Business Insights & Guides",
+    ogDescription: "Practical advice on WhatsApp automation, Salesforce integrations, and driving revenue through smarter customer conversations.",
+    ogUrl: "https://www.wbconnectplus.com/blog",
+    ogImage: "https://www.wbconnectplus.com/assets/logo.png",
   });
+  useBreadcrumbSchema([{ name: "Blog", path: "/blog" }]);
 
   const [posts, setPosts] = useState<PrismicDocument[]>([]);
   const [currentPage, setCurrentPage] = useState(1);

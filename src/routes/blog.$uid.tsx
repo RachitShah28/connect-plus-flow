@@ -7,6 +7,7 @@ import { CTAFooter } from "@/components/site/CTAFooter";
 import type { PrismicDocument } from "@prismicio/client";
 import { mapRichTextToBlocks, mapFaqs } from "@/lib/prismicMapper";
 import type { ContentBlock, PrismicSpan } from "@/lib/prismicMapper";
+import { useBreadcrumbSchema } from "@/hooks/useBreadcrumbSchema";
 
 // ─── Inline rich-text renderer ───────────────────────────────────────────────
 // Converts a Prismic text + spans array into React nodes with bold/italic/links.
@@ -85,18 +86,29 @@ function CodeBlock({ code, language }: { code: string; language?: string }) {
 }
 
 // ─── Raw HTML block ───────────────────────────────────────────────────────────
-// Uses ref.current.innerHTML directly (not dangerouslySetInnerHTML) so that
-// the browser natively processes <style> tags inside the injected HTML.
+// Mounts Prismic raw HTML inside a Shadow DOM so any <style> tags it contains
+// are fully isolated from the site's global stylesheet.
 function RawHtmlBlock({ html }: { html: string }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.innerHTML = html;
-    }
+    const host = hostRef.current;
+    if (!host) return;
+
+    // Attach shadow root only once; reuse on subsequent renders
+    const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
+
+    // Inject a minimal reset so the shadow subtree still inherits font/color
+    // from the page, but its <style> blocks cannot escape the shadow boundary.
+    shadow.innerHTML = `
+      <style>
+        :host { display: block; all: initial; font: inherit; color: inherit; }
+      </style>
+      ${html}
+    `;
   }, [html]);
 
-  return <div ref={ref} className="post2-html-block" />;
+  return <div ref={hostRef} className="post2-html-block" />;
 }
 
 // ─── Block renderer (same pattern as reference BlogPost.tsx renderBlock) ──────
@@ -129,7 +141,13 @@ function renderBlock(block: ContentBlock, i: number): React.ReactNode {
     case "embed":
       return (
         <div key={i} className="post2-block-embed">
-          <div dangerouslySetInnerHTML={{ __html: block.html }} />
+          {/* Strip any <style>/<link> tags from embed HTML to prevent
+              Prismic embed content from polluting the global stylesheet */}
+          <div dangerouslySetInnerHTML={{
+            __html: block.html
+              .replace(/<style[\s\S]*?<\/style>/gi, "")
+              .replace(/<link[^>]+rel=["']?stylesheet["']?[^>]*>/gi, ""),
+          }} />
         </div>
       );
     case "table":
@@ -255,43 +273,109 @@ function BlogPostPage() {
 
     let active = true;
 
-    const fetchPost = async () => {
+    // ── Helper: resolve redirect target for this uid ─────────────────────
+    // Checks both the edge API and Prismic url_redirect docs.
+    // Returns the target uid string if a redirect record exists, else null.
+    const lookupRedirect = async (): Promise<string | null> => {
+      // 1. Try edge API first (fast path on production)
       try {
-        const res = await fetch(`/api/blog?uid=${uid}`);
-        if (!res.ok) throw new Error("fallback");
-        const data = await res.json();
-        if (active) {
-          setDoc(data);
-          setLoading(false);
+        const res = await fetch(`/api/redirects?from=${encodeURIComponent(uid)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.to) return data.to as string;
         }
-      } catch {
-        // Direct CMS fetch (used when no edge proxy is available)
-        const customType = (import.meta.env.VITE_PRISMIC_CUSTOM_TYPE || "blog_post").toLowerCase();
+      } catch { /* edge API not available in local dev — fall through */ }
+
+      // 2. Query Prismic url_redirect custom type directly
+      try {
         const client = createClient();
-        client
-          .getByUID(customType, uid)
-          .then((d) => {
-            if (active) { setDoc(d); setLoading(false); }
-          })
-          .catch(() => {
-            client
-              .getByID(uid)
-              .then((d) => {
-                if (active) { setDoc(d); setLoading(false); }
-              })
-              .catch(() => {
-                if (active) { setNotFound(true); setLoading(false); }
-              });
-          });
+        const results = await client.getAllByType("url_redirect");
+
+        const match = results.find((rdoc) => {
+          const raw = rdoc.data?.from_uid;
+          let slug = "";
+          if (typeof raw === "string") slug = raw.trim();
+          else if (Array.isArray(raw) && raw.length > 0) slug = (raw[0].text ?? "").trim();
+          const cleanSlug = slug.replace(/^\/?(blog\/)?/, "").replace(/\/$/, "").trim();
+          const cleanUid  = uid .replace(/^\/?(blog\/)?/, "").replace(/\/$/, "").trim();
+          return cleanSlug === cleanUid;
+        });
+
+        if (!match) return null;
+
+        const rawTo = match.data?.to_uid;
+        let toUid = "";
+        if (typeof rawTo === "string") toUid = rawTo.trim();
+        else if (Array.isArray(rawTo) && rawTo.length > 0) toUid = (rawTo[0].text ?? "").trim();
+        else if (rawTo?.uid) toUid = rawTo.uid;
+
+        if (toUid) {
+          toUid = toUid.replace(/^\/?(blog\/)?/, "").replace(/\/$/, "").trim();
+          if (toUid.includes("/")) {
+            const segments = toUid.split("/").filter(Boolean);
+            toUid = segments[segments.length - 1] || "";
+          }
+        }
+
+        return toUid || null;
+      } catch {
+        return null;
       }
     };
 
-    fetchPost();
+    // ── Helper: fetch blog post from Prismic ─────────────────────────────
+    const fetchPost = async (): Promise<PrismicDocument | null> => {
+      try {
+        const res = await fetch(`/api/blog?uid=${uid}`);
+        if (!res.ok) throw new Error("fallback");
+        return await res.json() as PrismicDocument;
+      } catch {
+        const customType = (import.meta.env.VITE_PRISMIC_CUSTOM_TYPE || "blog_post").toLowerCase();
+        const client = createClient();
+        try {
+          return await client.getByUID(customType, uid);
+        } catch {
+          try {
+            return await client.getByID(uid);
+          } catch {
+            return null;
+          }
+        }
+      }
+    };
+
+    // ── Run redirect check and post fetch in parallel ────────────────────
+    // Redirect record always takes priority — even if a live page exists.
+    const run = async () => {
+      const [redirectTo, post] = await Promise.all([
+        lookupRedirect(),
+        fetchPost(),
+      ]);
+
+      if (!active) return;
+
+      if (redirectTo) {
+        // A redirect record was found — navigate to the target immediately
+        navigate({ to: "/blog/$uid", params: { uid: redirectTo }, replace: true });
+        return;
+      }
+
+      // No redirect — show the post or fall through to 404
+      if (post) {
+        setDoc(post);
+      } else {
+        setNotFound(true);
+      }
+      setLoading(false);
+      setRedirectChecked(true);
+    };
+
+    run();
 
     return () => {
       active = false;
     };
-  }, [uid]);
+  }, [uid, navigate]);
 
   // ── Fetch adjacent posts for More Blogs section ─────────────────────────
   useEffect(() => {
@@ -335,103 +419,9 @@ function BlogPostPage() {
     return () => { active = false; };
   }, [doc]);
 
-  // ── Redirect lookup (runs only after a 404) ─────────────────────────────
-  useEffect(() => {
-    if (!notFound || redirectChecked || checkStarted.current) return;
-
-    let active = true;
-
-    const checkRedirect = async () => {
-      checkStarted.current = true;
-      console.log("[Redirect Debug] checkRedirect started. UID:", uid);
-
-      try {
-        console.log("[Redirect Debug] Attempting fetch to edge redirects API...");
-        const res = await fetch(`/api/redirects?from=${encodeURIComponent(uid)}`);
-        console.log("[Redirect Debug] Edge redirects API returned status:", res.status, "ok:", res.ok);
-        if (res.ok) {
-          const data = await res.json();
-          console.log("[Redirect Debug] Edge redirects API json:", data);
-          if (active && data?.to) {
-            console.log("[Redirect Debug] Found edge redirect match! Navigating to:", data.to);
-            navigate({ to: "/blog/$uid", params: { uid: data.to }, replace: true });
-            return;
-          }
-        }
-      } catch (err) {
-        console.log("[Redirect Debug] Edge redirects API threw error (expected in local dev):", err);
-      }
-
-      console.log("[Redirect Debug] Attempting direct Prismic url_redirect query...");
-      try {
-        const client = createClient();
-        const results = await client.getAllByType("url_redirect");
-        console.log("[Redirect Debug] Total url_redirect docs from Prismic:", results.length);
-        if (!active) {
-          console.log("[Redirect Debug] Component unmounted or inactive. Aborting.");
-          return;
-        }
-
-        const match = results.find((doc) => {
-          const raw = doc.data?.from_uid;
-          let slug = "";
-          if (typeof raw === "string") {
-            slug = raw.trim();
-          } else if (Array.isArray(raw) && raw.length > 0) {
-            slug = (raw[0].text ?? "").trim();
-          }
-          const cleanSlug = slug.replace(/^\/?(blog\/)?/, "").replace(/\/$/, "").trim();
-          const cleanUid = uid.replace(/^\/?(blog\/)?/, "").replace(/\/$/, "").trim();
-          console.log(`[Redirect Debug] Comparing cleanSlug "${cleanSlug}" with cleanUid "${cleanUid}"`);
-          return cleanSlug === cleanUid;
-        });
-
-        console.log("[Redirect Debug] Found match in Prismic url_redirect list:", match ? JSON.stringify(match.data) : "None");
-
-        if (match) {
-          const rawTo = match.data?.to_uid;
-          let toUid = "";
-          if (typeof rawTo === "string") {
-            toUid = rawTo.trim();
-          } else if (Array.isArray(rawTo) && rawTo.length > 0) {
-            toUid = (rawTo[0].text ?? "").trim();
-          } else if (rawTo?.uid) {
-            toUid = rawTo.uid;
-          }
-
-          if (toUid) {
-            toUid = toUid.replace(/^\/?(blog\/)?/, "").replace(/\/$/, "").trim();
-            if (toUid.includes("/")) {
-              const segments = toUid.split("/").filter(Boolean);
-              toUid = segments[segments.length - 1] || "";
-            }
-          }
-
-          console.log("[Redirect Debug] Final target UID resolved to:", toUid);
-
-          if (toUid && active) {
-            console.log("[Redirect Debug] Navigating to target UID:", toUid);
-            navigate({ to: "/blog/$uid", params: { uid: toUid }, replace: true });
-            return;
-          }
-        } else {
-          console.log("[Redirect Debug] No matching redirect found in Prismic list.");
-        }
-      } catch (err) {
-        console.error("[Redirect Debug] Direct Prismic query failed with error:", err);
-      } finally {
-        if (active) {
-          setRedirectChecked(true);
-        }
-      }
-    };
-
-    checkRedirect();
-
-    return () => {
-      active = false;
-    };
-  }, [notFound, redirectChecked, uid, navigate]);
+  // Redirect lookup is now handled in the main fetch effect above.
+  // It runs in parallel with the post fetch and takes priority when a
+  // url_redirect record is found — even for URLs that have a live page.
 
   const title    = doc ? getText(doc, "title") || "" : "";
   const author   = doc ? getText(doc, "author_name") || getText(doc, "author") || "WBConnect Team" : "";
@@ -481,6 +471,12 @@ function BlogPostPage() {
   };
   const readTime = doc ? getReadTimeLocal(doc, body) : "";
 
+  // ── BreadcrumbList schema (Home > Blog > Post Title) ────────────────────
+  useBreadcrumbSchema([
+    { name: "Blog", path: "/blog" },
+    ...(title ? [{ name: title }] : []),
+  ]);
+
   // ── SEO Head & Schema Injection ──────────────────────────────────────────
   useEffect(() => {
     if (!doc) return;
@@ -491,6 +487,7 @@ function BlogPostPage() {
     const keywords  = getText(doc, "meta_keywords") || getText(doc, "seo_keywords") || `${category ? category + ', ' : ''}real estate, blog, crm`;
     
     // Canonical link handling (supports standard strings or dynamic Link objects)
+    const defaultCanonical = `https://www.wbconnectplus.com/blog/${uid || ""}`;
     let canonical = "";
     const rawCanonical = doc.data?.canonical_url;
     if (rawCanonical) {
@@ -501,7 +498,9 @@ function BlogPostPage() {
       }
     }
     if (!canonical) {
-      canonical = window.location.href;
+      canonical = defaultCanonical;
+    } else if (canonical.startsWith("https://wbconnectplus.com")) {
+      canonical = canonical.replace("https://wbconnectplus.com", "https://www.wbconnectplus.com");
     }
     
     const customSchema = getText(doc, "custom_json_schema") || getText(doc, "json_schema") || doc.data?.custom_schema;
@@ -586,7 +585,7 @@ function BlogPostPage() {
           "name": "WBConnect+",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://wbconnectplus.com/assets/logo.png"
+            "url": "https://www.wbconnectplus.com/assets/logo.png"
           }
         },
         "mainEntityOfPage": {

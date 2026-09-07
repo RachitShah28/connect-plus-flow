@@ -3,6 +3,7 @@ import { lazy, Suspense, useState, useEffect, useRef } from "react";
 import { Navbar } from "@/components/site/Navbar";
 import { Hero } from "@/components/site/Hero";
 import { useSEO } from "@/hooks/useSEO";
+import { useBreadcrumbSchema } from "@/hooks/useBreadcrumbSchema";
 
 // Lazy-load below-the-fold sections to reduce initial JS payload
 const Problem = lazy(() =>
@@ -117,8 +118,10 @@ function Index() {
     ogTitle: "WhatsApp Automation Tool for Business & Salesforce | WBConnect+",
     ogDescription: "Automate customer conversations, campaigns, and follow-ups with WBConnect Plus, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
     ogUrl: "https://www.wbconnectplus.com/",
-    ogImage: "Logo/image Source url",
+    ogImage: "https://www.wbconnectplus.com/favicon.svg",
   });
+  // BreadcrumbList schema for homepage (single Home item)
+  useBreadcrumbSchema([]);
 
   // Restore scroll position after coming back via browser Back (or cross-page anchor nav)
   useEffect(() => {

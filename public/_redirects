@@ -1,1 +1,5 @@
+# Redirect non-www domain to www canonical domain
+https://wbconnectplus.com/* https://www.wbconnectplus.com/:splat 301!
+
+# Route redirects
 /login / 301

@@ -49,4 +49,4 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://wbconnectplus.com/sitemap.xml
+Sitemap: https://www.wbconnectplus.com/sitemap.xml

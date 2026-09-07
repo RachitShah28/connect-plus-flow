@@ -8,6 +8,7 @@ const FlowBuilderVisual = lazy(() => import("@/components/site/FeatureShowcase")
 const TemplateBuilderVisual = lazy(() => import("@/components/site/FeatureShowcase").then(m => ({ default: m.TemplateBuilderVisual })));
 
 import { useSEO } from "@/hooks/useSEO";
+import { useBreadcrumbSchema } from "@/hooks/useBreadcrumbSchema";
 
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
@@ -320,12 +321,13 @@ function FeaturesPage() {
     title: "WhatsApp Business Features for Salesforce | WBConnect+",
     description: "Explore all WBConnect+ features — global chat window, flow builder, template builder, automation, broadcasts, analytics, and AWS S3 media storage, all inside Salesforce.",
     keywords: "WhatsApp Salesforce integration, WhatsApp automation features, WhatsApp flow builder, WhatsApp template builder, WhatsApp broadcast Salesforce, WBConnect+",
-    canonical: "https://www.wbconnectplus.com/feature",
-    ogTitle: "WhatsApp Automation Tool for Business & Salesforce | WBConnect+",
-    ogDescription: "Automate customer conversations, campaigns, and follow-ups with WBConnect Plus, a powerful WhatsApp automation tool built for sales, support, and Salesforce teams.",
-    ogUrl: "https://www.wbconnectplus.com/feature",
-    ogImage: "https://wbconnectplus.com/assets/logo.png",
+    canonical: "https://www.wbconnectplus.com/features",
+    ogTitle: "WhatsApp Business Features for Salesforce | WBConnect+",
+    ogDescription: "Explore all WBConnect+ features — global chat window, flow builder, template builder, automation, broadcasts, analytics, and AWS S3 media storage, all inside Salesforce.",
+    ogUrl: "https://www.wbconnectplus.com/features",
+    ogImage: "https://www.wbconnectplus.com/assets/logo.png",
   });
+  useBreadcrumbSchema([{ name: "Features", path: "/features" }]);
 
   return (
     <main className="min-h-screen bg-white text-slate-900" aria-label="WBConnect+ All Features">

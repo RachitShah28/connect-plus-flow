@@ -20,7 +20,7 @@ Starting at USD $189/month per organisation. Free 30-day trial available via Sal
 ## Company
 **MV Clouds Pvt Ltd**
 - Website: https://mvclouds.com/
-- Product page: https://wbconnectplus.com/
+- Product page: https://www.wbconnectplus.com/
 - Email: info@mvclouds.com
 - Phone: +91 9558019600
 - Headquarters: Ahmedabad, Gujarat, India
@@ -33,7 +33,7 @@ Real estate, financial services, healthcare, e-commerce, education, logistics, b
 https://login.salesforce.com/packaging/installPackage.apexp?p0=04tQy000000TnoX
 
 ## Sitemap
-https://wbconnectplus.com/sitemap.xml
+https://www.wbconnectplus.com/sitemap.xml
 
 ## Optional
 - Privacy Policy: https://mvclouds.com/privacypolicy
